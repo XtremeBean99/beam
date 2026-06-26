@@ -1,0 +1,6 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# Large tutorial/reference videos (exceed GitHub's 100MB file limit)
+*.mp4
