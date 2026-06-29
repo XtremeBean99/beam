@@ -6,6 +6,7 @@ const GAME_SCENE = "res://scenes/Main.tscn"
 
 
 func _ready() -> void:
+	mouse_filter = MOUSE_FILTER_IGNORE
 	# Gentle pulsing on the prompt so it reads as interactive.
 	var prompt := $CenterContainer/VBoxContainer/Prompt
 	var tween := create_tween().set_loops()
