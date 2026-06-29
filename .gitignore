@@ -1,6 +1,16 @@
 # Godot 4+ specific ignores
 .godot/
-/android/
 
-# Large tutorial/reference videos (exceed GitHub's 100MB file limit)
+# Imported translations
+*.translation
+
+# Export builds
+export/
+export_presets.cfg
+
+# Large tutorial/reference videos
 *.mp4
+
+# OS files
+.DS_Store
+Thumbs.db

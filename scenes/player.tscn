@@ -237,3 +237,5 @@ stream = ExtResource("41_2dvfe")
 
 [node name="PenTrail" type="Line2D" parent="."]
 script = ExtResource("42_pen_trail")
+
+[node name="AttackHitbox" type="Area2D" parent="."]

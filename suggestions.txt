@@ -1,0 +1,68 @@
+================================================================================
+SKIPPED SUGGESTIONS — Beam (Godot 2D Action Game)
+================================================================================
+Saved: 29 June 2026
+
+These items from suggestions.txt were deferred due to scope, complexity,
+or because they require design decisions best made by a human.
+
+================================================================================
+DEFERRED — Require design/scope decisions
+================================================================================
+
+2.1  FULL SETTINGS MENU (volume sliders, key rebinding)
+     Needs: Audio bus configuration, settings persistence (ConfigFile),
+     UI scene design. Scope: ~2-3 hours.
+
+2.2  ENHANCED TITLE SCREEN (logo, controls summary)
+     Needs: Graphic design assets, layout decisions.
+
+2.8  DIFFICULTY PROGRESSION / MULTIPLE LEVELS
+     Needs: Level design, new tilemaps, enemy placement, win conditions,
+     scene transitions. Scope: large.
+
+3.1  REMOVE UNUSED ASSETS (wizard, angel, fireball sprites, pistol.wav)
+     Can be done in Godot editor by deleting files. Quick but needs
+     editor access. Safe to leave for now.
+
+3.2  CLEAN .godot/imported CACHE
+     Delete .godot/ directory and re-import. Quick but needs Godot editor.
+
+3.3  DOCUMENT ASSET LICENSES
+     Review assets/images/ENVIRONMENT/public-license.txt and
+     assets/ licenses. Legal task.
+
+4.1  ADD TYPE HINTS THROUGHOUT GDScript
+     Large surface area. Best done incrementally with each file edit.
+     Partially done in player.gd and snail.gd.
+
+4.5  snail.gd TIMER NODE REFERENCE — DONE (added @onready var timer)
+
+4.6  collectable.gd INDENTATION — DONE (formatted)
+
+4.7  .godot IN .gitignore — DONE
+
+4.10 ADD GdUnit4 UNIT TESTS
+     Needs: Download GdUnit4 addon, setup test directory, write test
+     scripts. Scope: ~1-2 hours for basic coverage.
+
+5.2  README CONTROLS TABLE FORMATTING
+     Minor markdown issue. Quick fix when updating README.
+
+5.5  ENEMY THEME COHERENCE
+     Design question: martial artist vs snails. Needs creative direction.
+
+6.2  Area2D BODY_ENTERED DOUBLE-FIRE — DONE (is_collected flag)
+
+6.3  ANIMATION NAME VALIDATION — PARTIAL (assert would crash in release)
+     Better approach: use StringName constants or enums.
+
+6.4  LOADING SCREEN BETWEEN SCENES
+     Needs: ResourceLoader.load_threaded_request(), loading UI scene.
+     Scope: ~1-2 hours. Only needed if assets grow large.
+
+7.3  IMPLEMENT UNUSED ASSETS
+     wizard, angel, fireball, pistol — each is a separate feature.
+     Scope: large per feature.
+
+================================================================================
