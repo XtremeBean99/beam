@@ -40,6 +40,7 @@
 [ext_resource type="AudioStream" uid="uid://bmqo1vamgfs2s" path="res://assets/sounds/jump.mp3" id="38_cs1tg"]
 [ext_resource type="AudioStream" uid="uid://pbr4wjx2ah8i" path="res://assets/sounds/kick.mp3" id="39_2dvfe"]
 [ext_resource type="AudioStream" uid="uid://y1j1y23tdlql" path="res://assets/sounds/punch.mp3" id="40_giy8y"]
+[ext_resource type="AudioStream" uid="uid://b76ydbswhov37" path="res://assets/sounds/pistol.wav" id="41_2dvfe"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_g4v7s"]
 animations = [{
@@ -229,3 +230,8 @@ stream = ExtResource("39_2dvfe")
 
 [node name="PunchSound" type="AudioStreamPlayer2D" parent="." unique_id=450009685]
 stream = ExtResource("40_giy8y")
+
+[node name="PistolSound" type="AudioStreamPlayer2D" parent="." unique_id=1348085708]
+stream = ExtResource("41_2dvfe")
+
+[node name="PenTrail" type="Line2D" parent="."]

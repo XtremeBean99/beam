@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://y1v2jv2bmd2f"]
+
+[ext_resource type="Script" uid="uid://kckustq3rrxl" path="res://scripts/collectable.gd" id="1_llfh3"]
+[ext_resource type="Texture2D" uid="uid://ivijypmcu4cp" path="res://assets/images/SPRITES/canvas.png" id="1_ti8a4"]
+[ext_resource type="Texture2D" uid="uid://7ll2203vi0n" path="res://assets/images/SPRITES/fx/enemy-death/enemy-death-sprites/enemy-death3.png" id="2_cooh5"]
+[ext_resource type="Texture2D" uid="uid://y0u8sgj4giny" path="res://assets/images/SPRITES/fx/enemy-death/enemy-death-sprites/enemy-death4.png" id="3_uvacn"]
+[ext_resource type="Texture2D" uid="uid://cvo0yi018antt" path="res://assets/images/SPRITES/fx/enemy-death/enemy-death-sprites/enemy-death5.png" id="4_r08pg"]
+[ext_resource type="Texture2D" uid="uid://cdxcc1e7fbe15" path="res://assets/images/SPRITES/fx/enemy-death/enemy-death-sprites/enemy-death6.png" id="5_nx4ax"]
+[ext_resource type="Texture2D" uid="uid://dpkst2ecc51kj" path="res://assets/images/SPRITES/fx/enemy-death/enemy-death-sprites/enemy-death7.png" id="6_eyudh"]
+[ext_resource type="Texture2D" uid="uid://b1eb0itf18mq3" path="res://assets/images/SPRITES/fx/enemy-death/enemy-death-sprites/enemy-death8.png" id="7_jmqx7"]
+[ext_resource type="Texture2D" uid="uid://ds3pdmlt5v66h" path="res://assets/images/SPRITES/fx/enemy-death/enemy-death-sprites/enemy-death9.png" id="8_cidxd"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_g4v7s"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_cooh5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_uvacn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_r08pg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_nx4ax")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_eyudh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_jmqx7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_cidxd")
+}],
+"loop": 1,
+"name": &"collected",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_ti8a4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_ti8a4")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_yf5fn"]
+radius = 169.0
+height = 466.0
+
+[node name="Collectable" type="Area2D" unique_id=411621955]
+script = ExtResource("1_llfh3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=382932298]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_g4v7s")
+animation = &"collected"
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=638713866]
+shape = SubResource("CapsuleShape2D_yf5fn")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="animation_looped" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_looped"]

@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://s1r1qbt1mq60"]
+
+[ext_resource type="Texture2D" uid="uid://dq55uf4w7ised" path="res://assets/images/SPRITES/burning-ghoul/sprites/v2/burning-ghoul1.png" id="1_1lcli"]
+[ext_resource type="Script" uid="uid://uuhvsycgj56o" path="res://scripts/snail.gd" id="1_x6go0"]
+[ext_resource type="Texture2D" uid="uid://8xeubn8xim77" path="res://assets/images/SPRITES/burning-ghoul/sprites/v2/burning-ghoul2.png" id="2_x6go0"]
+[ext_resource type="Texture2D" uid="uid://5iuhin6o6nfx" path="res://assets/images/SPRITES/burning-ghoul/sprites/v2/burning-ghoul3.png" id="3_pu1r7"]
+[ext_resource type="Texture2D" uid="uid://cdniuxgkcvfws" path="res://assets/images/SPRITES/burning-ghoul/sprites/v2/burning-ghoul4.png" id="4_5v7em"]
+[ext_resource type="Texture2D" uid="uid://dyf7ln7xaw548" path="res://assets/images/SPRITES/burning-ghoul/sprites/v2/burning-ghoul5.png" id="5_dft4h"]
+[ext_resource type="Texture2D" uid="uid://bf4ipcg5t3tg0" path="res://assets/images/SPRITES/burning-ghoul/sprites/v2/burning-ghoul6.png" id="6_fc658"]
+[ext_resource type="Texture2D" uid="uid://b7w4g5ky06ddj" path="res://assets/images/SPRITES/burning-ghoul/sprites/v2/burning-ghoul7.png" id="7_u7h5c"]
+[ext_resource type="Texture2D" uid="uid://bry6v7on0h3xw" path="res://assets/images/SPRITES/burning-ghoul/sprites/v2/burning-ghoul8.png" id="8_vq1qi"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_g4v7s"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_1lcli")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_x6go0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_pu1r7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_5v7em")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_dft4h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_fc658")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_u7h5c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_vq1qi")
+}],
+"loop": 1,
+"name": &"running",
+"speed": 8.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_yf5fn"]
+radius = 11.0
+height = 72.0
+
+[node name="Snail" type="Area2D" unique_id=1197144203]
+script = ExtResource("1_x6go0")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=742693976]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_g4v7s")
+animation = &"running"
+autoplay = "running"
+frame_progress = 0.14521949
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=382094853]
+position = Vector2(-2, 24)
+shape = SubResource("CapsuleShape2D_yf5fn")
+
+[node name="Timer" type="Timer" parent="." unique_id=861523778]
+wait_time = 2.0
+autostart = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
