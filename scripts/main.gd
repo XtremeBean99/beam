@@ -64,11 +64,11 @@ func _create_platform(from, to):
 	var mid = (from + to) * 0.5
 	var dir = to - from
 	var length = dir.length()
-	var angle = dir.angle()
 
 	var body = StaticBody2D.new()
+	body.collision_layer = 1
+	body.collision_mask = 0
 	body.position = mid
-	body.rotation = angle
 
 	var shape = CollisionShape2D.new()
 	var rect = RectangleShape2D.new()
