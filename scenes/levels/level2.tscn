@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://bl2map2terrain0"]
+
+[ext_resource type="PackedScene" uid="uid://fgxcv3f8vatq" path="res://scenes/player.tscn" id="1_player"]
+[ext_resource type="Script" path="res://scripts/ink_terrain.gd" id="2_terrain"]
+[ext_resource type="Script" path="res://scripts/level2.gd" id="3_level2"]
+[ext_resource type="Texture2D" uid="uid://bcposdg0ro471" path="res://assets/images/map2.png" id="4_map2"]
+
+[node name="LevelRoot" type="Node2D"]
+script = ExtResource("3_level2")
+
+[node name="VoidBG" type="CanvasLayer" parent="."]
+layer = -10
+
+[node name="ColorRect" type="ColorRect" parent="VoidBG"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.054902, 0.058824, 0.070588, 1)
+
+[node name="MapGuide" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.12)
+z_index = -5
+centered = false
+scale = Vector2(2, 2)
+texture = ExtResource("4_map2")
+
+[node name="Terrain" type="Node2D" parent="."]
+script = ExtResource("2_terrain")
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+position = Vector2(420, 180)
+scale = Vector2(2, 2)
