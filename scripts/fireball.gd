@@ -8,6 +8,7 @@ const DAMAGE = 1
 
 var direction = 1.0
 var timer = 0.0
+var custom_velocity = Vector2.ZERO
 
 
 func _ready():
@@ -16,12 +17,19 @@ func _ready():
 	area_entered.connect(_on_hit_area)
 
 
+func set_velocity(vel):
+	custom_velocity = vel
+
+
 func _physics_process(delta):
 	timer += delta
 	if timer > LIFETIME:
 		queue_free()
 		return
-	position.x += direction * SPEED * delta
+	if custom_velocity.length() > 0:
+		position += custom_velocity * delta
+	else:
+		position.x += direction * SPEED * delta
 
 
 func _on_hit(body):

@@ -14,13 +14,12 @@ const WALL_JUMP_VERTICAL = -550.0
 const WALL_SLIDE_GRAVITY = 300.0
 const GRAVITY = 980.0
 
-const SLIDE_SPEED = 750.0
-const SLIDE_FRICTION = 0.95
+const SLIDE_ACCEL = 600.0
+const SLIDE_FRICTION = 0.97
 const SLIDE_KICK_THRESHOLD = 1.1
-const SLIDE_MIN_SPEED = 40.0
-const SLIDE_STOP_SPEED = 25.0
-const SLIDE_BOOST_TIME = 0.15
-const SLOPE_SLIDE_THRESHOLD = 0.08
+const SLIDE_MIN_SPEED = 30.0
+const SLIDE_STOP_SPEED = 20.0
+const SLOPE_SLIDE_THRESHOLD = 0.06
 
 const ATTACK_ANIMS = ["punch", "crouch-kick", "kick", "flying-kick"]
 const HURT_ANIMS = ["hurt"]
@@ -38,7 +37,9 @@ var slide_timer = 0.0
 var facing_right = true
 var floor_angle = 0.0
 var shoot_cooldown = 0.0
+var air_time = 0.0
 const SHOOT_COOLDOWN = 0.4
+const FALLING_ATTACK_TIME = 2.0
 var fireball_scene = preload("res://scenes/fireball.tscn")
 
 signal player_died
@@ -152,50 +153,41 @@ func _physics_process(delta):
 			slide_dir = -sign(normal.x)
 			slide_timer = 0.0
 
-	# Shooting — ranged fireball attack
-	if Input.is_action_just_pressed("shoot") and shoot_cooldown <= 0.0 and not is_attacking and is_on_floor():
-		_shoot_fireball()
+	# Shooting — ranged fireball or falling attack
+	if Input.is_action_just_pressed("shoot") and shoot_cooldown <= 0.0 and not is_attacking:
+		if is_on_floor():
+			_shoot_fireball()
+		elif air_time >= FALLING_ATTACK_TIME:
+			_falling_attack()
 
 	if Input.is_action_just_pressed("crouch") and is_on_floor() and not is_attacking and not is_sliding and abs(velocity.x) >= SLIDE_MIN_SPEED:
 		is_sliding = true
 		slide_dir = sign(velocity.x)
 		slide_timer = 0.0
-		velocity.x = SLIDE_SPEED * slide_dir
 
 	if is_sliding:
 		slide_timer += delta
 
-		# Get floor normal for slope-aware sliding
 		var normal = get_floor_normal()
 		var slope = abs(normal.x)
 		var surface_right = Vector2(-normal.y, normal.x)
 		floor_angle = surface_right.angle()
 
-		# Current speed along the surface
 		var current_speed = velocity.x * surface_right.x + velocity.y * surface_right.y
 
-		if abs(current_speed) < SLIDE_STOP_SPEED and slope < 0.02:
+		# Accelerate proportionally to slope steepness
+		if slope > 0.01:
+			current_speed += SLIDE_ACCEL * slope * delta * slide_dir
+		current_speed *= SLIDE_FRICTION
+		velocity = surface_right * current_speed
+
+		if abs(current_speed) < SLIDE_STOP_SPEED and slope < 0.03:
 			is_sliding = false
 			slide_timer = 0.0
 			floor_angle = 0.0
 			velocity = Vector2.ZERO
-		else:
-			# Speed boost during initial slide window
-			if slide_timer < SLIDE_BOOST_TIME:
-				current_speed = SLIDE_SPEED * slide_dir
-			else:
-				current_speed *= SLIDE_FRICTION
-			# Gravity along the slope
-			if slope > 0.01:
-				var grav_downhill = GRAVITY * slope * delta
-				if current_speed >= 0:
-					current_speed += grav_downhill
-				else:
-					current_speed -= grav_downhill
-			velocity = surface_right * current_speed
 
-		# Auto-kick or stop
-		if slide_timer >= SLIDE_KICK_THRESHOLD and not is_attacking:
+		# Auto-kick after long slide
 			is_attacking = true
 			is_sliding = false
 			slide_timer = 0.0
@@ -275,8 +267,28 @@ func _shoot_fireball():
 	is_attacking = true
 	animated_sprite_2d.play("punch")
 	punch_sound.play()
-	var fb = fireball_scene.instantiate()
-	fb.direction = 1.0 if facing_right else -1.0
-	fb.position = global_position + Vector2(40.0 * fb.direction, -10.0)
-	get_parent().add_child(fb)
+	await get_tree().create_timer(0.15)
+	if not alive:
+		return
+	_spawn_fireball(Vector2(25.0 * (1.0 if facing_right else -1.0), -8.0), Vector2(500.0 * (1.0 if facing_right else -1.0), 0))
 	shoot_cooldown = SHOOT_COOLDOWN
+
+
+func _falling_attack():
+	is_attacking = true
+	animated_sprite_2d.play("flying-kick")
+	kick_sound.play()
+	_spawn_fireball(Vector2(0, 30.0), Vector2(0, 600.0))
+	shoot_cooldown = SHOOT_COOLDOWN
+	air_time = 0.0
+
+
+func _spawn_fireball(offset, vel):
+	var fb = fireball_scene.instantiate()
+	fb.position = global_position + offset
+	get_parent().add_child(fb)
+	# Give the fireball its initial velocity
+	if fb.has_method("set_velocity"):
+		fb.set_velocity(vel)
+	else:
+		fb.direction = 1.0 if vel.x >= 0 else -1.0
