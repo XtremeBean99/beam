@@ -550,25 +550,20 @@ In the coyote-timer block from Task 3, set the air-jump count when grounded:
 
 - [ ] **Step 3: Refund the air jump on wall contact, and on wall jump**
 
-Replace the **Wall jump** block:
+Two surgical additions to the wall-jump area (which, from the Task 3 fix, already consumes `jump_buffer_timer` and `coyote_timer`).
 
-```gdscript
-	# Wall jump
-	if Input.is_action_just_pressed("jump") and is_on_wall() and not is_on_floor() and not is_busy and wall_jumps_used < MAX_WALL_JUMPS:
-		wall_jumps_used += 1
-		var wall_normal = get_wall_normal()
-		velocity.x = wall_normal.x * WALL_JUMP_HORIZONTAL
-		velocity.y = WALL_JUMP_VERTICAL
-		jump_sound.play()
-```
-
-with:
+**(a)** Immediately **before** the `# Wall jump` comment line, add a wall-contact refresh block:
 
 ```gdscript
 	# Touching a wall (airborne) refreshes the air jump → fluid wall chains
 	if is_on_wall() and not is_on_floor():
 		air_jumps_left = MAX_AIR_JUMPS
 
+```
+
+**(b)** Inside the existing **Wall jump** `if` block, add one line — `air_jumps_left = MAX_AIR_JUMPS` — immediately **after** `velocity.y = WALL_JUMP_VERTICAL`. The resulting block must read exactly:
+
+```gdscript
 	# Wall jump
 	if Input.is_action_just_pressed("jump") and is_on_wall() and not is_on_floor() and not is_busy and wall_jumps_used < MAX_WALL_JUMPS:
 		wall_jumps_used += 1
@@ -577,6 +572,7 @@ with:
 		velocity.y = WALL_JUMP_VERTICAL
 		air_jumps_left = MAX_AIR_JUMPS
 		jump_buffer_timer = 0.0
+		coyote_timer = 0.0
 		jump_sound.play()
 ```
 
