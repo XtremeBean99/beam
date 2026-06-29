@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ullknosbjxgi"]
 
-[ext_resource type="PackedScene" uid="uid://bl2map2terrain0" path="res://scenes/levels/level2.tscn" id="1_elqb8"]
+[ext_resource type="PackedScene" uid="uid://dwauw4vipyn1l" path="res://scenes/levels/level2.tscn" id="1_elqb8"]
 [ext_resource type="Script" uid="uid://bkkywhbo4sn7b" path="res://scripts/main.gd" id="1_rvslj"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g4v7s"]

@@ -20,11 +20,10 @@ const COYOTE_TIME = 0.1
 const JUMP_BUFFER_TIME = 0.1
 const MAX_AIR_JUMPS = 1
 
-const SLIDE_ACCEL = 850.0
-const SLIDE_FRICTION = 0.98
-const SLIDE_FLAT_FRICTION = 0.995
-const SLIDE_MIN_SPEED = 30.0
-const SLIDE_STOP_SPEED = 20.0
+const SLIDE_ACCEL = 1400.0       # downhill build-up (stronger = faster ramps)
+const SLIDE_FRICTION = 0.995     # gentle per-frame decay → long, extended slides
+const SLIDE_MIN_SPEED = 90.0     # speed needed to START a slide (> END for hysteresis)
+const SLIDE_END_SPEED = 70.0     # slide ends gracefully once it slows below this
 const SLIDE_ANIM_MIN = 200.0   # below this, hold the crouched first frame
 const SLIDE_ANIM_MAX = 700.0   # at/above this, fully-extended kick frame
 const SLIDE_ANIM = "crouch-kick"
@@ -195,30 +194,32 @@ func _physics_process(delta):
 			coyote_timer = 0.0
 			jump_sound.play()
 		elif not is_on_floor() or not Input.is_action_pressed("crouch"):
+			# Left the ground or released crouch — end slide, keep momentum.
 			is_sliding = false
 			slide_timer = 0.0
 			floor_angle = 0.0
-		elif direction == 0:
-			is_sliding = false
-			slide_timer = 0.0
-			floor_angle = 0.0
-			velocity.x = 0
 		else:
 			slide_timer += delta
-			slide_dir = sign(direction)
+			# Steer if a direction is held; otherwise keep gliding on momentum
+			# (releasing left/right no longer kills the slide).
+			if direction != 0:
+				slide_dir = sign(direction)
 			var normal = get_floor_normal()
 			var slope = abs(normal.x)
 			var surface_right = Vector2(-normal.y, normal.x)
 			floor_angle = surface_right.angle()
 			var current_speed = velocity.x * surface_right.x + velocity.y * surface_right.y
+			# Downhill accelerates the slide; gentle friction keeps it long.
 			if slope > 0.01:
 				current_speed += SLIDE_ACCEL * slope * delta * slide_dir
-				current_speed *= SLIDE_FRICTION
+			current_speed *= SLIDE_FRICTION
+			# End only once the slide has genuinely slowed to a crawl.
+			if abs(current_speed) < SLIDE_END_SPEED:
+				is_sliding = false
+				slide_timer = 0.0
+				floor_angle = 0.0
 			else:
-				current_speed *= SLIDE_FLAT_FRICTION
-			if abs(current_speed) < SLIDE_STOP_SPEED:
-				current_speed = SLIDE_STOP_SPEED * slide_dir
-			velocity = surface_right * current_speed
+				velocity = surface_right * current_speed
 
 	# Horizontal movement (when not sliding) — accel/friction for momentum
 	if not is_sliding:

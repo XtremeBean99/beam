@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bl2map2terrain0"]
+[gd_scene load_steps=5 format=3 uid="uid://dwauw4vipyn1l"]
 
 [ext_resource type="PackedScene" uid="uid://fgxcv3f8vatq" path="res://scenes/player.tscn" id="1_player"]
 [ext_resource type="Script" path="res://scripts/ink_terrain.gd" id="2_terrain"]
@@ -22,12 +22,33 @@ visible = false
 modulate = Color(1, 1, 1, 0.12)
 z_index = -5
 centered = false
-scale = Vector2(2, 2)
+scale = Vector2(3.5, 3.5)
 texture = ExtResource("4_map2")
 
 [node name="Terrain" type="Node2D" parent="."]
 script = ExtResource("2_terrain")
+world_scale = 3.5
 
 [node name="Player" parent="." instance=ExtResource("1_player")]
-position = Vector2(420, 180)
+position = Vector2(700, 280)
 scale = Vector2(2, 2)
+
+[node name="PlacementMarkers" type="Node2D" parent="."]
+
+[node name="EnemySpot1" type="Marker2D" parent="PlacementMarkers"]
+position = Vector2(1368, 485)
+
+[node name="EnemySpot2" type="Marker2D" parent="PlacementMarkers"]
+position = Vector2(1029, 1773)
+
+[node name="EnemySpot3" type="Marker2D" parent="PlacementMarkers"]
+position = Vector2(927, 852)
+
+[node name="EnemySpot4" type="Marker2D" parent="PlacementMarkers"]
+position = Vector2(1169, 943)
+
+[node name="EnemySpot5" type="Marker2D" parent="PlacementMarkers"]
+position = Vector2(374, 1808)
+
+[node name="EnemySpot6" type="Marker2D" parent="PlacementMarkers"]
+position = Vector2(549, 1524)
