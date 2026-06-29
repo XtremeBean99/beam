@@ -25,6 +25,9 @@ const SLIDE_FRICTION = 0.98
 const SLIDE_FLAT_FRICTION = 0.995
 const SLIDE_MIN_SPEED = 30.0
 const SLIDE_STOP_SPEED = 20.0
+const SLIDE_ANIM_MIN = 200.0   # below this, hold the crouched first frame
+const SLIDE_ANIM_MAX = 700.0   # at/above this, fully-extended kick frame
+const SLIDE_ANIM = "crouch-kick"
 
 const HURT_ANIMS = ["hurt"]
 const KNOCKBACK_FORCE = 400.0
@@ -90,6 +93,15 @@ func hurt():
 func apply_knockback(from_direction):
 	velocity.x = from_direction * KNOCKBACK_FORCE
 	velocity.y = -200.0
+
+
+# Map a slide speed to a frame index of the crouch-kick animation.
+# Slow slide → frame 0 (crouched); fast slide → last frame (extended kick).
+func slide_frame(speed: float, frame_count: int) -> int:
+	if frame_count <= 1:
+		return 0
+	var t = clampf((absf(speed) - SLIDE_ANIM_MIN) / (SLIDE_ANIM_MAX - SLIDE_ANIM_MIN), 0.0, 1.0)
+	return int(round(t * (frame_count - 1)))
 
 
 func _physics_process(delta):
@@ -225,7 +237,14 @@ func _physics_process(delta):
 			else:
 				animated_sprite_2d.play("fall")
 		elif is_sliding:
-			animated_sprite_2d.play("crouch")
+			var frames = animated_sprite_2d.sprite_frames
+			if frames.has_animation(SLIDE_ANIM):
+				animated_sprite_2d.animation = SLIDE_ANIM
+				animated_sprite_2d.pause()
+				var fc = frames.get_frame_count(SLIDE_ANIM)
+				animated_sprite_2d.frame = slide_frame(velocity.length(), fc)
+			else:
+				animated_sprite_2d.play("crouch")
 		elif crouching:
 			animated_sprite_2d.play("crouch")
 		elif abs(velocity.x) > 1:
