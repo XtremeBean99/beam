@@ -17,9 +17,9 @@ const GRAVITY = 980.0
 const SLIDE_SPEED = 650.0
 const SLIDE_FRICTION = 0.92
 const SLIDE_KICK_THRESHOLD = 0.55
-const SLIDE_MIN_SPEED = 60.0
-const SLIDE_STOP_SPEED = 30.0
-const SLOPE_SLIDE_THRESHOLD = 0.15
+const SLIDE_MIN_SPEED = 40.0
+const SLIDE_STOP_SPEED = 25.0
+const SLOPE_SLIDE_THRESHOLD = 0.08
 
 const ATTACK_ANIMS = ["punch", "crouch-kick", "kick", "flying-kick"]
 const HURT_ANIMS = ["hurt"]
@@ -47,6 +47,8 @@ func _ready():
 		if frames.has_animation(anim):
 			frames.set_animation_loop(anim, false)
 	animated_sprite_2d.animation_finished.connect(_on_animation_finished)
+	floor_max_angle = deg_to_rad(50)
+	floor_snap_length = 6.0
 	attack_collision = CollisionShape2D.new()
 	var rect = RectangleShape2D.new()
 	rect.size = Vector2(50, 30)
@@ -160,32 +162,35 @@ func _physics_process(delta):
 	if is_sliding:
 		slide_timer += delta
 
-		# Get floor normal for slope-aware sliding
 		var normal = get_floor_normal()
 		var slope = abs(normal.x)
-		var tangent = Vector2(slide_dir, 0)
 
-		if slope > 0.01:
-			# Tangent along the slope (pointing downhill in slide direction)
-			tangent = Vector2(-normal.y * slide_dir, normal.x * slide_dir)
-			floor_angle = atan2(-normal.x, normal.y)
-		else:
+		# Surface tangent pointing right (downhill for rightward slopes)
+		var surface_right = Vector2(-normal.y, normal.x)
+		floor_angle = surface_right.angle()
+
+		# Compute slide velocity along the surface
+		var current_speed = velocity.x * surface_right.x + velocity.y * surface_right.y
+		if abs(current_speed) < SLIDE_STOP_SPEED and slope < 0.02:
+			is_sliding = false
+			slide_timer = 0.0
 			floor_angle = 0.0
-
-		# Current speed along the slide direction
-		var current_speed = velocity.x * tangent.x + velocity.y * tangent.y
-		if current_speed < 0:
-			current_speed = 0
-
-		# Friction
-		current_speed *= SLIDE_FRICTION
-
-		# Gravity pull along the slope (adds momentum downhill)
-		var grav_along_slope = GRAVITY * slope * delta
-		current_speed += grav_along_slope
-
-		# Apply velocity along tangent
-		velocity = tangent * current_speed
+			velocity = Vector2.ZERO
+		else:
+			# Friction
+			current_speed *= SLIDE_FRICTION
+			# Gravity along the slope (always downhill, independent of direction)
+			if slope > 0.01:
+				var grav_downhill = GRAVITY * slope * delta
+				# Determine if we're going downhill or uphill along surface_right
+				# If moving right and slope goes down to the right, surface_right.y < 0 => downhill
+				# Add or subtract gravity based on direction relative to downhill
+				if current_speed >= 0:
+					current_speed += grav_downhill
+				else:
+					current_speed -= grav_downhill
+			# Apply velocity along tangent
+			velocity = surface_right * current_speed
 
 		# Auto-kick or stop
 		if slide_timer >= SLIDE_KICK_THRESHOLD and not is_attacking:
@@ -196,12 +201,6 @@ func _physics_process(delta):
 			animated_sprite_2d.play("crouch-kick")
 			kick_sound.play()
 			_enable_hitbox()
-		elif current_speed < SLIDE_STOP_SPEED and slope < 0.05:
-			is_sliding = false
-			slide_timer = 0.0
-			floor_angle = 0.0
-			velocity.x = 0
-			velocity.y = 0
 	elif crouching or (is_attacking and is_on_floor()):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	elif direction:
