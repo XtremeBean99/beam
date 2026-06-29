@@ -30,8 +30,6 @@ shadow_size = 5
 [node name="Main" type="Node2D" unique_id=1104803943]
 script = ExtResource("1_rvslj")
 
-[node name="DrawTrail" type="Line2D" parent="."]
-
 [node name="LevelRoot" parent="." unique_id=1060455443 instance=ExtResource("1_elqb8")]
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=1384939185]
