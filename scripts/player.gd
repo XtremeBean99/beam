@@ -25,6 +25,7 @@ var slide_timer := 0.0
 
 
 func _ready() -> void:
+	add_to_group("player")
 	# Attack animations must not loop so animation_finished fires and clears
 	# the attacking state. (They're authored as looping in the scene.)
 	var frames := animated_sprite_2d.sprite_frames

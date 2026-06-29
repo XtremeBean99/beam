@@ -6,7 +6,7 @@ signal collected
 const ROTATION_SPEED := 2.0
 
 func _ready() -> void:
-	pass
+	add_to_group("collectables")
 
 func _process(delta: float) -> void:
 	animated_sprite_2d.rotation += ROTATION_SPEED * delta

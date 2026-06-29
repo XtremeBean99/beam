@@ -3,36 +3,24 @@ extends Node2D
 
 var score: int = 0
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	_setup_level()
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
 
 func _setup_level() -> void:
-	
-	#Connect collectables
-	var collectables = $LevelRoot.get_node_or_null("collectables")
-	if collectables: 
-		for collectable in collectables.get_children():
+	# Connect collectables via group
+	for collectable in get_tree().get_nodes_in_group("collectables"):
+		if collectable.has_signal("collected"):
 			collectable.collected.connect(increase_score)
-	
-	#Connect enemies
-	var enemies = $LevelRoot.get_node_or_null("Enemies")
-	if enemies: 
-		for enemy in enemies.get_children():
+
+	# Connect enemies via group
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if enemy.has_signal("player_hit"):
 			enemy.player_hit.connect(_on_player_hit)
 
-# SIGNAL HANDLERS
-func _on_player_hit(body):
-	body.hurt()	 	
-	print("HP -10")
-	
-# Score
+func _on_player_hit(body: Node2D) -> void:
+	if body.has_method("hurt"):
+		body.hurt()
+
 func increase_score() -> void:
 	score += 1
 	score_label.text = "SCORE: %s" % score

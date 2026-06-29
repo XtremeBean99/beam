@@ -5,7 +5,7 @@ const MIN_DIST := 6.0
 
 func _ready() -> void:
 	width = 2.5
-	default_color = Color(0.7, 0.85, 1.0, 0.45)
+	default_color = Color(0.2, 0.5, 0.9, 0.6)
 	top_level = true
 
 func add_trail_point(world_pos: Vector2) -> void:
