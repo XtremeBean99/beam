@@ -191,6 +191,8 @@ func _physics_process(delta):
 			slide_timer = 0.0
 			floor_angle = 0.0
 			velocity.y = JUMP_VELOCITY
+			jump_buffer_timer = 0.0
+			coyote_timer = 0.0
 			jump_sound.play()
 		elif not is_on_floor() or not Input.is_action_pressed("crouch"):
 			is_sliding = false
