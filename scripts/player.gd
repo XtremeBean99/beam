@@ -126,5 +126,5 @@ func _physics_process(delta: float) -> void:
 	if is_sliding:
 		animated_sprite_2d.flip_h = (slide_dir < 0)
 
-	if Input.is_action_pressed("draw"):
+	if Input.is_action_pressed("draw") and pen_trail:
 		pen_trail.add_trail_point(global_position)
