@@ -581,15 +581,15 @@ Two surgical additions to the wall-jump area (which, from the Task 3 fix, alread
 Immediately **after** the ground-jump block from Task 3 (the `if jump_buffer_timer > 0.0 and coyote_timer > 0.0 ...` block), and **before** the `Input.is_action_just_released("jump")` variable-height line, add:
 
 ```gdscript
-	# Double jump — used when no coyote/ground jump is available
 	elif jump_buffer_timer > 0.0 and not is_on_floor() and not is_on_wall() and air_jumps_left > 0 and not is_busy:
+		# Double jump — used when no coyote/ground jump is available
 		velocity.y = JUMP_VELOCITY
 		air_jumps_left -= 1
 		jump_buffer_timer = 0.0
 		jump_sound.play()
 ```
 
-Note: this `elif` chains onto the ground-jump `if` so a single buffered press can't trigger both.
+Note: this `elif` chains onto the ground-jump `if` so a single buffered press can't trigger both. Keep the comment **inside** the `elif` body — do not place a comment line between the `if` block and the `elif`.
 
 - [ ] **Step 5: Verify in the editor**
 
