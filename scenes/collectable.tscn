@@ -60,7 +60,7 @@ script = ExtResource("1_llfh3")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=382932298]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_g4v7s")
-animation = &"collected"
+animation = &"default"
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=638713866]

@@ -18,7 +18,7 @@ func _setup_level() -> void:
 			enemy.player_hit.connect(_on_player_hit)
 
 func _on_player_hit(body: Node2D) -> void:
-	if body.has_method("hurt"):
+	if body.has_method("hurt") and body.alive:
 		body.hurt()
 
 func increase_score() -> void:

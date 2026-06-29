@@ -18,5 +18,5 @@ func _on_timer_timeout() -> void:
 
 
 func _on_body_entered(body: Node2D) -> void:
-	if body.is_in_group("player") and body.has_method("hurt"):
+	if body.is_in_group("player") and body.has_method("hurt") and body.alive:
 		emit_signal("player_hit", body)
