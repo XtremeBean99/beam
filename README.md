@@ -26,7 +26,7 @@ A 2D action platformer built with **Godot 4.7**. Play as a martial-artist who ca
 
 1. Install [Godot 4.7](https://godotengine.org/) (Forward+ renderer).
 2. Open `project.godot` in the Godot editor.
-3. Press **F5** (Play) — the game boots into the title screen.
+3. Press **F5** (Play) - the game boots into the title screen.
 
 ## Project structure
 
@@ -52,4 +52,4 @@ assets/
 
 ## License
 
-Source-available under the [PolyForm Noncommercial License 1.0.0](LICENSE). Free to use, modify, and share for **noncommercial** purposes. **Commercial use** and **use as AI/ML training data** require prior written permission — contact Ahmed Hussain (Ahmedyhussain07@gmail.com).
+Source-available under the [PolyForm Noncommercial License 1.0.0](LICENSE). Free to use, modify, and share for **noncommercial** purposes. **Commercial use** and **use as AI/ML training data** require prior written permission - contact Ahmed Hussain (Ahmedyhussain07@gmail.com).
