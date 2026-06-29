@@ -108,6 +108,13 @@ func _physics_process(delta):
 
 	shoot_cooldown = max(0.0, shoot_cooldown - delta)
 
+	if not is_on_floor():
+		air_time += delta
+	elif air_time > 0:
+		if air_time >= FALLING_ATTACK_TIME:
+			_falling_attack()
+		air_time = 0.0
+
 	if not is_finite(velocity.x):
 		velocity.x = 0.0
 	if not is_finite(velocity.y):
@@ -153,12 +160,9 @@ func _physics_process(delta):
 			slide_dir = -sign(normal.x)
 			slide_timer = 0.0
 
-	# Shooting — ranged fireball or falling attack
-	if Input.is_action_just_pressed("shoot") and shoot_cooldown <= 0.0 and not is_attacking:
-		if is_on_floor():
-			_shoot_fireball()
-		elif air_time >= FALLING_ATTACK_TIME:
-			_falling_attack()
+	# Shooting — ranged fireball attack (ground only)
+	if Input.is_action_just_pressed("shoot") and shoot_cooldown <= 0.0 and not is_attacking and is_on_floor():
+		_shoot_fireball()
 
 	if Input.is_action_just_pressed("crouch") and is_on_floor() and not is_attacking and not is_sliding and abs(velocity.x) >= SLIDE_MIN_SPEED:
 		is_sliding = true
@@ -279,8 +283,6 @@ func _falling_attack():
 	animated_sprite_2d.play("flying-kick")
 	kick_sound.play()
 	_spawn_fireball(Vector2(0, 30.0), Vector2(0, 600.0))
-	shoot_cooldown = SHOOT_COOLDOWN
-	air_time = 0.0
 
 
 func _spawn_fireball(offset, vel):
