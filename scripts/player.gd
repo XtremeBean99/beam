@@ -3,6 +3,7 @@ extends CharacterBody2D
 @onready var jump_sound: AudioStreamPlayer2D = $JumpSound
 @onready var kick_sound: AudioStreamPlayer2D = $KickSound
 @onready var punch_sound: AudioStreamPlayer2D = $PunchSound
+@onready var pen_trail: Line2D = $PenTrail
 
 
 const SPEED = 300.0
@@ -124,3 +125,6 @@ func _physics_process(delta: float) -> void:
 		animated_sprite_2d.flip_h = true
 	if is_sliding:
 		animated_sprite_2d.flip_h = (slide_dir < 0)
+
+	if Input.is_action_pressed("draw"):
+		pen_trail.add_trail_point(global_position)
