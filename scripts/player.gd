@@ -15,7 +15,8 @@ const WALL_SLIDE_GRAVITY = 300.0
 const GRAVITY = 980.0
 
 const SLIDE_ACCEL = 850.0
-const SLIDE_FRICTION = 0.97
+const SLIDE_FRICTION = 0.98
+const SLIDE_FLAT_FRICTION = 0.995
 const SLIDE_KICK_THRESHOLD = 1.1
 const SLIDE_MIN_SPEED = 30.0
 const SLIDE_STOP_SPEED = 20.0
@@ -159,34 +160,45 @@ func _physics_process(delta):
 		velocity.y = JUMP_VELOCITY
 		jump_sound.play()
 
-	# --- Slide / Slope Movement ---
-	if not is_sliding and is_on_floor() and crouching and not is_attacking and not direction:
-		# Crouching on a slope: slide downhill
-		var normal = get_floor_normal()
-		var slope = abs(normal.x)
-		if slope > SLOPE_SLIDE_THRESHOLD:
-			is_sliding = true
-			slide_dir = -sign(normal.x)
-			slide_timer = 0.0
-
-	# Shooting — ranged fireball attack (ground only)
-	if Input.is_action_just_pressed("shoot") and shoot_cooldown <= 0.0 and not is_attacking and is_on_floor():
-		_shoot_fireball()
-
+	# --- Slide ---
 	if Input.is_action_just_pressed("crouch") and is_on_floor() and not is_attacking and not is_sliding and abs(velocity.x) >= SLIDE_MIN_SPEED:
 		is_sliding = true
 		slide_dir = sign(velocity.x)
 		slide_timer = 0.0
 
 	if is_sliding:
-		if Input.is_action_just_pressed("jump"):
+		var still_sliding = is_on_floor() and not is_attacking
+
+		if Input.is_action_just_pressed("jump") and still_sliding:
 			is_sliding = false
 			slide_timer = 0.0
 			floor_angle = 0.0
 			velocity.y = JUMP_VELOCITY
 			jump_sound.play()
+		elif not is_on_floor() or not Input.is_action_pressed("crouch"):
+			# Fell off or released crouch — end slide
+			is_sliding = false
+			slide_timer = 0.0
+			floor_angle = 0.0
+		elif direction == 0 and slide_timer >= SLIDE_KICK_THRESHOLD:
+			# Released direction after long slide — auto-kick
+			is_attacking = true
+			is_sliding = false
+			slide_timer = 0.0
+			floor_angle = 0.0
+			animated_sprite_2d.play("crouch-kick")
+			kick_sound.play()
+			_enable_hitbox()
+		elif direction == 0:
+			# Released direction but slide too short — just stop
+			is_sliding = false
+			slide_timer = 0.0
+			floor_angle = 0.0
+			velocity.x = 0
 		else:
+			# Still holding direction — accelerate
 			slide_timer += delta
+			slide_dir = sign(direction)
 
 			var normal = get_floor_normal()
 			var slope = abs(normal.x)
@@ -195,24 +207,20 @@ func _physics_process(delta):
 
 			var current_speed = velocity.x * surface_right.x + velocity.y * surface_right.y
 
+			# Accelerate proportional to slope, maintain on flat
 			if slope > 0.01:
 				current_speed += SLIDE_ACCEL * slope * delta * slide_dir
-			current_speed *= SLIDE_FRICTION
+				current_speed *= SLIDE_FRICTION
+			else:
+				current_speed *= SLIDE_FLAT_FRICTION
+			# Ensure minimum slide speed while keys held
+			if abs(current_speed) < SLIDE_STOP_SPEED:
+				current_speed = SLIDE_STOP_SPEED * slide_dir
 			velocity = surface_right * current_speed
 
-			if abs(current_speed) < SLIDE_STOP_SPEED and slope < 0.03:
-				is_sliding = false
-				slide_timer = 0.0
-				floor_angle = 0.0
-
-			if slide_timer >= SLIDE_KICK_THRESHOLD and not is_attacking:
-				is_attacking = true
-				is_sliding = false
-				slide_timer = 0.0
-				floor_angle = 0.0
-				animated_sprite_2d.play("crouch-kick")
-				kick_sound.play()
-				_enable_hitbox()
+	# Shooting — ranged fireball attack (ground only)
+	if Input.is_action_just_pressed("shoot") and shoot_cooldown <= 0.0 and not is_attacking and is_on_floor():
+		_shoot_fireball()
 	elif crouching or (is_attacking and is_on_floor()):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	elif direction:
