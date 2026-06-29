@@ -14,7 +14,7 @@ const WALL_JUMP_VERTICAL = -550.0
 const WALL_SLIDE_GRAVITY = 300.0
 const GRAVITY = 980.0
 
-const SLIDE_ACCEL = 600.0
+const SLIDE_ACCEL = 850.0
 const SLIDE_FRICTION = 0.97
 const SLIDE_KICK_THRESHOLD = 1.1
 const SLIDE_MIN_SPEED = 30.0
@@ -54,7 +54,7 @@ func _ready():
 		if frames.has_animation(anim):
 			frames.set_animation_loop(anim, false)
 	animated_sprite_2d.animation_finished.connect(_on_animation_finished)
-	floor_max_angle = deg_to_rad(50)
+	floor_max_angle = deg_to_rad(60)
 	floor_snap_length = 6.0
 	attack_collision = CollisionShape2D.new()
 	var rect = RectangleShape2D.new()
@@ -123,14 +123,19 @@ func _physics_process(delta):
 	if not is_finite(velocity.y):
 		velocity.y = 0.0
 
-	if not is_on_floor():
-		if is_on_wall() and velocity.y > 0:
-			velocity.y = velocity.y + (WALL_SLIDE_GRAVITY / GRAVITY) * delta
-		else:
-			velocity.y = velocity.y + GRAVITY * delta
-
 	var direction = Input.get_axis("left", "right")
 	var crouching = Input.is_action_pressed("crouch") and is_on_floor()
+
+	if not is_on_floor():
+		if is_on_wall() and velocity.y > 0:
+			var wall_normal = get_wall_normal()
+			var pushing_into_wall = direction != 0 and sign(direction) == -sign(wall_normal.x)
+			if pushing_into_wall:
+				velocity.y = velocity.y + (WALL_SLIDE_GRAVITY / GRAVITY) * delta
+			else:
+				velocity.y = velocity.y + GRAVITY * delta
+		else:
+			velocity.y = velocity.y + GRAVITY * delta
 
 	if Input.is_action_just_pressed("jump") and is_on_wall() and not is_on_floor() and not is_attacking and wall_jumps_used < MAX_WALL_JUMPS:
 		wall_jumps_used += 1
@@ -174,7 +179,14 @@ func _physics_process(delta):
 		slide_timer = 0.0
 
 	if is_sliding:
-		slide_timer += delta
+		if Input.is_action_just_pressed("jump"):
+			is_sliding = false
+			slide_timer = 0.0
+			floor_angle = 0.0
+			velocity.y = JUMP_VELOCITY
+			jump_sound.play()
+		else:
+			slide_timer += delta
 
 		var normal = get_floor_normal()
 		var slope = abs(normal.x)
