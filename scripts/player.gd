@@ -51,7 +51,10 @@ func _ready():
 	attack_collision.position = Vector2(30, -5)
 	attack_collision.disabled = true
 	attack_hitbox.add_child(attack_collision)
+	attack_hitbox.collision_layer = 4
+	attack_hitbox.collision_mask = 1
 	attack_hitbox.body_entered.connect(_on_attack_hit)
+	attack_hitbox.area_entered.connect(_on_attack_hit_area)
 
 
 func _on_animation_finished():
@@ -194,6 +197,12 @@ func _on_attack_hit(body):
 	if body.has_method("take_damage"):
 		var knockback_dir = 1.0 if facing_right else -1.0
 		body.take_damage(ATTACK_DAMAGE, knockback_dir)
+
+
+func _on_attack_hit_area(area):
+	if area.has_method("take_damage"):
+		var knockback_dir = 1.0 if facing_right else -1.0
+		area.take_damage(ATTACK_DAMAGE, knockback_dir)
 
 
 func _enable_hitbox():
