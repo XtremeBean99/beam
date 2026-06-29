@@ -157,8 +157,8 @@ func _physics_process(delta):
 		jump_buffer_timer = 0.0
 		coyote_timer = 0.0
 		jump_sound.play()
-	# Double jump — used when no coyote/ground jump is available
 	elif jump_buffer_timer > 0.0 and not is_on_floor() and not is_on_wall() and air_jumps_left > 0 and not is_busy:
+		# Double jump — used when no coyote/ground jump is available
 		velocity.y = JUMP_VELOCITY
 		air_jumps_left -= 1
 		jump_buffer_timer = 0.0
