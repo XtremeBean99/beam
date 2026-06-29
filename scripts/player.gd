@@ -3,14 +3,10 @@ extends CharacterBody2D
 @onready var jump_sound: AudioStreamPlayer2D = $JumpSound
 @onready var kick_sound: AudioStreamPlayer2D = $KickSound
 @onready var punch_sound: AudioStreamPlayer2D = $PunchSound
-@onready var pistol_sound: AudioStreamPlayer2D = $PistolSound
 
 
 const SPEED = 300.0
 const JUMP_VELOCITY = -700.0
-
-var health = 100
-var alive = true
 
 # Attacks that play once and lock out other animations until they finish.
 const ATTACK_ANIMS = ["punch", "crouch-kick", "kick", "flying-kick"]
@@ -43,11 +39,6 @@ func _on_animation_finished() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	
-	if health <= 0:
-		alive = false 
-		return
-	
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -133,8 +124,3 @@ func _physics_process(delta: float) -> void:
 		animated_sprite_2d.flip_h = true
 	if is_sliding:
 		animated_sprite_2d.flip_h = (slide_dir < 0)
-		
-func hurt() -> void:
-	pistol_sound.play()
-	health -= 10 
-	animated_sprite_2d.animation = "hurt"
