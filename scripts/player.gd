@@ -10,6 +10,15 @@ const WALL_JUMP_VERTICAL = -550.0
 const WALL_SLIDE_GRAVITY = 300.0
 const GRAVITY = 980.0
 
+const RUN_ACCEL = 2200.0
+const RUN_FRICTION = 2600.0
+const AIR_ACCEL = 1600.0
+const AIR_FRICTION = 800.0
+const FALL_GRAVITY_MULT = 1.25
+const JUMP_CUT_MULT = 0.45
+const COYOTE_TIME = 0.1
+const JUMP_BUFFER_TIME = 0.1
+
 const SLIDE_ACCEL = 850.0
 const SLIDE_FRICTION = 0.98
 const SLIDE_FLAT_FRICTION = 0.995
@@ -32,6 +41,8 @@ var facing_right = true
 var floor_angle = 0.0
 var wall_jumps_used = 0
 var air_time = 0.0
+var coyote_timer = 0.0
+var jump_buffer_timer = 0.0
 
 signal player_died
 
@@ -107,9 +118,20 @@ func _physics_process(delta):
 			if pushing:
 				velocity.y += (WALL_SLIDE_GRAVITY / GRAVITY) * delta
 			else:
-				velocity.y += GRAVITY * delta
+				velocity.y += GRAVITY * (FALL_GRAVITY_MULT if velocity.y > 0 else 1.0) * delta
 		else:
-			velocity.y += GRAVITY * delta
+			velocity.y += GRAVITY * (FALL_GRAVITY_MULT if velocity.y > 0 else 1.0) * delta
+
+	# Coyote + jump buffer timers
+	if is_on_floor():
+		coyote_timer = COYOTE_TIME
+	else:
+		coyote_timer = max(0.0, coyote_timer - delta)
+
+	if Input.is_action_just_pressed("jump"):
+		jump_buffer_timer = JUMP_BUFFER_TIME
+	else:
+		jump_buffer_timer = max(0.0, jump_buffer_timer - delta)
 
 	# Wall jump
 	if Input.is_action_just_pressed("jump") and is_on_wall() and not is_on_floor() and not is_busy and wall_jumps_used < MAX_WALL_JUMPS:
@@ -119,10 +141,15 @@ func _physics_process(delta):
 		velocity.y = WALL_JUMP_VERTICAL
 		jump_sound.play()
 
-	# Ground jump
-	if Input.is_action_just_pressed("jump") and is_on_floor() and not is_busy:
+	# Ground jump (coyote + buffered) and variable height
+	if jump_buffer_timer > 0.0 and coyote_timer > 0.0 and not is_sliding and not is_busy:
 		velocity.y = JUMP_VELOCITY
+		jump_buffer_timer = 0.0
+		coyote_timer = 0.0
 		jump_sound.play()
+
+	if Input.is_action_just_released("jump") and velocity.y < 0.0:
+		velocity.y *= JUMP_CUT_MULT
 
 	# Start slide
 	if Input.is_action_just_pressed("crouch") and is_on_floor() and not is_busy and not is_sliding and abs(velocity.x) >= SLIDE_MIN_SPEED:
@@ -163,14 +190,14 @@ func _physics_process(delta):
 				current_speed = SLIDE_STOP_SPEED * slide_dir
 			velocity = surface_right * current_speed
 
-	# Horizontal movement (when not sliding)
+	# Horizontal movement (when not sliding) — accel/friction for momentum
 	if not is_sliding:
-		if crouching or is_busy:
-			velocity.x = move_toward(velocity.x, 0, SPEED)
-		elif direction:
-			velocity.x = direction * SPEED
+		var accel = RUN_ACCEL if is_on_floor() else AIR_ACCEL
+		var friction = RUN_FRICTION if is_on_floor() else AIR_FRICTION
+		if (crouching or is_busy) or direction == 0:
+			velocity.x = move_toward(velocity.x, 0.0, friction * delta)
 		else:
-			velocity.x = move_toward(velocity.x, 0, SPEED)
+			velocity.x = move_toward(velocity.x, direction * SPEED, accel * delta)
 
 	# Animation
 	if not is_busy:
