@@ -171,8 +171,14 @@ No attack buttons. Health stays at `3` with i-frames on hurt (kept).
   ground curves, the ramp/slope, the small platform, and minor accents. `map2` is
   shown as a faint authoring guide (a low-opacity `TextureRect`) and hidden at
   runtime.
-- **Contents:** player spawn, snail enemies, collectables, and an **ensō goal
-  gate** (Area2D) that fires level-complete.
+- **Contents:** player spawn, snail enemies, and collectables.
+- **Completion condition:** collect **all** collectables in the level. When the
+  last one is taken, level-complete fires.
+- **Beam transport (on-theme with the title):** on completion a vertical **beam of
+  light** descends onto the player; the player rises/dissolves into it and is
+  **transported to the next level** (for now: back to a fresh Level 2 / the
+  level-complete screen, since only one level exists). This beam is the canonical
+  level-transition effect and reuses the ink-wipe transition underneath.
 - **Respawn:** fast respawn at the start (or a placed checkpoint) on death —
   movement-game pacing, replacing the current full `reload_current_scene()` delay.
 - **Background:** monochrome void with subtle parallax ink/circuit motifs.
@@ -195,9 +201,11 @@ bright-outline Button/Panel/Label styles; glow on focus; pressed/disabled states
 - **Settings** — **master / music / SFX** volume via audio buses + **keyboard
   rebinding**, persisted with `ConfigFile` (`scripts/settings.gd`). (Was deferred
   item 2.1.)
-- **Level complete** — the incomplete ensō **closes** as the reward motif; shows
-  **time / score / kills**; Continue.
-- **Transitions** — a simple **ink-wipe** fade between scenes.
+- **Level complete** — triggered by collecting all collectables. The player is
+  taken up in the **beam of light** (§7), then the screen shows the closing **ensō**
+  reward motif with **time / score / kills**; Continue.
+- **Transitions** — a simple **ink-wipe** fade between scenes; the beam-of-light
+  effect plays over it for level completion.
 
 ---
 
