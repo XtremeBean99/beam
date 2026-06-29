@@ -15,6 +15,18 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 shadow_size = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health"]
+bg_color = Color(0.7, 0.05, 0.05, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_radius_top_left = 5
+border_radius_top_right = 5
+border_radius_bottom_right = 5
+border_radius_bottom_left = 5
+shadow_size = 5
+
 [node name="Main" type="Node2D" unique_id=1104803943]
 script = ExtResource("1_rvslj")
 
@@ -52,11 +64,15 @@ theme_override_font_sizes/font_size = 32
 text = "SCORE: 0"
 
 [node name="HealthPanel" type="Panel" parent="HUD" unique_id=1851767424]
-offset_left = 1690.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 85.0
 offset_top = 20.0
-offset_right = 1850.0
+offset_right = 245.0
 offset_bottom = 70.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_g4v7s")
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_health")
 
 [node name="HealthLabel" type="Label" parent="HUD/HealthPanel" unique_id=753828771]
 layout_mode = 1
