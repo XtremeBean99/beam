@@ -11,6 +11,10 @@ export_presets.cfg
 # Large tutorial/reference videos
 *.mp4
 
+# Oversized background music (exceeds GitHub 100MB limit) — kept locally,
+# to be trimmed/compressed and re-added later
+assets/sounds/bgm.mp3
+
 # OS files
 .DS_Store
 Thumbs.db
