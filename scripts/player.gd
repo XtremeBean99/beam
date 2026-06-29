@@ -96,6 +96,11 @@ func _physics_process(delta):
 	if not alive:
 		return
 
+	if not is_finite(velocity.x):
+		velocity.x = 0.0
+	if not is_finite(velocity.y):
+		velocity.y = 0.0
+
 	if not is_on_floor():
 		if is_on_wall() and velocity.y > 0:
 			var g = abs(get_gravity())

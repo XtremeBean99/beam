@@ -72,7 +72,7 @@ func _create_platform(from, to):
 
 	var shape = CollisionShape2D.new()
 	var rect = RectangleShape2D.new()
-	rect.size = Vector2(length + PLATFORM_WIDTH, PLATFORM_HEIGHT)
+	rect.size = Vector2(max(length + PLATFORM_WIDTH, 4.0), PLATFORM_HEIGHT)
 	shape.shape = rect
 	body.add_child(shape)
 
