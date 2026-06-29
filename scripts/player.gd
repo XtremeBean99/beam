@@ -18,6 +18,7 @@ const FALL_GRAVITY_MULT = 1.25
 const JUMP_CUT_MULT = 0.45
 const COYOTE_TIME = 0.1
 const JUMP_BUFFER_TIME = 0.1
+const MAX_AIR_JUMPS = 1
 
 const SLIDE_ACCEL = 850.0
 const SLIDE_FRICTION = 0.98
@@ -43,6 +44,7 @@ var wall_jumps_used = 0
 var air_time = 0.0
 var coyote_timer = 0.0
 var jump_buffer_timer = 0.0
+var air_jumps_left = MAX_AIR_JUMPS
 
 signal player_died
 
@@ -125,6 +127,7 @@ func _physics_process(delta):
 	# Coyote + jump buffer timers
 	if is_on_floor():
 		coyote_timer = COYOTE_TIME
+		air_jumps_left = MAX_AIR_JUMPS
 	else:
 		coyote_timer = max(0.0, coyote_timer - delta)
 
@@ -133,12 +136,17 @@ func _physics_process(delta):
 	else:
 		jump_buffer_timer = max(0.0, jump_buffer_timer - delta)
 
+	# Touching a wall (airborne) refreshes the air jump → fluid wall chains
+	if is_on_wall() and not is_on_floor():
+		air_jumps_left = MAX_AIR_JUMPS
+
 	# Wall jump
 	if Input.is_action_just_pressed("jump") and is_on_wall() and not is_on_floor() and not is_busy and wall_jumps_used < MAX_WALL_JUMPS:
 		wall_jumps_used += 1
 		var wall_normal = get_wall_normal()
 		velocity.x = wall_normal.x * WALL_JUMP_HORIZONTAL
 		velocity.y = WALL_JUMP_VERTICAL
+		air_jumps_left = MAX_AIR_JUMPS
 		jump_buffer_timer = 0.0
 		coyote_timer = 0.0
 		jump_sound.play()
@@ -148,6 +156,12 @@ func _physics_process(delta):
 		velocity.y = JUMP_VELOCITY
 		jump_buffer_timer = 0.0
 		coyote_timer = 0.0
+		jump_sound.play()
+	# Double jump — used when no coyote/ground jump is available
+	elif jump_buffer_timer > 0.0 and not is_on_floor() and not is_on_wall() and air_jumps_left > 0 and not is_busy:
+		velocity.y = JUMP_VELOCITY
+		air_jumps_left -= 1
+		jump_buffer_timer = 0.0
 		jump_sound.play()
 
 	if Input.is_action_just_released("jump") and velocity.y < 0.0:
