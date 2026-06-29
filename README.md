@@ -49,3 +49,7 @@ assets/
 
 - Melee attacks are currently animation + sound only (no damage hitboxes yet).
 - The crouch does not shrink the player's collision shape.
+
+## License
+
+Source-available under the [PolyForm Noncommercial License 1.0.0](LICENSE). Free to use, modify, and share for **noncommercial** purposes. **Commercial use** and **use as AI/ML training data** require prior written permission — contact Ahmed Hussain (Ahmedyhussain07@gmail.com).
