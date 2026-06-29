@@ -14,11 +14,12 @@ const WALL_JUMP_VERTICAL = -550.0
 const WALL_SLIDE_GRAVITY = 300.0
 const GRAVITY = 980.0
 
-const SLIDE_SPEED = 650.0
-const SLIDE_FRICTION = 0.92
-const SLIDE_KICK_THRESHOLD = 0.55
+const SLIDE_SPEED = 750.0
+const SLIDE_FRICTION = 0.95
+const SLIDE_KICK_THRESHOLD = 1.1
 const SLIDE_MIN_SPEED = 40.0
 const SLIDE_STOP_SPEED = 25.0
+const SLIDE_BOOST_TIME = 0.15
 const SLOPE_SLIDE_THRESHOLD = 0.08
 
 const ATTACK_ANIMS = ["punch", "crouch-kick", "kick", "flying-kick"]
@@ -126,15 +127,12 @@ func _physics_process(delta):
 		velocity.y = WALL_JUMP_VERTICAL
 		jump_sound.play()
 
+	# — Attacks (no crouch-attack; crouch is slide only) —
 	elif not is_attacking:
-		if Input.is_action_just_pressed("punch") and is_on_floor():
+		if Input.is_action_just_pressed("punch") and is_on_floor() and not crouching:
 			is_attacking = true
-			if crouching:
-				animated_sprite_2d.play("crouch-kick")
-				kick_sound.play()
-			else:
-				animated_sprite_2d.play("punch")
-				punch_sound.play()
+			animated_sprite_2d.play("punch")
+			punch_sound.play()
 			_enable_hitbox()
 		elif Input.is_action_just_pressed("kick"):
 			is_attacking = true
@@ -167,38 +165,38 @@ func _physics_process(delta):
 		is_sliding = true
 		slide_dir = sign(velocity.x)
 		slide_timer = 0.0
+		velocity.x = SLIDE_SPEED * slide_dir
 
 	if is_sliding:
 		slide_timer += delta
 
+		# Get floor normal for slope-aware sliding
 		var normal = get_floor_normal()
 		var slope = abs(normal.x)
-
-		# Surface tangent pointing right (downhill for rightward slopes)
 		var surface_right = Vector2(-normal.y, normal.x)
 		floor_angle = surface_right.angle()
 
-		# Compute slide velocity along the surface
+		# Current speed along the surface
 		var current_speed = velocity.x * surface_right.x + velocity.y * surface_right.y
+
 		if abs(current_speed) < SLIDE_STOP_SPEED and slope < 0.02:
 			is_sliding = false
 			slide_timer = 0.0
 			floor_angle = 0.0
 			velocity = Vector2.ZERO
 		else:
-			# Friction
-			current_speed *= SLIDE_FRICTION
-			# Gravity along the slope (always downhill, independent of direction)
+			# Speed boost during initial slide window
+			if slide_timer < SLIDE_BOOST_TIME:
+				current_speed = SLIDE_SPEED * slide_dir
+			else:
+				current_speed *= SLIDE_FRICTION
+			# Gravity along the slope
 			if slope > 0.01:
 				var grav_downhill = GRAVITY * slope * delta
-				# Determine if we're going downhill or uphill along surface_right
-				# If moving right and slope goes down to the right, surface_right.y < 0 => downhill
-				# Add or subtract gravity based on direction relative to downhill
 				if current_speed >= 0:
 					current_speed += grav_downhill
 				else:
 					current_speed -= grav_downhill
-			# Apply velocity along tangent
 			velocity = surface_right * current_speed
 
 		# Auto-kick or stop
