@@ -1,0 +1,40 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/fireball.gd" id="1_fireball"]
+[ext_resource type="Texture2D" path="res://assets/images/SPRITES/fx/fireball/fireball-sprites/fireball1.png" id="1_f1"]
+[ext_resource type="Texture2D" path="res://assets/images/SPRITES/fx/fireball/fireball-sprites/fireball2.png" id="2_f2"]
+[ext_resource type="Texture2D" path="res://assets/images/SPRITES/fx/fireball/fireball-sprites/fireball3.png" id="3_f3"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fireball"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_f1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_f2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_f3")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fireball"]
+radius = 12.0
+
+[node name="Fireball" type="Area2D"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1_fireball")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_fireball")
+animation = &"default"
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_fireball")

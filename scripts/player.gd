@@ -36,6 +36,9 @@ var slide_dir = 1.0
 var slide_timer = 0.0
 var facing_right = true
 var floor_angle = 0.0
+var shoot_cooldown = 0.0
+const SHOOT_COOLDOWN = 0.4
+var fireball_scene = preload("res://scenes/fireball.tscn")
 
 signal player_died
 
@@ -101,6 +104,8 @@ func _physics_process(delta):
 	if not alive:
 		return
 
+	shoot_cooldown = max(0.0, shoot_cooldown - delta)
+
 	if not is_finite(velocity.x):
 		velocity.x = 0.0
 	if not is_finite(velocity.y):
@@ -153,6 +158,10 @@ func _physics_process(delta):
 			is_sliding = true
 			slide_dir = -sign(normal.x)
 			slide_timer = 0.0
+
+	# Shooting — ranged fireball attack
+	if Input.is_action_just_pressed("shoot") and shoot_cooldown <= 0.0 and not is_attacking:
+		_shoot_fireball()
 
 	if Input.is_action_just_pressed("crouch") and is_on_floor() and not is_attacking and not is_sliding and abs(velocity.x) >= SLIDE_MIN_SPEED:
 		is_sliding = true
@@ -267,3 +276,11 @@ func _enable_hitbox():
 	attack_collision.shape.size = Vector2(50, hitbox_height)
 	attack_collision.disabled = false
 	attack_hitbox_active = true
+
+
+func _shoot_fireball():
+	var fb = fireball_scene.instantiate()
+	fb.direction = 1.0 if facing_right else -1.0
+	fb.position = global_position + Vector2(40.0 * fb.direction, -10.0)
+	get_parent().add_child(fb)
+	shoot_cooldown = SHOOT_COOLDOWN
