@@ -127,14 +127,9 @@ func _physics_process(delta):
 		velocity.y = WALL_JUMP_VERTICAL
 		jump_sound.play()
 
-	# — Attacks (no crouch-attack; crouch is slide only) —
+	# — Attacks (kick and fireball-punch only) —
 	elif not is_attacking:
-		if Input.is_action_just_pressed("punch") and is_on_floor() and not crouching:
-			is_attacking = true
-			animated_sprite_2d.play("punch")
-			punch_sound.play()
-			_enable_hitbox()
-		elif Input.is_action_just_pressed("kick"):
+		if Input.is_action_just_pressed("kick"):
 			is_attacking = true
 			if is_on_floor():
 				animated_sprite_2d.play("kick")
@@ -158,7 +153,7 @@ func _physics_process(delta):
 			slide_timer = 0.0
 
 	# Shooting — ranged fireball attack
-	if Input.is_action_just_pressed("shoot") and shoot_cooldown <= 0.0 and not is_attacking:
+	if Input.is_action_just_pressed("shoot") and shoot_cooldown <= 0.0 and not is_attacking and is_on_floor():
 		_shoot_fireball()
 
 	if Input.is_action_just_pressed("crouch") and is_on_floor() and not is_attacking and not is_sliding and abs(velocity.x) >= SLIDE_MIN_SPEED:
@@ -277,6 +272,9 @@ func _enable_hitbox():
 
 
 func _shoot_fireball():
+	is_attacking = true
+	animated_sprite_2d.play("punch")
+	punch_sound.play()
 	var fb = fireball_scene.instantiate()
 	fb.direction = 1.0 if facing_right else -1.0
 	fb.position = global_position + Vector2(40.0 * fb.direction, -10.0)
