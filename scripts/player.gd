@@ -15,10 +15,11 @@ const WALL_SLIDE_GRAVITY = 300.0
 const GRAVITY = 980.0
 
 const SLIDE_SPEED = 650.0
-const SLIDE_FRICTION = 0.88
+const SLIDE_FRICTION = 0.92
 const SLIDE_KICK_THRESHOLD = 0.55
-const SLIDE_MIN_SPEED = 80.0
-const SLIDE_STOP_SPEED = 40.0
+const SLIDE_MIN_SPEED = 60.0
+const SLIDE_STOP_SPEED = 30.0
+const SLOPE_SLIDE_THRESHOLD = 0.15
 
 const ATTACK_ANIMS = ["punch", "crouch-kick", "kick", "flying-kick"]
 const HURT_ANIMS = ["hurt"]
@@ -34,6 +35,7 @@ var is_sliding = false
 var slide_dir = 1.0
 var slide_timer = 0.0
 var facing_right = true
+var floor_angle = 0.0
 
 signal player_died
 
@@ -140,26 +142,66 @@ func _physics_process(delta):
 		velocity.y = JUMP_VELOCITY
 		jump_sound.play()
 
+	# --- Slide / Slope Movement ---
+	if not is_sliding and is_on_floor() and crouching and not is_attacking and not direction:
+		# Crouching on a slope: slide downhill
+		var normal = get_floor_normal()
+		var slope = abs(normal.x)
+		if slope > SLOPE_SLIDE_THRESHOLD:
+			is_sliding = true
+			slide_dir = -sign(normal.x)
+			slide_timer = 0.0
+
 	if Input.is_action_just_pressed("crouch") and is_on_floor() and not is_attacking and not is_sliding and abs(velocity.x) >= SLIDE_MIN_SPEED:
 		is_sliding = true
 		slide_dir = sign(velocity.x)
 		slide_timer = 0.0
-		velocity.x = SLIDE_SPEED * slide_dir
 
 	if is_sliding:
 		slide_timer += delta
+
+		# Get floor normal for slope-aware sliding
+		var normal = get_floor_normal()
+		var slope = abs(normal.x)
+		var tangent = Vector2(slide_dir, 0)
+
+		if slope > 0.01:
+			# Tangent along the slope (pointing downhill in slide direction)
+			tangent = Vector2(-normal.y * slide_dir, normal.x * slide_dir)
+			floor_angle = atan2(-normal.x, normal.y)
+		else:
+			floor_angle = 0.0
+
+		# Current speed along the slide direction
+		var current_speed = velocity.x * tangent.x + velocity.y * tangent.y
+		if current_speed < 0:
+			current_speed = 0
+
+		# Friction
+		current_speed *= SLIDE_FRICTION
+
+		# Gravity pull along the slope (adds momentum downhill)
+		var grav_along_slope = GRAVITY * slope * delta
+		current_speed += grav_along_slope
+
+		# Apply velocity along tangent
+		velocity = tangent * current_speed
+
+		# Auto-kick or stop
 		if slide_timer >= SLIDE_KICK_THRESHOLD and not is_attacking:
 			is_attacking = true
 			is_sliding = false
 			slide_timer = 0.0
+			floor_angle = 0.0
 			animated_sprite_2d.play("crouch-kick")
 			kick_sound.play()
 			_enable_hitbox()
-		elif abs(velocity.x) < SLIDE_STOP_SPEED:
+		elif current_speed < SLIDE_STOP_SPEED and slope < 0.05:
 			is_sliding = false
 			slide_timer = 0.0
-		else:
-			velocity.x *= SLIDE_FRICTION
+			floor_angle = 0.0
+			velocity.x = 0
+			velocity.y = 0
 	elif crouching or (is_attacking and is_on_floor()):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	elif direction:
@@ -186,6 +228,13 @@ func _physics_process(delta):
 
 	move_and_slide()
 
+	# Reset rotation if not sliding
+	if not is_sliding and floor_angle != 0:
+		floor_angle = 0.0
+
+	# Apply slope rotation to sprite
+	animated_sprite_2d.rotation = floor_angle
+
 	if direction == 1.0:
 		animated_sprite_2d.flip_h = false
 		facing_right = true
@@ -210,6 +259,12 @@ func _on_attack_hit_area(area):
 
 func _enable_hitbox():
 	var offset_x = 30.0 if facing_right else -30.0
-	attack_collision.position.x = offset_x
+	var offset_y = -5.0
+	var hitbox_height = 30.0
+	if is_sliding or (Input.is_action_pressed("crouch") and is_on_floor()):
+		offset_y = 8.0
+		hitbox_height = 20.0
+	attack_collision.position = Vector2(offset_x, offset_y)
+	attack_collision.shape.size = Vector2(50, hitbox_height)
 	attack_collision.disabled = false
 	attack_hitbox_active = true
