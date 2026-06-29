@@ -4,6 +4,7 @@ extends Area2D
 
 signal collected
 const ROTATION_SPEED := 2.0
+var is_collected := false
 
 func _ready() -> void:
 	add_to_group("collectables")
@@ -12,6 +13,9 @@ func _process(delta: float) -> void:
 	animated_sprite_2d.rotation += ROTATION_SPEED * delta
 
 func _on_body_entered(_body: Node2D) -> void:
+	if is_collected:
+		return
+	is_collected = true
 	animated_sprite_2d.rotation = 0.0
 	animated_sprite_2d.animation = "collected"
 	collected.emit()

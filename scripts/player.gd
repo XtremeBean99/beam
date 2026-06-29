@@ -22,13 +22,15 @@ var health := 3
 var invincible := false
 const INVINCIBLE_MS := 1000.0
 
-const SLIDE_SPEED := 520.0
+const SLIDE_SPEED := 650.0
 const SLIDE_FRICTION := 0.88
 const SLIDE_KICK_THRESHOLD := 0.55
 
 var is_sliding := false
 var slide_dir := 1.0
 var slide_timer := 0.0
+
+signal player_died
 
 
 func _ready() -> void:
@@ -55,6 +57,7 @@ func hurt() -> void:
 	if health <= 0:
 		alive = false
 		is_attacking = true
+		player_died.emit()
 		animated_sprite_2d.play("hurt")
 		# Disable physics so the death animation plays out
 		set_physics_process(false)
