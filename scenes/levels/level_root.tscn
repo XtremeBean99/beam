@@ -290,6 +290,12 @@ scale = Vector2(2, 2)
 [node name="Snail" parent="Enemies" unique_id=1197144203 instance=ExtResource("4_f5m83")]
 position = Vector2(590, 374)
 
+[node name="Snail3" parent="Enemies" unique_id=1743277877 instance=ExtResource("4_f5m83")]
+position = Vector2(1692, 948)
+
+[node name="Snail2" parent="Enemies" unique_id=172442983 instance=ExtResource("4_f5m83")]
+position = Vector2(1276, 463)
+
 [node name="Collectables" type="Node2D" parent="." unique_id=1659751265]
 
 [node name="Collectable" parent="Collectables" unique_id=411621955 instance=ExtResource("5_4po5r")]

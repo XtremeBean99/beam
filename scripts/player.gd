@@ -188,32 +188,31 @@ func _physics_process(delta):
 		else:
 			slide_timer += delta
 
-		var normal = get_floor_normal()
-		var slope = abs(normal.x)
-		var surface_right = Vector2(-normal.y, normal.x)
-		floor_angle = surface_right.angle()
+			var normal = get_floor_normal()
+			var slope = abs(normal.x)
+			var surface_right = Vector2(-normal.y, normal.x)
+			floor_angle = surface_right.angle()
 
-		var current_speed = velocity.x * surface_right.x + velocity.y * surface_right.y
+			var current_speed = velocity.x * surface_right.x + velocity.y * surface_right.y
 
-		# Accelerate proportionally to slope steepness
-		if slope > 0.01:
-			current_speed += SLIDE_ACCEL * slope * delta * slide_dir
-		current_speed *= SLIDE_FRICTION
-		velocity = surface_right * current_speed
+			if slope > 0.01:
+				current_speed += SLIDE_ACCEL * slope * delta * slide_dir
+			current_speed *= SLIDE_FRICTION
+			velocity = surface_right * current_speed
 
-		if abs(current_speed) < SLIDE_STOP_SPEED and slope < 0.03:
-			is_sliding = false
-			slide_timer = 0.0
-			floor_angle = 0.0
+			if abs(current_speed) < SLIDE_STOP_SPEED and slope < 0.03:
+				is_sliding = false
+				slide_timer = 0.0
+				floor_angle = 0.0
 
-		# Auto-kick after long slide
-			is_attacking = true
-			is_sliding = false
-			slide_timer = 0.0
-			floor_angle = 0.0
-			animated_sprite_2d.play("crouch-kick")
-			kick_sound.play()
-			_enable_hitbox()
+			if slide_timer >= SLIDE_KICK_THRESHOLD and not is_attacking:
+				is_attacking = true
+				is_sliding = false
+				slide_timer = 0.0
+				floor_angle = 0.0
+				animated_sprite_2d.play("crouch-kick")
+				kick_sound.play()
+				_enable_hitbox()
 	elif crouching or (is_attacking and is_on_floor()):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	elif direction:
@@ -294,8 +293,7 @@ func _shoot_fireball():
 
 
 func _falling_attack():
-	is_attacking = true
-	animated_sprite_2d.play("flying-kick")
+	animated_sprite_2d.play("fall")
 	kick_sound.play()
 	_spawn_fireball(Vector2(0, 30.0), Vector2(0, 600.0))
 
