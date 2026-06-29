@@ -139,6 +139,8 @@ func _physics_process(delta):
 		var wall_normal = get_wall_normal()
 		velocity.x = wall_normal.x * WALL_JUMP_HORIZONTAL
 		velocity.y = WALL_JUMP_VERTICAL
+		jump_buffer_timer = 0.0
+		coyote_timer = 0.0
 		jump_sound.play()
 
 	# Ground jump (coyote + buffered) and variable height
