@@ -38,8 +38,10 @@ var facing_right = true
 var floor_angle = 0.0
 var shoot_cooldown = 0.0
 var air_time = 0.0
+var wall_jumps_used = 0
 const SHOOT_COOLDOWN = 0.4
-const FALLING_ATTACK_TIME = 2.0
+const FALLING_ATTACK_TIME = 1.0
+const MAX_WALL_JUMPS = 1
 var fireball_scene = preload("res://scenes/fireball.tscn")
 
 signal player_died
@@ -114,6 +116,7 @@ func _physics_process(delta):
 		if air_time >= FALLING_ATTACK_TIME:
 			_falling_attack()
 		air_time = 0.0
+		wall_jumps_used = 0
 
 	if not is_finite(velocity.x):
 		velocity.x = 0.0
@@ -129,7 +132,8 @@ func _physics_process(delta):
 	var direction = Input.get_axis("left", "right")
 	var crouching = Input.is_action_pressed("crouch") and is_on_floor()
 
-	if Input.is_action_just_pressed("jump") and is_on_wall() and not is_on_floor() and not is_attacking:
+	if Input.is_action_just_pressed("jump") and is_on_wall() and not is_on_floor() and not is_attacking and wall_jumps_used < MAX_WALL_JUMPS:
+		wall_jumps_used += 1
 		var wall_normal = get_wall_normal()
 		velocity.x = wall_normal.x * WALL_JUMP_HORIZONTAL
 		velocity.y = WALL_JUMP_VERTICAL
@@ -189,7 +193,6 @@ func _physics_process(delta):
 			is_sliding = false
 			slide_timer = 0.0
 			floor_angle = 0.0
-			velocity = Vector2.ZERO
 
 		# Auto-kick after long slide
 			is_attacking = true
