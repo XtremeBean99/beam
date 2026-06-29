@@ -113,11 +113,15 @@ func _physics_process(delta):
 
 	if not is_on_floor():
 		air_time += delta
-	elif air_time > 0:
+	elif air_time >= 0.1:
+		# Landed after meaningful airtime
 		if air_time >= FALLING_ATTACK_TIME:
 			_falling_attack()
 		air_time = 0.0
 		wall_jumps_used = 0
+	elif air_time > 0:
+		# Micro-bump — ignore, keep counting if they go airborne again
+		air_time = 0.0
 
 	if not is_finite(velocity.x):
 		velocity.x = 0.0
