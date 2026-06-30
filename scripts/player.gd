@@ -222,16 +222,13 @@ func _physics_process(delta):
 			# slope tilt (+/-theta), so the sprite never flips upside-down.
 			var surface_right = Vector2(-normal.y, normal.x)
 			floor_angle = surface_right.angle()
-			var current_speed = velocity.dot(surface_right)   # signed: + = down/along +x
-			var uphill = slope > 0.02 and signf(slide_dir) != signf(normal.x)
-			if uphill:
-				# Sliding up a slope: gravity + drag bleed the speed off.
-				current_speed = move_toward(current_speed, 0.0, (SLIDE_ACCEL * slope + SLIDE_DRAG) * delta)
-			else:
-				# Flat or downhill: always faster than walking, steeper -> faster.
-				var target = minf(SPEED * (SLIDE_BASE + slope * SLIDE_GAIN), SLIDE_MAX_SPEED) * slide_dir
-				var rate = SLIDE_ACCEL if absf(current_speed) < absf(target) else SLIDE_DRAG
-				current_speed = move_toward(current_speed, target, rate * delta)
+			var current_speed = velocity.dot(surface_right)   # signed: + = along +x
+			# Speed is driven by slope STEEPNESS and is always a boost over walking,
+			# regardless of travel direction — so steep lines are fast either way and
+			# no slide gets misclassified as a slow "uphill".
+			var target = minf(SPEED * (SLIDE_BASE + slope * SLIDE_GAIN), SLIDE_MAX_SPEED) * slide_dir
+			var rate = SLIDE_ACCEL if absf(current_speed) < absf(target) else SLIDE_DRAG
+			current_speed = move_toward(current_speed, target, rate * delta)
 			# End once the slide has genuinely slowed to a crawl.
 			if absf(current_speed) < SLIDE_END_SPEED:
 				is_sliding = false
