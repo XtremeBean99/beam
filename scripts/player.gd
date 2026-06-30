@@ -63,7 +63,7 @@ func _ready():
 			frames.set_animation_loop(anim, false)
 	animated_sprite_2d.animation_finished.connect(_on_animation_finished)
 	floor_max_angle = deg_to_rad(60)
-	floor_snap_length = 6.0
+	floor_snap_length = 16.0
 
 
 func _on_animation_finished():
@@ -216,31 +216,28 @@ func _physics_process(delta):
 			if direction != 0:
 				slide_dir = sign(direction)
 			var normal = get_floor_normal()
-			var slope = absf(normal.x)                       # sin(slope angle)
-			var tangent = Vector2(-normal.y, normal.x).normalized()
-			# Orient the surface tangent along the slide's travel direction.
-			if slide_dir != 0.0 and signf(tangent.x) != signf(slide_dir):
-				tangent = -tangent
-			floor_angle = tangent.angle()
-			var v_along = velocity.dot(tangent)              # speed in travel direction
-			# Downhill if travelling the way gravity pulls along this surface.
+			var slope = absf(normal.x)                        # sin(slope angle)
+			# Right-pointing unit vector along the surface; its angle is the small
+			# slope tilt (+/-theta), so the sprite never flips upside-down.
+			var surface_right = Vector2(-normal.y, normal.x)
+			floor_angle = surface_right.angle()
+			var current_speed = velocity.dot(surface_right)   # signed: + = down/along +x
+			# Downhill when travelling the way gravity pulls along this surface.
 			if signf(slide_dir) == signf(normal.x) and slope > 0.02:
 				# 30deg slope -> walking speed; steeper -> proportionally faster.
-				var target = minf(SPEED * slope / SLIDE_REF_SIN, SLIDE_MAX_SPEED)
-				if v_along < target:
-					v_along = move_toward(v_along, target, SLIDE_ACCEL * delta)
-				else:
-					v_along = move_toward(v_along, target, SLIDE_DRAG * delta)
+				var target = minf(SPEED * slope / SLIDE_REF_SIN, SLIDE_MAX_SPEED) * slide_dir
+				var rate = SLIDE_ACCEL if absf(current_speed) < absf(target) else SLIDE_DRAG
+				current_speed = move_toward(current_speed, target, rate * delta)
 			else:
 				# Flat or uphill: slope and drag bleed the speed off.
-				v_along = move_toward(v_along, 0.0, (SLIDE_ACCEL * slope + SLIDE_DRAG) * delta)
+				current_speed = move_toward(current_speed, 0.0, (SLIDE_ACCEL * slope + SLIDE_DRAG) * delta)
 			# End once the slide has genuinely slowed to a crawl.
-			if v_along < SLIDE_END_SPEED:
+			if absf(current_speed) < SLIDE_END_SPEED:
 				is_sliding = false
 				slide_timer = 0.0
 				floor_angle = 0.0
 			else:
-				velocity = tangent * v_along
+				velocity = surface_right * current_speed
 
 	# Horizontal movement (when not sliding) — accel/friction for momentum
 	if not is_sliding:
