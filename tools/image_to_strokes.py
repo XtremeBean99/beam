@@ -139,19 +139,80 @@ def rdp(points, eps):
     return [points[i] for i in keep]
 
 
-def image_to_strokes(path, eps=1.2, min_len=12.0, threshold=128):
+def _polylen(p):
+    return sum(((p[i + 1][0] - p[i][0]) ** 2 + (p[i + 1][1] - p[i][1]) ** 2) ** 0.5
+               for i in range(len(p) - 1))
+
+
+def stitch(polys, gap=8.0, max_turn_deg=40.0):
+    """Join segments whose endpoints nearly touch and continue roughly straight.
+
+    The skeleton tracer splits a line at every junction/crossing; this re-joins
+    the pieces that are really one continuous stroke (gentle continuation),
+    while leaving genuine sharp corners as separate strokes.
+    """
+    import math
+    polys = [list(map(tuple, p)) for p in polys]
+
+    def outdir(poly, at_start):
+        if at_start:
+            p0, p1 = poly[0], (poly[1] if len(poly) > 1 else poly[0])
+        else:
+            p0, p1 = poly[-1], (poly[-2] if len(poly) > 1 else poly[-1])
+        v = (p0[0] - p1[0], p0[1] - p1[1])
+        L = math.hypot(*v) or 1.0
+        return (v[0] / L, v[1] / L)
+
+    changed = True
+    while changed:
+        changed = False
+        for i in range(len(polys)):
+            if polys[i] is None:
+                continue
+            joined = False
+            for j in range(len(polys)):
+                if j == i or polys[j] is None:
+                    continue
+                for ei in (True, False):
+                    pi = polys[i][0] if ei else polys[i][-1]
+                    di = outdir(polys[i], ei)
+                    for ej in (True, False):
+                        pj = polys[j][0] if ej else polys[j][-1]
+                        if math.hypot(pi[0] - pj[0], pi[1] - pj[1]) > gap:
+                            continue
+                        dj = outdir(polys[j], ej)
+                        dot = max(-1.0, min(1.0, -(di[0] * dj[0] + di[1] * dj[1])))
+                        if math.degrees(math.acos(dot)) > max_turn_deg:
+                            continue
+                        a = polys[i][::-1] if ei else polys[i][:]   # 'a' ends at the join
+                        b = polys[j][:] if ej else polys[j][::-1]   # 'b' starts at the join
+                        polys[i] = a + b[1:]
+                        polys[j] = None
+                        changed = joined = True
+                        break
+                    if joined:
+                        break
+                if joined:
+                    break
+    return [p for p in polys if p is not None]
+
+
+def image_to_strokes(path, eps=1.2, min_len=12.0, threshold=128,
+                     stitch_gap=14.0, stitch_turn=40.0):
     a = np.array(Image.open(path).convert("L"))
     H, W = a.shape
     mask = (a < threshold).astype(np.uint8)
     skel = thin(mask)
-    strokes = []
+    # Trace, simplify, drop noise specks, THEN stitch the meaningful segments that
+    # are really one continuous line (bridging the small gaps left at crossings).
+    kept = []
     for p in trace(skel):
         sp = rdp(p, eps)
-        L = sum(((sp[i + 1][0] - sp[i][0]) ** 2 + (sp[i + 1][1] - sp[i][1]) ** 2) ** 0.5
-                for i in range(len(sp) - 1))
-        if L >= min_len and len(sp) >= 2:
-            strokes.append({"pts": [[int(x), int(y)] for x, y in sp]})
-    return {"W": W, "H": H, "strokes": strokes}
+        if len(sp) >= 2 and _polylen(sp) >= min_len:
+            kept.append(sp)
+    merged = stitch(kept, stitch_gap, stitch_turn)
+    return {"W": W, "H": H, "strokes": [{"pts": [[int(x), int(y)] for x, y in sp]}
+                                        for sp in merged]}
 
 
 def main():
