@@ -8,7 +8,9 @@ extends Node2D
 
 @onready var player: Node2D = $Player
 
-const FALL_LIMIT := 2600.0
+## World-Y below which the player is considered to have fallen off the level and
+## is returned to spawn. Set generously below the lowest platform.
+@export var fall_limit: float = 7000.0
 
 var _spawn := Vector2.ZERO
 
@@ -19,6 +21,6 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if player and is_instance_valid(player) and player.global_position.y > FALL_LIMIT:
+	if player and is_instance_valid(player) and player.global_position.y > fall_limit:
 		player.global_position = _spawn
 		player.velocity = Vector2.ZERO

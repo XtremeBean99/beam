@@ -22,33 +22,33 @@ visible = false
 modulate = Color(1, 1, 1, 0.12)
 z_index = -5
 centered = false
-scale = Vector2(3.5, 3.5)
+scale = Vector2(5, 5)
 texture = ExtResource("4_map2")
 
 [node name="Terrain" type="Node2D" parent="."]
 script = ExtResource("2_terrain")
-world_scale = 3.5
+world_scale = 5.0
 
 [node name="Player" parent="." instance=ExtResource("1_player")]
-position = Vector2(700, 280)
+position = Vector2(995, 420)
 scale = Vector2(2, 2)
 
 [node name="PlacementMarkers" type="Node2D" parent="."]
 
 [node name="EnemySpot1" type="Marker2D" parent="PlacementMarkers"]
-position = Vector2(1368, 485)
+position = Vector2(2150, 4150)
 
 [node name="EnemySpot2" type="Marker2D" parent="PlacementMarkers"]
-position = Vector2(1029, 1773)
+position = Vector2(2150, 2850)
 
 [node name="EnemySpot3" type="Marker2D" parent="PlacementMarkers"]
-position = Vector2(927, 852)
+position = Vector2(2100, 1600)
 
 [node name="EnemySpot4" type="Marker2D" parent="PlacementMarkers"]
-position = Vector2(1169, 943)
+position = Vector2(2150, 5350)
 
 [node name="EnemySpot5" type="Marker2D" parent="PlacementMarkers"]
-position = Vector2(374, 1808)
+position = Vector2(3000, 700)
 
 [node name="EnemySpot6" type="Marker2D" parent="PlacementMarkers"]
-position = Vector2(549, 1524)
+position = Vector2(2600, 6300)

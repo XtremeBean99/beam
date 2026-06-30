@@ -239,8 +239,3 @@ stream = ExtResource("41_2dvfe")
 [node name="Camera2D" type="Camera2D" parent="."]
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0
-limit_smoothed = true
-limit_left = 0
-limit_top = 0
-limit_right = 4000
-limit_bottom = 1200

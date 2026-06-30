@@ -20,12 +20,13 @@ const COYOTE_TIME = 0.1
 const JUMP_BUFFER_TIME = 0.1
 const MAX_AIR_JUMPS = 1
 
-const SLIDE_ACCEL = 1400.0       # downhill build-up (stronger = faster ramps)
-const SLIDE_FRICTION = 0.995     # gentle per-frame decay → long, extended slides
-const SLIDE_MIN_SPEED = 90.0     # speed needed to START a slide (> END for hysteresis)
-const SLIDE_END_SPEED = 70.0     # slide ends gracefully once it slows below this
-const SLIDE_ANIM_MIN = 200.0   # below this, hold the crouched first frame
-const SLIDE_ANIM_MAX = 700.0   # at/above this, fully-extended kick frame
+const SLIDE_ACCEL = 1800.0       # downhill build-up (stronger = faster ramps)
+const SLIDE_FRICTION = 0.997     # very gentle decay → very long, extended slides
+const SLIDE_MIN_SPEED = 50.0     # low bar to START a slide (> END for hysteresis)
+const SLIDE_END_SPEED = 30.0     # slide ends gracefully once it slows below this
+const SLIDE_KICK_DELAY = 1.0     # hold plain crouch for the first second of a slide
+const SLIDE_ANIM_MIN = 400.0   # below this, hold the crouched first frame
+const SLIDE_ANIM_MAX = 950.0   # at/above this, fully-extended kick frame
 const SLIDE_ANIM = "crouch-kick"
 
 const HURT_ANIMS = ["hurt"]
@@ -241,13 +242,16 @@ func _physics_process(delta):
 				animated_sprite_2d.play("fall")
 		elif is_sliding:
 			var frames = animated_sprite_2d.sprite_frames
-			if frames.has_animation(SLIDE_ANIM):
+			if slide_timer < SLIDE_KICK_DELAY or not frames.has_animation(SLIDE_ANIM):
+				# First second of a slide: hold the plain crouch pose.
+				animated_sprite_2d.play("crouch")
+			else:
+				# After the delay: scrub crouch-kick frames by speed
+				# (only advances toward the full kick at higher speeds).
 				animated_sprite_2d.animation = SLIDE_ANIM
 				animated_sprite_2d.pause()
 				var fc = frames.get_frame_count(SLIDE_ANIM)
 				animated_sprite_2d.frame = slide_frame(velocity.length(), fc)
-			else:
-				animated_sprite_2d.play("crouch")
 		elif crouching:
 			animated_sprite_2d.play("crouch")
 		elif abs(velocity.x) > 1:
