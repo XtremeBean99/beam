@@ -11,6 +11,7 @@ signal died
 const SPEED := 55.0
 const GRAVITY := 980.0
 const MAX_HEALTH := 3
+const SLIDE_KILL_SPEED := 400.0  # min slide speed to kill on contact
 const PROBE_AHEAD := 26.0     # how far ahead to look for ground (world units)
 const STEP_TOLERANCE := 26.0  # ground-height change ahead that counts as a turn/edge
 
@@ -76,6 +77,11 @@ func _on_contact(body: Node2D) -> void:
 	if is_dead or not body.is_in_group("player"):
 		return
 	if not (body.has_method("hurt") and body.alive):
+		return
+	# Slide-kill: fast slide into the enemy from the side kills it.
+	# Uses velocity.length() so slope-decomposed speed on inclines counts correctly.
+	if body.is_sliding and body.velocity.length() >= SLIDE_KILL_SPEED:
+		take_damage(1, sign(body.velocity.x))
 		return
 	# Stomp: player is above the snail and moving downward.
 	if body.velocity.y > 0.0 and body.global_position.y < global_position.y:

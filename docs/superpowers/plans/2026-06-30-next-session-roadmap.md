@@ -34,14 +34,14 @@ movement/slide feel is good.
 | --- | --- |
 | §4 Movement | ✅ done (tuned) |
 | §5 Stomp | ✅ done |
-| §5 Slide-kill | ❌ todo |
-| §5 Charge meter + fireball | ❌ todo |
-| §7 Collect-all → beam exit / level flow | ❌ todo |
-| §8 HUD charge ensō | ❌ todo (needs charge system) |
-| §8 Level-complete screen | ❌ todo |
-| §8 Ink-wipe transitions | ❌ todo |
-| §5 Settings — key rebinding | ❌ todo |
-| §9 Afterglow trail | ❌ todo |
+| §5 Slide-kill | ✅ done |
+| §5 Charge meter + fireball | ✅ done |
+| §7 Collect-all → beam exit / level flow | ✅ done |
+| §8 HUD charge ensō | ✅ done |
+| §8 Level-complete screen | ✅ done |
+| §8 Ink-wipe transitions | ✅ done |
+| §5 Settings — key rebinding | ✅ done |
+| §9 Afterglow trail | ✅ done |
 | Pen-draw editor / SVG import (user request) | ❌ future |
 
 ---

@@ -103,6 +103,111 @@ text = "90%"
 horizontal_alignment = 2
 vertical_alignment = 1
 
+[node name="RebindSection" type="VBoxContainer" parent="Dim/Center/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="Dim/Center/Panel/VBox/RebindSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "KEY BINDINGS"
+horizontal_alignment = 1
+
+[node name="VBox" type="VBoxContainer" parent="Dim/Center/Panel/VBox/RebindSection"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="leftRow" type="HBoxContainer" parent="Dim/Center/Panel/VBox/RebindSection/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+[node name="Label" type="Label" parent="Dim/Center/Panel/VBox/RebindSection/VBox/leftRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "LEFT"
+vertical_alignment = 1
+[node name="leftButton" type="Button" parent="Dim/Center/Panel/VBox/RebindSection/VBox/leftRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "A"
+
+[node name="rightRow" type="HBoxContainer" parent="Dim/Center/Panel/VBox/RebindSection/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+[node name="Label" type="Label" parent="Dim/Center/Panel/VBox/RebindSection/VBox/rightRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "RIGHT"
+vertical_alignment = 1
+[node name="rightButton" type="Button" parent="Dim/Center/Panel/VBox/RebindSection/VBox/rightRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "D"
+
+[node name="jumpRow" type="HBoxContainer" parent="Dim/Center/Panel/VBox/RebindSection/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+[node name="Label" type="Label" parent="Dim/Center/Panel/VBox/RebindSection/VBox/jumpRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "JUMP"
+vertical_alignment = 1
+[node name="jumpButton" type="Button" parent="Dim/Center/Panel/VBox/RebindSection/VBox/jumpRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "Space"
+
+[node name="crouchRow" type="HBoxContainer" parent="Dim/Center/Panel/VBox/RebindSection/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+[node name="Label" type="Label" parent="Dim/Center/Panel/VBox/RebindSection/VBox/crouchRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "CROUCH"
+vertical_alignment = 1
+[node name="crouchButton" type="Button" parent="Dim/Center/Panel/VBox/RebindSection/VBox/crouchRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "S"
+
+[node name="punchRow" type="HBoxContainer" parent="Dim/Center/Panel/VBox/RebindSection/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+[node name="Label" type="Label" parent="Dim/Center/Panel/VBox/RebindSection/VBox/punchRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "PUNCH"
+vertical_alignment = 1
+[node name="punchButton" type="Button" parent="Dim/Center/Panel/VBox/RebindSection/VBox/punchRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "J"
+
+[node name="shootRow" type="HBoxContainer" parent="Dim/Center/Panel/VBox/RebindSection/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+[node name="Label" type="Label" parent="Dim/Center/Panel/VBox/RebindSection/VBox/shootRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "SHOOT"
+vertical_alignment = 1
+[node name="shootButton" type="Button" parent="Dim/Center/Panel/VBox/RebindSection/VBox/shootRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "L"
+
+[node name="pauseRow" type="HBoxContainer" parent="Dim/Center/Panel/VBox/RebindSection/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+[node name="Label" type="Label" parent="Dim/Center/Panel/VBox/RebindSection/VBox/pauseRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "PAUSE"
+vertical_alignment = 1
+[node name="pauseButton" type="Button" parent="Dim/Center/Panel/VBox/RebindSection/VBox/pauseRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "Escape"
+
 [node name="Back" type="Button" parent="Dim/Center/Panel/VBox"]
 layout_mode = 2
 size_flags_horizontal = 4

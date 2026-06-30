@@ -37,11 +37,17 @@ const HURT_ANIMS = ["hurt"]
 const KNOCKBACK_FORCE = 400.0
 const INVINCIBLE_MS = 1000.0
 const MAX_WALL_JUMPS = 1
+const MAX_FIREBALL_CHARGES := 3
+const KILLS_PER_CHARGE := 3
+const FIREBALL_GROUND_ONLY := true
 
 var alive = true
 var health = 3
 var invincible = false
 var is_busy = false        # blocks movement input during the hurt animation
+var input_locked = false   # set by level scripts to freeze the player (beam transport, etc.)
+var fireball_charges := 0
+var _kill_since_charge := 0
 var is_sliding = false
 var slide_dir = 1.0
 var slide_timer = 0.0
@@ -62,6 +68,9 @@ func _ready():
 	for anim in HURT_ANIMS:
 		if frames.has_animation(anim):
 			frames.set_animation_loop(anim, false)
+	# Punch must be non-looping so the fireball coroutine can await its finish.
+	if frames.has_animation("punch"):
+		frames.set_animation_loop("punch", false)
 	animated_sprite_2d.animation_finished.connect(_on_animation_finished)
 	floor_max_angle = deg_to_rad(72)
 	floor_snap_length = 40.0
@@ -116,7 +125,7 @@ func slide_frame(speed: float, frame_count: int) -> int:
 
 
 func _physics_process(delta):
-	if not alive:
+	if not alive or input_locked:
 		return
 
 	if not is_on_floor():
@@ -134,6 +143,11 @@ func _physics_process(delta):
 
 	var direction = Input.get_axis("left", "right")
 	var crouching = Input.is_action_pressed("crouch") and is_on_floor()
+
+	# Fireball shoot — spends a charge, ground-only by default.
+	if Input.is_action_just_pressed("shoot") and fireball_charges > 0 and not is_busy and not is_sliding:
+		if not FIREBALL_GROUND_ONLY or is_on_floor():
+			_shoot_fireball()
 
 	# Gravity / wall slide
 	if not is_on_floor():
@@ -288,3 +302,39 @@ func _physics_process(delta):
 		facing_right = false
 	if is_sliding:
 		animated_sprite_2d.flip_h = (slide_dir < 0)
+
+
+## Called by main.gd when kills reach the threshold.
+func add_charge() -> void:
+	_kill_since_charge += 1
+	if _kill_since_charge >= KILLS_PER_CHARGE and fireball_charges < MAX_FIREBALL_CHARGES:
+		fireball_charges += 1
+		_kill_since_charge = 0
+
+
+func has_charge() -> bool:
+	return fireball_charges > 0
+
+
+func _shoot_fireball() -> void:
+	fireball_charges -= 1
+	is_busy = true  # lock animation until punch completes
+
+	# Play punch animation
+	animated_sprite_2d.play("punch")
+	if has_node("PunchSound"):
+		$PunchSound.play()
+
+	# Spawn fireball
+	var fb_scene := preload("res://scenes/fireball.tscn")
+	if fb_scene:
+		var fb := fb_scene.instantiate()
+		fb.global_position = global_position + Vector2((1.0 if facing_right else -1.0) * 30, -10)
+		fb.direction = 1.0 if facing_right else -1.0
+		get_parent().add_child(fb)
+
+	# Return to idle after punch anim
+	await animated_sprite_2d.animation_finished
+	is_busy = false
+	if alive:
+		animated_sprite_2d.play("idle")
