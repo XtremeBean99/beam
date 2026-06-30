@@ -21,10 +21,11 @@ const JUMP_BUFFER_TIME = 0.1
 const MAX_AIR_JUMPS = 1
 const STOMP_BOUNCE = -560.0       # upward pop when bouncing off a stomped enemy
 
-const SLIDE_ACCEL = 1500.0       # how fast the slide reaches its slope-target speed
-const SLIDE_DRAG = 120.0         # bleed-off when over target / on flat / uphill
-const SLIDE_REF_SIN = 0.5        # sin(30deg): a 30-degree slope slides at walk speed
-const SLIDE_MAX_SPEED = 750.0    # cap on slope-driven slide speed
+const SLIDE_ACCEL = 1500.0       # how fast the slide reaches its target speed
+const SLIDE_DRAG = 120.0         # bleed-off when over target / uphill
+const SLIDE_BASE = 1.2           # flat slide speed as a multiple of walk speed (>1 = always faster)
+const SLIDE_GAIN = 1.4           # extra slide speed per unit slope (steeper = faster)
+const SLIDE_MAX_SPEED = 750.0    # cap on slide speed
 const SLIDE_MIN_SPEED = 30.0     # low bar to START a slide (> END for hysteresis)
 const SLIDE_END_SPEED = 15.0     # slide ends gracefully once it slows below this
 const SLIDE_KICK_DELAY = 1.0     # hold plain crouch for the first second of a slide
@@ -222,15 +223,15 @@ func _physics_process(delta):
 			var surface_right = Vector2(-normal.y, normal.x)
 			floor_angle = surface_right.angle()
 			var current_speed = velocity.dot(surface_right)   # signed: + = down/along +x
-			# Downhill when travelling the way gravity pulls along this surface.
-			if signf(slide_dir) == signf(normal.x) and slope > 0.02:
-				# 30deg slope -> walking speed; steeper -> proportionally faster.
-				var target = minf(SPEED * slope / SLIDE_REF_SIN, SLIDE_MAX_SPEED) * slide_dir
+			var uphill = slope > 0.02 and signf(slide_dir) != signf(normal.x)
+			if uphill:
+				# Sliding up a slope: gravity + drag bleed the speed off.
+				current_speed = move_toward(current_speed, 0.0, (SLIDE_ACCEL * slope + SLIDE_DRAG) * delta)
+			else:
+				# Flat or downhill: always faster than walking, steeper -> faster.
+				var target = minf(SPEED * (SLIDE_BASE + slope * SLIDE_GAIN), SLIDE_MAX_SPEED) * slide_dir
 				var rate = SLIDE_ACCEL if absf(current_speed) < absf(target) else SLIDE_DRAG
 				current_speed = move_toward(current_speed, target, rate * delta)
-			else:
-				# Flat or uphill: slope and drag bleed the speed off.
-				current_speed = move_toward(current_speed, 0.0, (SLIDE_ACCEL * slope + SLIDE_DRAG) * delta)
 			# End once the slide has genuinely slowed to a crawl.
 			if absf(current_speed) < SLIDE_END_SPEED:
 				is_sliding = false
