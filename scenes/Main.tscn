@@ -1,129 +1,142 @@
-[gd_scene format=3 uid="uid://ullknosbjxgi"]
+[gd_scene load_steps=5 format=3 uid="uid://ullknosbjxgi"]
 
-[ext_resource type="PackedScene" uid="uid://dwauw4vipyn1l" path="res://scenes/levels/level2.tscn" id="1_elqb8"]
-[ext_resource type="Script" uid="uid://bkkywhbo4sn7b" path="res://scripts/main.gd" id="1_rvslj"]
+[ext_resource type="PackedScene" uid="uid://dwauw4vipyn1l" path="res://scenes/levels/level2.tscn" id="1_level"]
+[ext_resource type="Script" uid="uid://bkkywhbo4sn7b" path="res://scripts/main.gd" id="2_main"]
+[ext_resource type="Theme" path="res://themes/ui_theme.tres" id="3_theme"]
+[ext_resource type="PackedScene" uid="uid://b1settingsmenu0" path="res://scenes/ui/settings_menu.tscn" id="4_settings"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g4v7s"]
-bg_color = Color(1.2513996e-06, 0.6829969, 0.71157765, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-shadow_size = 5
+[node name="Main" type="Node2D"]
+process_mode = 3
+script = ExtResource("2_main")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health"]
-bg_color = Color(0.7, 0.05, 0.05, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_radius_top_left = 5
-border_radius_top_right = 5
-border_radius_bottom_right = 5
-border_radius_bottom_left = 5
-shadow_size = 5
+[node name="LevelRoot" parent="." instance=ExtResource("1_level")]
+process_mode = 1
 
-[node name="Main" type="Node2D" unique_id=1104803943]
-script = ExtResource("1_rvslj")
+[node name="HUD" type="CanvasLayer" parent="."]
 
-[node name="LevelRoot" parent="." unique_id=1060455443 instance=ExtResource("1_elqb8")]
+[node name="StatsPanel" type="PanelContainer" parent="HUD"]
+offset_left = 18.0
+offset_top = 16.0
+theme = ExtResource("3_theme")
 
-[node name="HUD" type="CanvasLayer" parent="." unique_id=1384939185]
+[node name="VBox" type="VBoxContainer" parent="HUD/StatsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="ScorePanel" type="Panel" parent="HUD" unique_id=1851767423]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -75.0
-offset_top = 20.0
-offset_right = 85.0
-offset_bottom = 70.0
-grow_horizontal = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_g4v7s")
+[node name="HealthRow" type="HBoxContainer" parent="HUD/StatsPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
 
-[node name="ScoreLabel" type="Label" parent="HUD/ScorePanel" unique_id=753828770]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -68.5
-offset_top = -22.5
-offset_right = 68.5
-offset_bottom = 22.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 32
-text = "SCORE: 0"
+[node name="Label" type="Label" parent="HUD/StatsPanel/VBox/HealthRow"]
+custom_minimum_size = Vector2(86, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "HP"
+vertical_alignment = 1
 
-[node name="HealthPanel" type="Panel" parent="HUD" unique_id=1851767424]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = 85.0
-offset_top = 20.0
-offset_right = 245.0
-offset_bottom = 70.0
-grow_horizontal = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_health")
+[node name="Pips" type="HBoxContainer" parent="HUD/StatsPanel/VBox/HealthRow"]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
 
-[node name="HealthLabel" type="Label" parent="HUD/HealthPanel" unique_id=753828771]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -45.0
-offset_top = -22.5
-offset_right = 45.0
-offset_bottom = 22.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 32
-text = "HP: 3"
+[node name="Pip1" type="ColorRect" parent="HUD/StatsPanel/VBox/HealthRow/Pips"]
+custom_minimum_size = Vector2(24, 12)
+layout_mode = 2
+size_flags_vertical = 4
+color = Color(0.85, 0.92, 1, 1)
 
-[node name="PauseOverlay" type="ColorRect" parent="HUD"]
+[node name="Pip2" type="ColorRect" parent="HUD/StatsPanel/VBox/HealthRow/Pips"]
+custom_minimum_size = Vector2(24, 12)
+layout_mode = 2
+size_flags_vertical = 4
+color = Color(0.85, 0.92, 1, 1)
+
+[node name="Pip3" type="ColorRect" parent="HUD/StatsPanel/VBox/HealthRow/Pips"]
+custom_minimum_size = Vector2(24, 12)
+layout_mode = 2
+size_flags_vertical = 4
+color = Color(0.85, 0.92, 1, 1)
+
+[node name="KillsRow" type="HBoxContainer" parent="HUD/StatsPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="HUD/StatsPanel/VBox/KillsRow"]
+custom_minimum_size = Vector2(86, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "KILLS"
+
+[node name="Value" type="Label" parent="HUD/StatsPanel/VBox/KillsRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "0"
+
+[node name="ScoreRow" type="HBoxContainer" parent="HUD/StatsPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="HUD/StatsPanel/VBox/ScoreRow"]
+custom_minimum_size = Vector2(86, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "SCORE"
+
+[node name="Value" type="Label" parent="HUD/StatsPanel/VBox/ScoreRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "0"
+
+[node name="PauseOverlay" type="Control" parent="HUD"]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0.7)
+theme = ExtResource("3_theme")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HUD/PauseOverlay"]
+[node name="Dim" type="ColorRect" parent="HUD/PauseOverlay"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -100.0
-offset_top = -60.0
-offset_right = 100.0
-offset_bottom = 60.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 16
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.025, 0.035, 0.8)
 
-[node name="PausedLabel" type="Label" parent="HUD/PauseOverlay/VBoxContainer"]
+[node name="Center" type="CenterContainer" parent="HUD/PauseOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBox" type="VBoxContainer" parent="HUD/PauseOverlay/Center"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 48
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="PausedLabel" type="Label" parent="HUD/PauseOverlay/Center/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 52
 text = "PAUSED"
 horizontal_alignment = 1
 
-[node name="ResumeButton" type="Button" parent="HUD/PauseOverlay/VBoxContainer"]
+[node name="ResumeButton" type="Button" parent="HUD/PauseOverlay/Center/VBox"]
+custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
-text = "Resume"
+size_flags_horizontal = 4
+text = "RESUME"
 
-[node name="QuitButton" type="Button" parent="HUD/PauseOverlay/VBoxContainer"]
+[node name="SettingsButton" type="Button" parent="HUD/PauseOverlay/Center/VBox"]
+custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
-text = "Quit to Title"
+size_flags_horizontal = 4
+text = "SETTINGS"
 
-[connection signal="pressed" from="HUD/PauseOverlay/VBoxContainer/ResumeButton" to="." method="_on_resume_pressed"]
-[connection signal="pressed" from="HUD/PauseOverlay/VBoxContainer/QuitButton" to="." method="_on_quit_pressed"]
+[node name="QuitButton" type="Button" parent="HUD/PauseOverlay/Center/VBox"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "QUIT TO TITLE"
+
+[node name="SettingsMenu" parent="HUD" instance=ExtResource("4_settings")]
+visible = false

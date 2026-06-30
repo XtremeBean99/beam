@@ -214,9 +214,12 @@ metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1848913745]
 texture_filter = 1
+texture_repeat = 1
 sprite_frames = SubResource("SpriteFrames_g4v7s")
-animation = &"idle"
+animation = &"walk"
 autoplay = "idle"
+frame = 1
+frame_progress = 0.38737512
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1288170393]
 position = Vector2(-1, 8)
@@ -224,18 +227,23 @@ shape = SubResource("CapsuleShape2D_g4v7s")
 
 [node name="JumpSound" type="AudioStreamPlayer2D" parent="." unique_id=1143910443]
 stream = ExtResource("38_cs1tg")
+bus = &"SFX"
 
 [node name="KickSound" type="AudioStreamPlayer2D" parent="." unique_id=1168141990]
 stream = ExtResource("39_2dvfe")
+bus = &"SFX"
 
 [node name="PunchSound" type="AudioStreamPlayer2D" parent="." unique_id=450009685]
 stream = ExtResource("40_giy8y")
+bus = &"SFX"
 
 [node name="PistolSound" type="AudioStreamPlayer2D" parent="." unique_id=1348085708]
+texture_filter = 1
 stream = ExtResource("41_2dvfe")
+bus = &"SFX"
 
-[node name="AttackHitbox" type="Area2D" parent="."]
+[node name="AttackHitbox" type="Area2D" parent="." unique_id=762785265]
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=699169745]
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0

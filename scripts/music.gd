@@ -5,7 +5,7 @@ extends AudioStreamPlayer
 
 func _ready() -> void:
 	stream = preload("res://assets/sounds/bgm.mp3")
-	bus = "Master"
+	bus = "Music"
 	finished.connect(_on_finished)
 	play()
 

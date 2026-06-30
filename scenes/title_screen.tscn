@@ -1,64 +1,76 @@
-[gd_scene format=3 uid="uid://chugfj37xxfc7"]
+[gd_scene load_steps=4 format=3 uid="uid://chugfj37xxfc7"]
 
-[ext_resource type="Script" path="res://scripts/title_screen.gd" id="1_title"]
-[ext_resource type="Texture2D" uid="uid://bs7av1s2uvtib" path="res://assets/images/ENVIRONMENT/aishot-1341.jpg" id="2_bg"]
+[ext_resource type="Theme" path="res://themes/ui_theme.tres" id="1_theme"]
+[ext_resource type="Script" path="res://scripts/title_screen.gd" id="2_script"]
+[ext_resource type="PackedScene" uid="uid://b1settingsmenu0" path="res://scenes/ui/settings_menu.tscn" id="3_settings"]
 
 [node name="TitleScreen" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("1_title")
+theme = ExtResource("1_theme")
+script = ExtResource("2_script")
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Bg" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_bg")
-expand_mode = 1
-stretch_mode = 6
+color = Color(0.054902, 0.058824, 0.070588, 1)
 
-[node name="Overlay" type="ColorRect" parent="."]
+[node name="Center" type="CenterContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.0392157, 0.0431373, 0.0784314, 0.55)
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+[node name="VBox" type="VBoxContainer" parent="Center"]
 layout_mode = 2
-theme_override_constants/separation = 32
+theme_override_constants/separation = 18
 alignment = 1
 
-[node name="Title" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="Center/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0.090196, 0.6, 0.85098, 0.6)
+theme_override_colors/font_shadow_color = Color(0.35, 0.6, 0.95, 0.55)
 theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 6
-theme_override_constants/shadow_outline_size = 18
-theme_override_font_sizes/font_size = 160
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 22
+theme_override_font_sizes/font_size = 150
 text = "BEAM"
 horizontal_alignment = 1
 
-[node name="Prompt" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="Prompt" type="Label" parent="Center/VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.85, 0.92, 1, 1)
-theme_override_font_sizes/font_size = 44
-text = "Press any key to start"
+theme_override_colors/font_color = Color(0.7, 0.82, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "a hand-drawn movement game"
 horizontal_alignment = 1
+
+[node name="Menu" type="VBoxContainer" parent="Center/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Play" type="Button" parent="Center/VBox/Menu"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "PLAY"
+
+[node name="Settings" type="Button" parent="Center/VBox/Menu"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "SETTINGS"
+
+[node name="Quit" type="Button" parent="Center/VBox/Menu"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "QUIT"
+
+[node name="SettingsMenu" parent="." instance=ExtResource("3_settings")]
+visible = false
+layout_mode = 1
