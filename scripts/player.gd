@@ -21,11 +21,11 @@ const JUMP_BUFFER_TIME = 0.1
 const MAX_AIR_JUMPS = 1
 const STOMP_BOUNCE = -560.0       # upward pop when bouncing off a stomped enemy
 
-const SLIDE_ACCEL = 1500.0       # how fast the slide reaches its target speed
-const SLIDE_DRAG = 120.0         # bleed-off when over target / uphill
-const SLIDE_BASE = 1.2           # flat slide speed as a multiple of walk speed (>1 = always faster)
-const SLIDE_GAIN = 1.4           # extra slide speed per unit slope (steeper = faster)
-const SLIDE_MAX_SPEED = 750.0    # cap on slide speed
+const SLIDE_ACCEL = 3500.0       # reach target quickly so even short lines get up to speed
+const SLIDE_DRAG = 300.0         # settle toward target when over it
+const SLIDE_BASE = 1.0           # flat slide == walking speed; any incline is faster
+const SLIDE_GAIN = 2.0           # extra slide speed per unit slope (steeper = faster)
+const SLIDE_MAX_SPEED = 800.0    # cap on slide speed
 const SLIDE_MIN_SPEED = 30.0     # low bar to START a slide (> END for hysteresis)
 const SLIDE_END_SPEED = 15.0     # slide ends gracefully once it slows below this
 const SLIDE_KICK_DELAY = 1.0     # hold plain crouch for the first second of a slide
