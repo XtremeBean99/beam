@@ -30,25 +30,25 @@ script = ExtResource("2_terrain")
 world_scale = 5.0
 
 [node name="Player" parent="." instance=ExtResource("1_player")]
-position = Vector2(995, 420)
+position = Vector2(1955, 580)
 scale = Vector2(2, 2)
 
 [node name="PlacementMarkers" type="Node2D" parent="."]
 
 [node name="EnemySpot1" type="Marker2D" parent="PlacementMarkers"]
-position = Vector2(2150, 4150)
+position = Vector2(1955, 700)
 
 [node name="EnemySpot2" type="Marker2D" parent="PlacementMarkers"]
-position = Vector2(2150, 2850)
+position = Vector2(1470, 2540)
 
 [node name="EnemySpot3" type="Marker2D" parent="PlacementMarkers"]
-position = Vector2(2100, 1600)
+position = Vector2(1325, 1225)
 
 [node name="EnemySpot4" type="Marker2D" parent="PlacementMarkers"]
-position = Vector2(2150, 5350)
+position = Vector2(670, 2615)
 
 [node name="EnemySpot5" type="Marker2D" parent="PlacementMarkers"]
-position = Vector2(3000, 700)
+position = Vector2(785, 2185)
 
 [node name="EnemySpot6" type="Marker2D" parent="PlacementMarkers"]
-position = Vector2(2600, 6300)
+position = Vector2(825, 1335)
