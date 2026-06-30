@@ -63,8 +63,8 @@ func _ready():
 		if frames.has_animation(anim):
 			frames.set_animation_loop(anim, false)
 	animated_sprite_2d.animation_finished.connect(_on_animation_finished)
-	floor_max_angle = deg_to_rad(60)
-	floor_snap_length = 16.0
+	floor_max_angle = deg_to_rad(72)
+	floor_snap_length = 40.0
 
 
 func _on_animation_finished():
