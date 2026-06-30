@@ -21,10 +21,12 @@ const JUMP_BUFFER_TIME = 0.1
 const MAX_AIR_JUMPS = 1
 const STOMP_BOUNCE = -560.0       # upward pop when bouncing off a stomped enemy
 
-const SLIDE_ACCEL = 1800.0       # downhill build-up (stronger = faster ramps)
-const SLIDE_FRICTION = 0.997     # very gentle decay → very long, extended slides
-const SLIDE_MIN_SPEED = 30.0     # very low bar to START a slide (> END for hysteresis)
-const SLIDE_END_SPEED = 20.0     # slide ends gracefully once it slows below this
+const SLIDE_ACCEL = 1500.0       # how fast the slide reaches its slope-target speed
+const SLIDE_DRAG = 120.0         # bleed-off when over target / on flat / uphill
+const SLIDE_REF_SIN = 0.5        # sin(30deg): a 30-degree slope slides at walk speed
+const SLIDE_MAX_SPEED = 750.0    # cap on slope-driven slide speed
+const SLIDE_MIN_SPEED = 30.0     # low bar to START a slide (> END for hysteresis)
+const SLIDE_END_SPEED = 15.0     # slide ends gracefully once it slows below this
 const SLIDE_KICK_DELAY = 1.0     # hold plain crouch for the first second of a slide
 const SLIDE_ANIM_MIN = 400.0   # below this, hold the crouched first frame
 const SLIDE_ANIM_MAX = 950.0   # at/above this, fully-extended kick frame
@@ -214,21 +216,31 @@ func _physics_process(delta):
 			if direction != 0:
 				slide_dir = sign(direction)
 			var normal = get_floor_normal()
-			var slope = abs(normal.x)
-			var surface_right = Vector2(-normal.y, normal.x)
-			floor_angle = surface_right.angle()
-			var current_speed = velocity.x * surface_right.x + velocity.y * surface_right.y
-			# Downhill accelerates the slide; gentle friction keeps it long.
-			if slope > 0.01:
-				current_speed += SLIDE_ACCEL * slope * delta * slide_dir
-			current_speed *= SLIDE_FRICTION
-			# End only once the slide has genuinely slowed to a crawl.
-			if abs(current_speed) < SLIDE_END_SPEED:
+			var slope = absf(normal.x)                       # sin(slope angle)
+			var tangent = Vector2(-normal.y, normal.x).normalized()
+			# Orient the surface tangent along the slide's travel direction.
+			if slide_dir != 0.0 and signf(tangent.x) != signf(slide_dir):
+				tangent = -tangent
+			floor_angle = tangent.angle()
+			var v_along = velocity.dot(tangent)              # speed in travel direction
+			# Downhill if travelling the way gravity pulls along this surface.
+			if signf(slide_dir) == signf(normal.x) and slope > 0.02:
+				# 30deg slope -> walking speed; steeper -> proportionally faster.
+				var target = minf(SPEED * slope / SLIDE_REF_SIN, SLIDE_MAX_SPEED)
+				if v_along < target:
+					v_along = move_toward(v_along, target, SLIDE_ACCEL * delta)
+				else:
+					v_along = move_toward(v_along, target, SLIDE_DRAG * delta)
+			else:
+				# Flat or uphill: slope and drag bleed the speed off.
+				v_along = move_toward(v_along, 0.0, (SLIDE_ACCEL * slope + SLIDE_DRAG) * delta)
+			# End once the slide has genuinely slowed to a crawl.
+			if v_along < SLIDE_END_SPEED:
 				is_sliding = false
 				slide_timer = 0.0
 				floor_angle = 0.0
 			else:
-				velocity = surface_right * current_speed
+				velocity = tangent * v_along
 
 	# Horizontal movement (when not sliding) — accel/friction for momentum
 	if not is_sliding:
