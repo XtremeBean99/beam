@@ -1,54 +1,102 @@
-[gd_scene load_steps=5 format=3 uid="uid://dwauw4vipyn1l"]
+[gd_scene format=3 uid="uid://dwauw4vipyn1l"]
 
 [ext_resource type="PackedScene" uid="uid://fgxcv3f8vatq" path="res://scenes/player.tscn" id="1_player"]
-[ext_resource type="Script" path="res://scripts/ink_terrain.gd" id="2_terrain"]
-[ext_resource type="Script" path="res://scripts/level2.gd" id="3_level2"]
+[ext_resource type="Script" uid="uid://dtv6qnxaweupx" path="res://scripts/ink_terrain.gd" id="2_terrain"]
+[ext_resource type="Script" uid="uid://dwd64c2khpyrx" path="res://scripts/level2.gd" id="3_level2"]
 [ext_resource type="Texture2D" uid="uid://bcposdg0ro471" path="res://assets/images/map2.png" id="4_map2"]
+[ext_resource type="PackedScene" uid="uid://s1r1qbt1mq60" path="res://scenes/snail.tscn" id="5_ok6xr"]
+[ext_resource type="PackedScene" uid="uid://y1v2jv2bmd2f" path="res://scenes/collectable.tscn" id="6_dj4wq"]
 
-[node name="LevelRoot" type="Node2D"]
+[node name="LevelRoot" type="Node2D" unique_id=1312342411]
 script = ExtResource("3_level2")
 
-[node name="VoidBG" type="CanvasLayer" parent="."]
+[node name="VoidBG" type="CanvasLayer" parent="." unique_id=1322901232]
 layer = -10
 
-[node name="ColorRect" type="ColorRect" parent="VoidBG"]
+[node name="ColorRect" type="ColorRect" parent="VoidBG" unique_id=86147379]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(0.054902, 0.058824, 0.070588, 1)
 
-[node name="MapGuide" type="Sprite2D" parent="."]
+[node name="MapGuide" type="Sprite2D" parent="." unique_id=1780676609]
 visible = false
 modulate = Color(1, 1, 1, 0.12)
 z_index = -5
-centered = false
 scale = Vector2(5, 5)
 texture = ExtResource("4_map2")
+centered = false
 
-[node name="Terrain" type="Node2D" parent="."]
+[node name="Terrain" type="Node2D" parent="." unique_id=2042493243]
 script = ExtResource("2_terrain")
 world_scale = 5.0
 
-[node name="Player" parent="." instance=ExtResource("1_player")]
+[node name="Player" parent="." unique_id=1057731734 instance=ExtResource("1_player")]
 position = Vector2(1955, 580)
 scale = Vector2(2, 2)
 
-[node name="PlacementMarkers" type="Node2D" parent="."]
+[node name="PlacementMarkers" type="Node2D" parent="." unique_id=149676694]
 
-[node name="EnemySpot1" type="Marker2D" parent="PlacementMarkers"]
+[node name="EnemySpot1" type="Marker2D" parent="PlacementMarkers" unique_id=1663541835]
 position = Vector2(1955, 700)
 
-[node name="EnemySpot2" type="Marker2D" parent="PlacementMarkers"]
+[node name="EnemySpot2" type="Marker2D" parent="PlacementMarkers" unique_id=2108890739]
 position = Vector2(1470, 2540)
 
-[node name="EnemySpot3" type="Marker2D" parent="PlacementMarkers"]
+[node name="EnemySpot3" type="Marker2D" parent="PlacementMarkers" unique_id=1137966317]
 position = Vector2(1325, 1225)
 
-[node name="EnemySpot4" type="Marker2D" parent="PlacementMarkers"]
+[node name="EnemySpot4" type="Marker2D" parent="PlacementMarkers" unique_id=338994556]
 position = Vector2(670, 2615)
 
-[node name="EnemySpot5" type="Marker2D" parent="PlacementMarkers"]
+[node name="EnemySpot5" type="Marker2D" parent="PlacementMarkers" unique_id=1807026127]
 position = Vector2(785, 2185)
 
-[node name="EnemySpot6" type="Marker2D" parent="PlacementMarkers"]
+[node name="EnemySpot6" type="Marker2D" parent="PlacementMarkers" unique_id=297389656]
 position = Vector2(825, 1335)
+
+[node name="Enemies" type="Node2D" parent="." unique_id=484029577]
+
+[node name="Snail" parent="Enemies" unique_id=1197144203 instance=ExtResource("5_ok6xr")]
+position = Vector2(701, 1293)
+
+[node name="Snail2" parent="Enemies" unique_id=753676881 instance=ExtResource("5_ok6xr")]
+position = Vector2(566, 2198)
+
+[node name="Snail3" parent="Enemies" unique_id=1780301257 instance=ExtResource("5_ok6xr")]
+position = Vector2(689, 2582)
+
+[node name="Snail4" parent="Enemies" unique_id=1386343174 instance=ExtResource("5_ok6xr")]
+position = Vector2(1837, 2535)
+
+[node name="Snail5" parent="Enemies" unique_id=626956781 instance=ExtResource("5_ok6xr")]
+position = Vector2(2870, 2126)
+
+[node name="Snail6" parent="Enemies" unique_id=689348032 instance=ExtResource("5_ok6xr")]
+position = Vector2(2917, 1367)
+
+[node name="Collectables" type="Node2D" parent="." unique_id=2055833639]
+
+[node name="Collectable" parent="Collectables" unique_id=411621955 instance=ExtResource("6_dj4wq")]
+position = Vector2(2210, 2532)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable2" parent="Collectables" unique_id=1708276445 instance=ExtResource("6_dj4wq")]
+position = Vector2(856.0001, 2627)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable3" parent="Collectables" unique_id=98066191 instance=ExtResource("6_dj4wq")]
+position = Vector2(799.0002, 1117)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable4" parent="Collectables" unique_id=406516122 instance=ExtResource("6_dj4wq")]
+position = Vector2(568.00024, 1497)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable5" parent="Collectables" unique_id=1596476872 instance=ExtResource("6_dj4wq")]
+position = Vector2(3796.9998, 885.00006)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable6" parent="Collectables" unique_id=1644866393 instance=ExtResource("6_dj4wq")]
+position = Vector2(3459.9998, 1818)
+scale = Vector2(0.1, 0.1)

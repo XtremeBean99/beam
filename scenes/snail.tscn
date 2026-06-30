@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://s1r1qbt1mq60"]
+[gd_scene load_steps=12 format=3 uid="uid://s1r1qbt1mq60"]
 
 [ext_resource type="Texture2D" uid="uid://dq55uf4w7ised" path="res://assets/images/SPRITES/burning-ghoul/sprites/v2/burning-ghoul1.png" id="1_1lcli"]
 [ext_resource type="Script" uid="uid://uuhvsycgj56o" path="res://scripts/snail.gd" id="1_x6go0"]
@@ -46,23 +46,25 @@ animations = [{
 radius = 11.0
 height = 72.0
 
-[node name="Snail" type="Area2D" unique_id=1197144203]
+[node name="Snail" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 1
 script = ExtResource("1_x6go0")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=742693976]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_g4v7s")
 animation = &"running"
 autoplay = "running"
-frame_progress = 0.14521949
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=382094853]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-2, 24)
 shape = SubResource("CapsuleShape2D_yf5fn")
 
-[node name="Timer" type="Timer" parent="." unique_id=861523778]
-wait_time = 2.0
-autostart = true
+[node name="ContactArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
 
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ContactArea"]
+position = Vector2(-2, 24)
+shape = SubResource("CapsuleShape2D_yf5fn")

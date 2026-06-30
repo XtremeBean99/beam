@@ -19,11 +19,12 @@ const JUMP_CUT_MULT = 0.45
 const COYOTE_TIME = 0.1
 const JUMP_BUFFER_TIME = 0.1
 const MAX_AIR_JUMPS = 1
+const STOMP_BOUNCE = -560.0       # upward pop when bouncing off a stomped enemy
 
 const SLIDE_ACCEL = 1800.0       # downhill build-up (stronger = faster ramps)
 const SLIDE_FRICTION = 0.997     # very gentle decay → very long, extended slides
-const SLIDE_MIN_SPEED = 50.0     # low bar to START a slide (> END for hysteresis)
-const SLIDE_END_SPEED = 30.0     # slide ends gracefully once it slows below this
+const SLIDE_MIN_SPEED = 30.0     # very low bar to START a slide (> END for hysteresis)
+const SLIDE_END_SPEED = 20.0     # slide ends gracefully once it slows below this
 const SLIDE_KICK_DELAY = 1.0     # hold plain crouch for the first second of a slide
 const SLIDE_ANIM_MIN = 400.0   # below this, hold the crouched first frame
 const SLIDE_ANIM_MAX = 950.0   # at/above this, fully-extended kick frame
@@ -93,6 +94,13 @@ func hurt():
 func apply_knockback(from_direction):
 	velocity.x = from_direction * KNOCKBACK_FORCE
 	velocity.y = -200.0
+
+
+# Called by an enemy when the player lands on its head: bounce up and refund the
+# mid-air jump so stomps can be chained.
+func stomp_bounce():
+	velocity.y = STOMP_BOUNCE
+	air_jumps_left = MAX_AIR_JUMPS
 
 
 # Map a slide speed to a frame index of the crouch-kick animation.
