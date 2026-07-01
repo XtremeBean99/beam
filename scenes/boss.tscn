@@ -1,0 +1,143 @@
+[gd_scene format=3 uid="uid://duyutl56e04fa"]
+
+[ext_resource type="Script" uid="uid://do670nkh5nisj" path="res://scripts/boss.gd" id="1_boss"]
+[ext_resource type="Texture2D" uid="uid://fuyvyqnexqrm" path="res://assets/images/SPRITES/wizard/idle-sprites/wizard-idle-1.png" id="2_i1"]
+[ext_resource type="Texture2D" uid="uid://7tvn5itodwjy" path="res://assets/images/SPRITES/wizard/idle-sprites/wizard-idle-2.png" id="3_i2"]
+[ext_resource type="Texture2D" uid="uid://bdx7ap76f7j67" path="res://assets/images/SPRITES/wizard/idle-sprites/wizard-idle-3.png" id="4_i3"]
+[ext_resource type="Texture2D" uid="uid://dmjnvnchoia1h" path="res://assets/images/SPRITES/wizard/idle-sprites/wizard-idle-4.png" id="5_i4"]
+[ext_resource type="Texture2D" uid="uid://dua4d36ffq1al" path="res://assets/images/SPRITES/wizard/idle-sprites/wizard-idle-5.png" id="6_i5"]
+[ext_resource type="Texture2D" uid="uid://falw37u2q4j" path="res://assets/images/SPRITES/wizard/fire-sprites/fire1.png" id="7_f1"]
+[ext_resource type="Texture2D" uid="uid://dwqpakg2wljh6" path="res://assets/images/SPRITES/wizard/fire-sprites/fire2.png" id="8_f2"]
+[ext_resource type="Texture2D" uid="uid://bmy4fenmrh55h" path="res://assets/images/SPRITES/wizard/fire-sprites/fire3.png" id="9_f3"]
+[ext_resource type="Texture2D" uid="uid://csvs1i4bmx0jh" path="res://assets/images/SPRITES/wizard/fire-sprites/fire4.png" id="10_f4"]
+[ext_resource type="Texture2D" uid="uid://cxbfbbo4xcwqa" path="res://assets/images/SPRITES/wizard/fire-sprites/fire5.png" id="11_f5"]
+[ext_resource type="Texture2D" uid="uid://3pmelkkx5640" path="res://assets/images/SPRITES/wizard/fire-sprites/fire6.png" id="12_f6"]
+[ext_resource type="Texture2D" uid="uid://di0t8im0f1vkc" path="res://assets/images/SPRITES/wizard/fire-sprites/fire7.png" id="13_f7"]
+[ext_resource type="Texture2D" uid="uid://3x7fy315irqt" path="res://assets/images/SPRITES/wizard/fire-sprites/fire8.png" id="14_f8"]
+[ext_resource type="Texture2D" uid="uid://c0d0h3hina3nd" path="res://assets/images/SPRITES/wizard/fire-sprites/fire9.png" id="15_f9"]
+[ext_resource type="Texture2D" uid="uid://d0pu7di5b56ho" path="res://assets/images/SPRITES/wizard/fire-sprites/fire10.png" id="16_f10"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_boss"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_f1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_f2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_f3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_f4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_f5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_f6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_f7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_f8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_f9")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_f10")
+}],
+"loop": 0,
+"name": &"fire",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_i1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_i2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_i3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_i4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_i5")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_boss"]
+radius = 11.0
+height = 37.6
+
+[node name="Boss" type="CharacterBody2D" unique_id=191312001]
+scale = Vector2(2.5, 2.5)
+collision_layer = 2
+script = ExtResource("1_boss")
+max_health = 6
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1095523453]
+sprite_frames = SubResource("SpriteFrames_boss")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=139720680]
+position = Vector2(0, 14)
+shape = SubResource("CapsuleShape2D_boss")
+
+[node name="ContactArea" type="Area2D" parent="." unique_id=1060389692]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ContactArea" unique_id=938277401]
+position = Vector2(0, 14)
+shape = SubResource("CapsuleShape2D_boss")
+
+[node name="BossHUD" type="CanvasLayer" parent="." unique_id=2103719476]
+
+[node name="Center" type="Control" parent="BossHUD" unique_id=1781309502]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -250.0
+offset_top = 16.0
+offset_right = 250.0
+offset_bottom = 64.0
+
+[node name="NameLabel" type="Label" parent="BossHUD/Center" unique_id=2043379100]
+layout_mode = 0
+offset_left = -125.0
+offset_right = 125.0
+offset_bottom = 28.0
+theme_override_colors/font_color = Color(0.85, 0.92, 1, 0.9)
+theme_override_font_sizes/font_size = 24
+text = "Grand Wizard"
+horizontal_alignment = 1
+
+[node name="Bar" type="Control" parent="BossHUD/Center" unique_id=421986714]
+anchors_preset = 0
+offset_left = -200.0
+offset_top = 30.0
+offset_right = 200.0
+offset_bottom = 46.0
+
+[node name="BG" type="ColorRect" parent="BossHUD/Center/Bar" unique_id=89794867]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 16.0
+color = Color(0.04, 0.05, 0.07, 0.85)
+
+[node name="Fill" type="ColorRect" parent="BossHUD/Center/Bar" unique_id=2063250459]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 16.0
+color = Color(0.85, 0.92, 1, 0.95)

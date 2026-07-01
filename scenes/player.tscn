@@ -41,7 +41,7 @@
 [ext_resource type="AudioStream" uid="uid://pbr4wjx2ah8i" path="res://assets/sounds/kick.mp3" id="39_2dvfe"]
 [ext_resource type="AudioStream" uid="uid://y1j1y23tdlql" path="res://assets/sounds/punch.mp3" id="40_giy8y"]
 [ext_resource type="AudioStream" uid="uid://b76ydbswhov37" path="res://assets/sounds/pistol.wav" id="41_2dvfe"]
-[ext_resource type="Script" path="res://scripts/player_trail.gd" id="42_trail"]
+[ext_resource type="Script" uid="uid://bplayertrail0" path="res://scripts/player_trail.gd" id="42_trail"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_g4v7s"]
 animations = [{
@@ -204,9 +204,9 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g4v7s"]
-radius = 12.0
-height = 46.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w6avg"]
+radius = 8.666667
+height = 42.666668
 
 [node name="Player" type="CharacterBody2D" unique_id=1659751386]
 scale = Vector2(3, 3)
@@ -217,14 +217,12 @@ metadata/_edit_group_ = true
 texture_filter = 1
 texture_repeat = 1
 sprite_frames = SubResource("SpriteFrames_g4v7s")
-animation = &"walk"
+animation = &"fall"
 autoplay = "idle"
-frame = 1
-frame_progress = 0.38737512
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1288170393]
-position = Vector2(-1, 8)
-shape = SubResource("CapsuleShape2D_g4v7s")
+position = Vector2(0, 9)
+shape = SubResource("CapsuleShape2D_w6avg")
 
 [node name="JumpSound" type="AudioStreamPlayer2D" parent="." unique_id=1143910443]
 stream = ExtResource("38_cs1tg")
@@ -243,10 +241,8 @@ texture_filter = 1
 stream = ExtResource("41_2dvfe")
 bus = &"SFX"
 
-[node name="PlayerTrail" type="Node2D" parent="."]
+[node name="PlayerTrail" type="Node2D" parent="." unique_id=160560964]
 script = ExtResource("42_trail")
-
-[node name="AttackHitbox" type="Area2D" parent="." unique_id=762785265]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=699169745]
 position_smoothing_enabled = true

@@ -5,15 +5,17 @@ extends Node
 
 const PATH := "user://settings.cfg"
 const BUSES := ["Master", "Music", "SFX"]
-const REBINDABLE_ACTIONS := ["left", "right", "jump", "crouch", "punch", "shoot", "pause"]
+const REBINDABLE_ACTIONS := ["left", "right", "jump", "crouch", "shoot", "pause"]
 
 var volumes := {"Master": 1.0, "Music": 0.9, "SFX": 0.9}
+var fullscreen := true
 
 
 func _ready() -> void:
 	load_settings()
 	load_keybindings()
 	apply_all()
+	apply_display()
 
 
 func get_volume(bus: String) -> float:
@@ -32,6 +34,17 @@ func apply_all() -> void:
 		_apply(b, get_volume(b))
 
 
+func apply_display() -> void:
+	DisplayServer.window_set_mode(
+		DisplayServer.WINDOW_MODE_FULLSCREEN if fullscreen else DisplayServer.WINDOW_MODE_WINDOWED)
+
+
+func set_fullscreen(on: bool) -> void:
+	fullscreen = on
+	apply_display()
+	save_settings()
+
+
 func _apply(bus: String, linear: float) -> void:
 	var idx := AudioServer.get_bus_index(bus)
 	if idx < 0:
@@ -45,6 +58,7 @@ func save_settings() -> void:
 	cfg.load(PATH)  # preserve existing key bindings
 	for b in BUSES:
 		cfg.set_value("audio", b, get_volume(b))
+	cfg.set_value("display", "fullscreen", fullscreen)
 	cfg.save(PATH)
 
 
@@ -54,19 +68,23 @@ func load_settings() -> void:
 		return
 	for b in BUSES:
 		volumes[b] = float(cfg.get_value("audio", b, get_volume(b)))
+	fullscreen = bool(cfg.get_value("display", "fullscreen", fullscreen))
 
 
 func save_keybindings() -> void:
 	var cfg := ConfigFile.new()
-	if cfg.load(PATH) == OK:
-		# Preserve existing audio settings
-		pass
+	cfg.load(PATH)  # preserve the [audio] section
 	for action in REBINDABLE_ACTIONS:
-		var events := InputMap.action_get_events(action)
+		if not InputMap.has_action(action):
+			continue
 		var codes: Array[int] = []
-		for e in events:
+		for e in InputMap.action_get_events(action):
 			if e is InputEventKey:
-				codes.append(e.keycode)
+				# The project's bindings are physical; fall back to logical only
+				# if a physical code is somehow missing. Never persist 0 (none).
+				var pc: int = e.physical_keycode if e.physical_keycode != 0 else e.keycode
+				if pc != 0:
+					codes.append(pc)
 		cfg.set_value("keys", action, codes)
 	cfg.save(PATH)
 
@@ -76,16 +94,23 @@ func load_keybindings() -> void:
 	if cfg.load(PATH) != OK:
 		return
 	for action in REBINDABLE_ACTIONS:
-		var codes = cfg.get_value("keys", action, [])
-		if codes == null or codes.is_empty():
+		if not InputMap.has_action(action):
 			continue
-		# Remove current key events for this action
-		var current := InputMap.action_get_events(action)
-		for e in current:
+		var codes = cfg.get_value("keys", action, [])
+		if codes == null:
+			continue
+		# Keep only valid (non-zero) codes; if none are valid, leave the project's
+		# default binding for this action untouched (guards against old corrupt saves).
+		var valid: Array = []
+		for code in codes:
+			if int(code) != 0:
+				valid.append(int(code))
+		if valid.is_empty():
+			continue
+		for e in InputMap.action_get_events(action):
 			if e is InputEventKey:
 				InputMap.action_erase_event(action, e)
-		# Add saved key events
-		for code in codes:
+		for code in valid:
 			var ev := InputEventKey.new()
-			ev.keycode = int(code)
+			ev.physical_keycode = int(code)
 			InputMap.action_add_event(action, ev)

@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://cry128keverqq"]
+
+[ext_resource type="Script" path="res://scripts/crumbling_platform.gd" id="1_crumble"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(360, 110)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_detect"]
+size = Vector2(360, 36)
+
+[node name="CrumblingPlatform" type="StaticBody2D"]
+collision_layer = 1
+collision_mask = 0
+script = ExtResource("1_crumble")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(0.3, 0.3)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Detector" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Detector"]
+position = Vector2(0, -66)
+shape = SubResource("RectangleShape2D_detect")

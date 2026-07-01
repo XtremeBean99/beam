@@ -2,15 +2,17 @@
 extends Node2D
 class_name InkTerrain
 
-## Builds a hand-drawn level's terrain by reading a JSON file of strokes
-## (extracted from a sketch like map2.png) and spawning one InkStroke per stroke,
-## scaled from image space into world space.
+## Builds a hand-drawn level's terrain by reading a strokes file (JSON or SVG)
+## and spawning one InkStroke per polyline, scaled from image space into
+## world space.
 ##
 ## JSON shape: { "W": int, "H": int, "strokes": [ { "pts": [[x,y], ...] }, ... ] }
+## SVG:     standard <path d="..."> elements are extracted and sampled.
 
 const InkStrokeScript = preload("res://scripts/ink_stroke.gd")
+const SvgParserClass = preload("res://scripts/svg_parser.gd")
 
-@export_file("*.json") var strokes_path: String = "res://assets/levels/map2_strokes.json":
+@export_file("*.json", "*.svg") var strokes_path: String = "res://assets/levels/map2_strokes.json":
 	set(value):
 		strokes_path = value
 		_rebuild()
@@ -40,8 +42,6 @@ func _ready() -> void:
 
 
 func _rebuild() -> void:
-	if not is_inside_tree():
-		return
 	for n in _built:
 		if is_instance_valid(n):
 			n.queue_free()
@@ -65,6 +65,15 @@ func _rebuild() -> void:
 
 
 func _load_strokes() -> Dictionary:
+	# Return strokes in the internal dict format: { "strokes": [ { "pts": [...] }, ... ] }
+	var ext := strokes_path.get_extension().to_lower()
+	if ext == "svg":
+		var strokes: Array = SvgParserClass.parse_file(strokes_path, false)
+		return {"strokes": strokes}
+	return _load_json_strokes()
+
+
+func _load_json_strokes() -> Dictionary:
 	if not FileAccess.file_exists(strokes_path):
 		push_warning("InkTerrain: strokes file not found: %s" % strokes_path)
 		return {}

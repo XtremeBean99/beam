@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://dkynikjijfpui"]
+
+[ext_resource type="Script" uid="uid://bq8ueuijuj4so" path="res://scripts/moving_platform.gd" id="1_plat"]
+[ext_resource type="Texture2D" uid="uid://ckf3u4203ypoy" path="res://assets/images/ENVIRONMENT/platform.png" id="2_plattex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat"]
+size = Vector2(470, 150)
+
+[node name="MovingPlatform" type="AnimatableBody2D" unique_id=921161044]
+collision_mask = 0
+script = ExtResource("1_plat")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=361447728]
+texture_filter = 1
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_plattex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1842489237]
+position = Vector2(0, -18)
+shape = SubResource("RectangleShape2D_plat")
+
+[node name="PointA" type="Marker2D" parent="." unique_id=62187457]
+position = Vector2(-300, 0)
+
+[node name="PointB" type="Marker2D" parent="." unique_id=29794498]
+position = Vector2(1637, 0)

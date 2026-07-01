@@ -1,0 +1,111 @@
+[gd_scene format=3 uid="uid://cye64ai8r0x2j"]
+
+[ext_resource type="PackedScene" uid="uid://fgxcv3f8vatq" path="res://scenes/player.tscn" id="1_player"]
+[ext_resource type="Script" uid="uid://dtv6qnxaweupx" path="res://scripts/ink_terrain.gd" id="2_terrain"]
+[ext_resource type="Script" uid="uid://dwd64c2khpyrx" path="res://scripts/ink_level.gd" id="3_level"]
+[ext_resource type="PackedScene" uid="uid://s1r1qbt1mq60" path="res://scenes/snail.tscn" id="4_snail"]
+[ext_resource type="PackedScene" uid="uid://y1v2jv2bmd2f" path="res://scenes/collectable.tscn" id="5_dywbp"]
+[ext_resource type="PackedScene" uid="uid://ctextsign0001" path="res://scenes/ui/text_sign.tscn" id="6_sign"]
+
+[node name="LevelRoot" type="Node2D" unique_id=1882946579]
+script = ExtResource("3_level")
+fall_limit = 12000.0
+
+[node name="VoidBG" type="CanvasLayer" parent="." unique_id=1081603487]
+layer = -10
+
+[node name="ColorRect" type="ColorRect" parent="VoidBG" unique_id=636564640]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.054902, 0.058824, 0.070588, 1)
+
+[node name="Terrain" type="Node2D" parent="." unique_id=468233813]
+script = ExtResource("2_terrain")
+strokes_path = "res://assets/levels/tutorial.svg"
+world_scale = 2.5
+
+[node name="Player" parent="." unique_id=1816786088 instance=ExtResource("1_player")]
+position = Vector2(390, 1051)
+scale = Vector2(2, 2)
+
+[node name="Enemies" type="Node2D" parent="." unique_id=413993921]
+
+[node name="Snail" parent="Enemies" unique_id=1948737017 instance=ExtResource("4_snail")]
+position = Vector2(3485, 1843)
+
+[node name="Snail2" parent="Enemies" unique_id=822803323 instance=ExtResource("4_snail")]
+position = Vector2(522, 2061)
+
+[node name="Snail3" parent="Enemies" unique_id=807293765 instance=ExtResource("4_snail")]
+position = Vector2(1149, 1783)
+
+[node name="Snail4" parent="Enemies" unique_id=6780207 instance=ExtResource("4_snail")]
+position = Vector2(973, 2433)
+
+[node name="Snail5" parent="Enemies" unique_id=1908673350 instance=ExtResource("4_snail")]
+position = Vector2(584, 4632)
+
+[node name="Snail6" parent="Enemies" unique_id=2030567827 instance=ExtResource("4_snail")]
+position = Vector2(1664, 4960)
+
+[node name="Snail8" parent="Enemies" unique_id=383829210 instance=ExtResource("4_snail")]
+position = Vector2(3647, 2121)
+
+[node name="Snail7" parent="Enemies" unique_id=1143510585 instance=ExtResource("4_snail")]
+position = Vector2(1319, 4188)
+
+[node name="Collectables" type="Node2D" parent="." unique_id=981884735]
+
+[node name="Collectable" parent="Collectables" unique_id=411621955 instance=ExtResource("5_dywbp")]
+position = Vector2(3066, 1580)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable2" parent="Collectables" unique_id=370320140 instance=ExtResource("5_dywbp")]
+position = Vector2(4152, 1451)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable3" parent="Collectables" unique_id=521831225 instance=ExtResource("5_dywbp")]
+position = Vector2(3052, 2029)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable4" parent="Collectables" unique_id=309065203 instance=ExtResource("5_dywbp")]
+position = Vector2(3091, 2359)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable5" parent="Collectables" unique_id=1516720961 instance=ExtResource("5_dywbp")]
+position = Vector2(520.00024, 1648)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable6" parent="Collectables" unique_id=381516935 instance=ExtResource("5_dywbp")]
+position = Vector2(868, 2245)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable7" parent="Collectables" unique_id=1558244719 instance=ExtResource("5_dywbp")]
+position = Vector2(123.00006, 2528)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable8" parent="Collectables" unique_id=952550985 instance=ExtResource("5_dywbp")]
+position = Vector2(1548, 4212)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable9" parent="Collectables" unique_id=345479385 instance=ExtResource("5_dywbp")]
+position = Vector2(1621, 3642)
+scale = Vector2(0.1, 0.1)
+
+[node name="Signs" type="Node2D" parent="." unique_id=1244017581]
+
+[node name="Sign1" parent="Signs" unique_id=2019726583 instance=ExtResource("6_sign")]
+position = Vector2(685, 821)
+text = "MOVE
+←  A      D  →"
+
+[node name="Sign2" parent="Signs" unique_id=1192280220 instance=ExtResource("6_sign")]
+position = Vector2(1442, 780)
+text = "JUMP:  SPACE  /  W
+Tap again in mid-air to DOUBLE JUMP"
+
+[node name="Sign4" parent="Signs" unique_id=669532629 instance=ExtResource("6_sign")]
+position = Vector2(465, 1843)
+text = "SHOOT:  press  L
+Defeat enemies to earn fireball charges"

@@ -3,11 +3,9 @@ extends Node2D
 class_name InkStroke
 
 ## A single hand-drawn terrain stroke: renders as a glowing monochrome line
-## (Line2D) and builds matching collision by thickening the polyline into a
-## CollisionPolygon2D. Authored terrain and (future) effects share this primitive.
-##
-## The polyline-thickening math is migrated from the retired player-drawn
-## platform mechanic (old main.gd _build_thick_platform / _get_perpendicular).
+## (Line2D) and builds matching collision. Open strokes become one convex quad per
+## segment (robust, no concave decomposition); closed paths use their outline
+## directly. Authored terrain and (future) effects share this primitive.
 
 @export var points: PackedVector2Array:
 	set(value):
@@ -54,15 +52,22 @@ func _rebuild() -> void:
 	add_child(_glow)
 	add_child(_core)
 
-	# --- Collision: thicken the polyline into a solid polygon ---
+	# --- Collision ---
 	# (Skipped in the editor so authoring doesn't spawn physics bodies.)
 	if not Engine.is_editor_hint():
 		_body = StaticBody2D.new()
 		_body.collision_layer = 1
 		_body.collision_mask = 0
-		var poly := CollisionPolygon2D.new()
-		poly.polygon = _build_thick_polygon(points, thickness)
-		_body.add_child(poly)
+		if points.size() >= 3 and points[0].distance_to(points[points.size() - 1]) < 2.0:
+			# Closed path (letters / filled shapes) → use the outline directly.
+			var poly := CollisionPolygon2D.new()
+			poly.polygon = points
+			_body.add_child(poly)
+		else:
+			# Open stroke → one convex quad per segment. Independent convex pieces
+			# avoid the costly/fragile concave decomposition of a single ribbon and
+			# the self-intersections an offset polyline produces on tight bends.
+			_add_segment_collision(_body, points, thickness)
 		add_child(_body)
 
 
@@ -78,26 +83,21 @@ func _make_line(width: float, color: Color) -> Line2D:
 	return line
 
 
-func _build_thick_polygon(pts: PackedVector2Array, th: float) -> PackedVector2Array:
+## Build collision as one convex quad per polyline segment, parented to `body`.
+## Each quad is independent, so there is no concave decomposition and no miter
+## self-intersection; consecutive quads overlap at the joints to fill corners.
+func _add_segment_collision(body: StaticBody2D, pts: PackedVector2Array, th: float) -> void:
 	var half := th * 0.5
-	var n := pts.size()
-	var poly := PackedVector2Array()
-	# Top edge: offset each point along its averaged perpendicular.
-	for i in range(n):
-		poly.append(pts[i] + _perpendicular(pts, i, n) * half)
-	# Bottom edge: opposite offset, reversed, to close the ribbon.
-	for i in range(n - 1, -1, -1):
-		poly.append(pts[i] - _perpendicular(pts, i, n) * half)
-	return poly
+	for i in range(pts.size() - 1):
+		if pts[i].distance_to(pts[i + 1]) < 0.001:
+			continue
+		var cp := CollisionPolygon2D.new()
+		cp.polygon = segment_quad(pts[i], pts[i + 1], half)
+		body.add_child(cp)
 
 
-func _perpendicular(pts: PackedVector2Array, i: int, n: int) -> Vector2:
-	var dir := Vector2.ZERO
-	if i > 0:
-		dir += (pts[i] - pts[i - 1]).normalized()
-	if i < n - 1:
-		dir += (pts[i + 1] - pts[i]).normalized()
-	if dir.length() < 0.001:
-		return Vector2(0, -1)
-	dir = dir.normalized()
-	return Vector2(-dir.y, dir.x)
+## Pure helper: the convex quad for one segment a→b, offset by `half` either side.
+## Static so it can be unit-tested without a node in the tree.
+static func segment_quad(a: Vector2, b: Vector2, half: float) -> PackedVector2Array:
+	var perp := (b - a).orthogonal().normalized() * half
+	return PackedVector2Array([a + perp, b + perp, b - perp, a - perp])

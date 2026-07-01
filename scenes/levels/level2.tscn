@@ -1,102 +1,168 @@
-[gd_scene format=3 uid="uid://dwauw4vipyn1l"]
+[gd_scene format=3 uid="uid://dtreqj3l41i1g"]
 
 [ext_resource type="PackedScene" uid="uid://fgxcv3f8vatq" path="res://scenes/player.tscn" id="1_player"]
 [ext_resource type="Script" uid="uid://dtv6qnxaweupx" path="res://scripts/ink_terrain.gd" id="2_terrain"]
-[ext_resource type="Script" uid="uid://dwd64c2khpyrx" path="res://scripts/level2.gd" id="3_level2"]
-[ext_resource type="Texture2D" uid="uid://bcposdg0ro471" path="res://assets/images/map2.png" id="4_map2"]
-[ext_resource type="PackedScene" uid="uid://s1r1qbt1mq60" path="res://scenes/snail.tscn" id="5_ok6xr"]
-[ext_resource type="PackedScene" uid="uid://y1v2jv2bmd2f" path="res://scenes/collectable.tscn" id="6_dj4wq"]
+[ext_resource type="Script" uid="uid://dwd64c2khpyrx" path="res://scripts/ink_level.gd" id="3_level"]
+[ext_resource type="PackedScene" uid="uid://s1r1qbt1mq60" path="res://scenes/snail.tscn" id="4_ok6xr"]
+[ext_resource type="PackedScene" uid="uid://bflyrwatch01" path="res://scenes/flyer.tscn" id="5_dj4wq"]
+[ext_resource type="PackedScene" uid="uid://y1v2jv2bmd2f" path="res://scenes/collectable.tscn" id="6_k0mew"]
 
-[node name="LevelRoot" type="Node2D" unique_id=1312342411]
-script = ExtResource("3_level2")
+[node name="LevelRoot" type="Node2D" unique_id=1103856774]
+script = ExtResource("3_level")
 
-[node name="VoidBG" type="CanvasLayer" parent="." unique_id=1322901232]
+[node name="VoidBG" type="CanvasLayer" parent="." unique_id=914088001]
 layer = -10
 
-[node name="ColorRect" type="ColorRect" parent="VoidBG" unique_id=86147379]
+[node name="ColorRect" type="ColorRect" parent="VoidBG" unique_id=10546543]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(0.054902, 0.058824, 0.070588, 1)
 
-[node name="MapGuide" type="Sprite2D" parent="." unique_id=1780676609]
-visible = false
-modulate = Color(1, 1, 1, 0.12)
-z_index = -5
-scale = Vector2(5, 5)
-texture = ExtResource("4_map2")
-centered = false
-
-[node name="Terrain" type="Node2D" parent="." unique_id=2042493243]
+[node name="Terrain" type="Node2D" parent="." unique_id=1078880412]
 script = ExtResource("2_terrain")
-world_scale = 5.0
+strokes_path = "res://assets/levels/level2.svg"
+world_scale = 30.0
 
-[node name="Player" parent="." unique_id=1057731734 instance=ExtResource("1_player")]
-position = Vector2(1955, 580)
+[node name="Player" parent="." unique_id=1361566250 instance=ExtResource("1_player")]
+position = Vector2(178, 180)
 scale = Vector2(2, 2)
 
-[node name="PlacementMarkers" type="Node2D" parent="." unique_id=149676694]
+[node name="Enemies" type="Node2D" parent="." unique_id=1688866165]
 
-[node name="EnemySpot1" type="Marker2D" parent="PlacementMarkers" unique_id=1663541835]
-position = Vector2(1955, 700)
+[node name="Snail" parent="Enemies" unique_id=1833603532 instance=ExtResource("4_ok6xr")]
+position = Vector2(1401, 1504)
 
-[node name="EnemySpot2" type="Marker2D" parent="PlacementMarkers" unique_id=2108890739]
-position = Vector2(1470, 2540)
+[node name="Snail2" parent="Enemies" unique_id=1860841899 instance=ExtResource("4_ok6xr")]
+position = Vector2(1436, 2556)
 
-[node name="EnemySpot3" type="Marker2D" parent="PlacementMarkers" unique_id=1137966317]
-position = Vector2(1325, 1225)
+[node name="Snail3" parent="Enemies" unique_id=497808652 instance=ExtResource("4_ok6xr")]
+position = Vector2(3632, 2345)
 
-[node name="EnemySpot4" type="Marker2D" parent="PlacementMarkers" unique_id=338994556]
-position = Vector2(670, 2615)
+[node name="Snail4" parent="Enemies" unique_id=1245115747 instance=ExtResource("4_ok6xr")]
+position = Vector2(2907, 5971)
 
-[node name="EnemySpot5" type="Marker2D" parent="PlacementMarkers" unique_id=1807026127]
-position = Vector2(785, 2185)
+[node name="Snail5" parent="Enemies" unique_id=504621540 instance=ExtResource("4_ok6xr")]
+position = Vector2(3184, 5974)
 
-[node name="EnemySpot6" type="Marker2D" parent="PlacementMarkers" unique_id=297389656]
-position = Vector2(825, 1335)
+[node name="Snail8" parent="Enemies" unique_id=1870817793 instance=ExtResource("4_ok6xr")]
+position = Vector2(3438, 5977)
 
-[node name="Enemies" type="Node2D" parent="." unique_id=484029577]
+[node name="Snail9" parent="Enemies" unique_id=93620691 instance=ExtResource("4_ok6xr")]
+position = Vector2(4816, 5977)
 
-[node name="Snail" parent="Enemies" unique_id=1197144203 instance=ExtResource("5_ok6xr")]
-position = Vector2(701, 1293)
+[node name="Snail6" parent="Enemies" unique_id=202763313 instance=ExtResource("4_ok6xr")]
+position = Vector2(5049, 5971)
 
-[node name="Snail2" parent="Enemies" unique_id=753676881 instance=ExtResource("5_ok6xr")]
-position = Vector2(566, 2198)
+[node name="Snail7" parent="Enemies" unique_id=103318242 instance=ExtResource("4_ok6xr")]
+position = Vector2(5551, 5974)
 
-[node name="Snail3" parent="Enemies" unique_id=1780301257 instance=ExtResource("5_ok6xr")]
-position = Vector2(689, 2582)
+[node name="Flyer" parent="Enemies" unique_id=1101388958 instance=ExtResource("5_dj4wq")]
+position = Vector2(855, 1449)
 
-[node name="Snail4" parent="Enemies" unique_id=1386343174 instance=ExtResource("5_ok6xr")]
-position = Vector2(1837, 2535)
+[node name="Flyer2" parent="Enemies" unique_id=101685122 instance=ExtResource("5_dj4wq")]
+position = Vector2(2292, 2410)
 
-[node name="Snail5" parent="Enemies" unique_id=626956781 instance=ExtResource("5_ok6xr")]
-position = Vector2(2870, 2126)
+[node name="Flyer3" parent="Enemies" unique_id=398853874 instance=ExtResource("5_dj4wq")]
+position = Vector2(5551, 2359)
 
-[node name="Snail6" parent="Enemies" unique_id=689348032 instance=ExtResource("5_ok6xr")]
-position = Vector2(2917, 1367)
+[node name="Flyer4" parent="Enemies" unique_id=128229483 instance=ExtResource("5_dj4wq")]
+position = Vector2(5071, 5308)
 
-[node name="Collectables" type="Node2D" parent="." unique_id=2055833639]
+[node name="Flyer5" parent="Enemies" unique_id=29329054 instance=ExtResource("5_dj4wq")]
+position = Vector2(3003, 5078)
 
-[node name="Collectable" parent="Collectables" unique_id=411621955 instance=ExtResource("6_dj4wq")]
-position = Vector2(2210, 2532)
+[node name="Flyer6" parent="Enemies" unique_id=38821377 instance=ExtResource("5_dj4wq")]
+position = Vector2(4223, 5751)
+
+[node name="Collectables" type="Node2D" parent="." unique_id=1726500582]
+
+[node name="Collectable" parent="Collectables" unique_id=411621955 instance=ExtResource("6_k0mew")]
+position = Vector2(2085, 388.00003)
 scale = Vector2(0.1, 0.1)
 
-[node name="Collectable2" parent="Collectables" unique_id=1708276445 instance=ExtResource("6_dj4wq")]
-position = Vector2(856.0001, 2627)
+[node name="Collectable2" parent="Collectables" unique_id=906653161 instance=ExtResource("6_k0mew")]
+position = Vector2(1099, 1587)
 scale = Vector2(0.1, 0.1)
 
-[node name="Collectable3" parent="Collectables" unique_id=98066191 instance=ExtResource("6_dj4wq")]
-position = Vector2(799.0002, 1117)
+[node name="Collectable3" parent="Collectables" unique_id=949875094 instance=ExtResource("6_k0mew")]
+position = Vector2(986, 2223)
 scale = Vector2(0.1, 0.1)
 
-[node name="Collectable4" parent="Collectables" unique_id=406516122 instance=ExtResource("6_dj4wq")]
-position = Vector2(568.00024, 1497)
+[node name="Collectable4" parent="Collectables" unique_id=154496888 instance=ExtResource("6_k0mew")]
+position = Vector2(1507, 2014)
 scale = Vector2(0.1, 0.1)
 
-[node name="Collectable5" parent="Collectables" unique_id=1596476872 instance=ExtResource("6_dj4wq")]
-position = Vector2(3796.9998, 885.00006)
+[node name="Collectable5" parent="Collectables" unique_id=365636525 instance=ExtResource("6_k0mew")]
+position = Vector2(1759, 2351)
 scale = Vector2(0.1, 0.1)
 
-[node name="Collectable6" parent="Collectables" unique_id=1644866393 instance=ExtResource("6_dj4wq")]
-position = Vector2(3459.9998, 1818)
+[node name="Collectable6" parent="Collectables" unique_id=1925134507 instance=ExtResource("6_k0mew")]
+position = Vector2(1536, 2604)
 scale = Vector2(0.1, 0.1)
+
+[node name="Collectable7" parent="Collectables" unique_id=1680434178 instance=ExtResource("6_k0mew")]
+position = Vector2(2160, 2026)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable8" parent="Collectables" unique_id=331864356 instance=ExtResource("6_k0mew")]
+position = Vector2(2447, 2674)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable9" parent="Collectables" unique_id=350927266 instance=ExtResource("6_k0mew")]
+position = Vector2(2835, 2298)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable10" parent="Collectables" unique_id=2012309354 instance=ExtResource("6_k0mew")]
+position = Vector2(3804, 2342)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable11" parent="Collectables" unique_id=144874238 instance=ExtResource("6_k0mew")]
+position = Vector2(4357, 2292)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable12" parent="Collectables" unique_id=1554579497 instance=ExtResource("6_k0mew")]
+position = Vector2(4629, 3672)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable13" parent="Collectables" unique_id=1783377528 instance=ExtResource("6_k0mew")]
+position = Vector2(4146.9995, 3591)
+rotation = 0.15492994
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable14" parent="Collectables" unique_id=351976633 instance=ExtResource("6_k0mew")]
+position = Vector2(4262.0005, 5242)
+rotation = 0.2613395
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable15" parent="Collectables" unique_id=1221410135 instance=ExtResource("6_k0mew")]
+position = Vector2(2813, 6012)
+rotation = 0.2613395
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable16" parent="Collectables" unique_id=573326797 instance=ExtResource("6_k0mew")]
+position = Vector2(5746, 6018)
+rotation = 0.2613395
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable17" parent="Collectables" unique_id=630770154 instance=ExtResource("6_k0mew")]
+position = Vector2(5729, 4532)
+rotation = 0.2613395
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable18" parent="Collectables" unique_id=625195914 instance=ExtResource("6_k0mew")]
+position = Vector2(2830.0002, 4526)
+rotation = 0.2613395
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable19" parent="Collectables" unique_id=1144123896 instance=ExtResource("6_k0mew")]
+position = Vector2(4242, 6010)
+rotation = 0.2613395
+scale = Vector2(0.1, 0.1)
+
+[node name="Bossroom" type="Panel" parent="." unique_id=1291831401]
+visible = false
+offset_left = 2782.0
+offset_top = 4471.0
+offset_right = 5784.0
+offset_bottom = 6055.0

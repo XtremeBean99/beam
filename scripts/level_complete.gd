@@ -30,6 +30,25 @@ func show_stats(elapsed: float, score: int, kills: int) -> void:
 	_animate_enso()
 
 
+## End-of-run screen: reuses this panel to show the whole-run total time and the
+## tokens collected as a percentage. The KILLS row is hidden and the SCORE row is
+## repurposed as TOKENS. Continue still fires continue_pressed (main routes the last
+## level's continue to the title screen).
+func show_endgame(total_time: float, token_percent: int) -> void:
+	$Center/Panel/VBox/Title.text = "RUN COMPLETE"
+	var mins := int(total_time / 60.0)
+	var secs := int(fmod(total_time, 60.0))
+	var cs := int(fmod(total_time, 1.0) * 100.0)
+	_time_label.text = "%d:%02d.%02d" % [mins, secs, cs]
+	$Center/Panel/VBox/Stats/ScoreRow/Label.text = "TOKENS"
+	_score_label.text = "%d%%" % token_percent
+	$Center/Panel/VBox/Stats/KillsRow.hide()
+	_continue_btn.text = "FINISH"
+	show()
+	_continue_btn.grab_focus()
+	_animate_enso()
+
+
 func _animate_enso() -> void:
 	# The ensō starts as an incomplete arc and closes as a reward motif,
 	# accompanied by a glow pulse, then breathes gently.

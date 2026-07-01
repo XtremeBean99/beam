@@ -1,14 +1,14 @@
 extends AudioStreamPlayer
 
-# Autoloaded singleton: plays looping background music that persists across
-# scene changes. Uses a short crossfade to minimise the MP3 loop gap.
+# Autoloaded singleton: plays looping background music that persists across scene
+# changes. Loops seamlessly via the stream's own loop flag (no gap from the old
+# finished→replay approach, which couldn't loop an MP3 gaplessly).
 
 func _ready() -> void:
-	stream = preload("res://assets/sounds/bgm.mp3")
+	var bgm := preload("res://assets/sounds/bgm.mp3")
+	if bgm is AudioStreamMP3:
+		bgm.loop = true
+		bgm.loop_offset = 0.0
+	stream = bgm
 	bus = "Music"
-	finished.connect(_on_finished)
 	play()
-
-func _on_finished() -> void:
-	# Small random offset reduces audible pattern repetition
-	play(randf_range(0.0, 0.15))

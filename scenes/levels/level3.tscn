@@ -1,0 +1,221 @@
+[gd_scene format=3 uid="uid://ydi5h6dkunao"]
+
+[ext_resource type="PackedScene" uid="uid://fgxcv3f8vatq" path="res://scenes/player.tscn" id="1_player"]
+[ext_resource type="Script" uid="uid://dtv6qnxaweupx" path="res://scripts/ink_terrain.gd" id="2_terrain"]
+[ext_resource type="Script" uid="uid://dwd64c2khpyrx" path="res://scripts/ink_level.gd" id="3_level"]
+[ext_resource type="PackedScene" uid="uid://bflyrwatch01" path="res://scenes/flyer.tscn" id="4_8w0pe"]
+[ext_resource type="PackedScene" uid="uid://s1r1qbt1mq60" path="res://scenes/snail.tscn" id="5_7eb4w"]
+[ext_resource type="PackedScene" uid="uid://duyutl56e04fa" path="res://scenes/boss.tscn" id="6_hadiw"]
+[ext_resource type="PackedScene" uid="uid://y1v2jv2bmd2f" path="res://scenes/collectable.tscn" id="7_72x3h"]
+[ext_resource type="PackedScene" uid="uid://b5ix5eftjot3u" path="res://scenes/spike.tscn" id="8_wb0vq"]
+[ext_resource type="PackedScene" uid="uid://dkynikjijfpui" path="res://scenes/platform.tscn" id="9_7eb4w"]
+[ext_resource type="PackedScene" uid="uid://cry128keverqq" path="res://scenes/crumbling_platform.tscn" id="10_hadiw"]
+
+[node name="LevelRoot" type="Node2D" unique_id=773593397]
+script = ExtResource("3_level")
+
+[node name="VoidBG" type="CanvasLayer" parent="." unique_id=974358687]
+layer = -10
+
+[node name="ColorRect" type="ColorRect" parent="VoidBG" unique_id=1454820162]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.054902, 0.058824, 0.070588, 1)
+
+[node name="Terrain" type="Node2D" parent="." unique_id=1283187710]
+script = ExtResource("2_terrain")
+strokes_path = "res://assets/levels/level3.svg"
+world_scale = 30.0
+
+[node name="Player" parent="." unique_id=1126491045 instance=ExtResource("1_player")]
+position = Vector2(377, 819)
+scale = Vector2(2, 2)
+
+[node name="Enemies" type="Node2D" parent="." unique_id=818103087]
+
+[node name="Flyer" parent="Enemies" unique_id=456963151 instance=ExtResource("4_8w0pe")]
+position = Vector2(1950, 661)
+
+[node name="Flyer2" parent="Enemies" unique_id=1919060469 instance=ExtResource("4_8w0pe")]
+position = Vector2(4145, 674)
+
+[node name="Flyer3" parent="Enemies" unique_id=694576588 instance=ExtResource("4_8w0pe")]
+position = Vector2(3179, 3952)
+
+[node name="Flyer4" parent="Enemies" unique_id=685720393 instance=ExtResource("4_8w0pe")]
+position = Vector2(4806, 4698)
+
+[node name="Flyer6" parent="Enemies" unique_id=1442251613 instance=ExtResource("4_8w0pe")]
+position = Vector2(4700, 7588)
+
+[node name="Flyer7" parent="Enemies" unique_id=2026762187 instance=ExtResource("4_8w0pe")]
+position = Vector2(2214, 7680)
+
+[node name="Flyer5" parent="Enemies" unique_id=1686601648 instance=ExtResource("4_8w0pe")]
+position = Vector2(5002, 3548)
+
+[node name="Snail" parent="Enemies" unique_id=421802207 instance=ExtResource("5_7eb4w")]
+position = Vector2(1680, 2263)
+
+[node name="Snail2" parent="Enemies" unique_id=162650732 instance=ExtResource("5_7eb4w")]
+position = Vector2(2712, 2188)
+
+[node name="Snail3" parent="Enemies" unique_id=2066322948 instance=ExtResource("5_7eb4w")]
+position = Vector2(3760, 2088)
+
+[node name="Snail4" parent="Enemies" unique_id=507654529 instance=ExtResource("5_7eb4w")]
+position = Vector2(4608, 1971)
+
+[node name="Snail5" parent="Enemies" unique_id=1691402310 instance=ExtResource("5_7eb4w")]
+position = Vector2(4006, 3588)
+
+[node name="Snail6" parent="Enemies" unique_id=423161683 instance=ExtResource("5_7eb4w")]
+position = Vector2(5334, 3965)
+
+[node name="Snail7" parent="Enemies" unique_id=1257955426 instance=ExtResource("5_7eb4w")]
+position = Vector2(4557, 8064)
+
+[node name="Snail8" parent="Enemies" unique_id=1957449480 instance=ExtResource("5_7eb4w")]
+position = Vector2(1998, 8041)
+
+[node name="Snail9" parent="Enemies" unique_id=533794229 instance=ExtResource("5_7eb4w")]
+position = Vector2(2747, 8069)
+
+[node name="Snail10" parent="Enemies" unique_id=139686737 instance=ExtResource("5_7eb4w")]
+position = Vector2(4107, 8055)
+
+[node name="Boss" parent="Enemies" unique_id=191312001 instance=ExtResource("6_hadiw")]
+position = Vector2(3577, 8013)
+
+[node name="Collectables" type="Node2D" parent="." unique_id=1655555245]
+
+[node name="Collectable" parent="Collectables" unique_id=411621955 instance=ExtResource("7_72x3h")]
+position = Vector2(1951, 739)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable13" parent="Collectables" unique_id=499806232 instance=ExtResource("7_72x3h")]
+position = Vector2(3539, 484)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable2" parent="Collectables" unique_id=1920552219 instance=ExtResource("7_72x3h")]
+position = Vector2(4096, 770)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable3" parent="Collectables" unique_id=1861045232 instance=ExtResource("7_72x3h")]
+position = Vector2(2816, 2109)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable4" parent="Collectables" unique_id=990171465 instance=ExtResource("7_72x3h")]
+position = Vector2(693.0001, 3132)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable5" parent="Collectables" unique_id=839545038 instance=ExtResource("7_72x3h")]
+position = Vector2(4127, 3634)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable6" parent="Collectables" unique_id=1327528214 instance=ExtResource("7_72x3h")]
+position = Vector2(5158, 5080)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable7" parent="Collectables" unique_id=705180401 instance=ExtResource("7_72x3h")]
+position = Vector2(5552, 3018.0002)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable8" parent="Collectables" unique_id=361042511 instance=ExtResource("7_72x3h")]
+position = Vector2(3267.0002, 5318)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable9" parent="Collectables" unique_id=248993252 instance=ExtResource("7_72x3h")]
+position = Vector2(982.00024, 7618)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable10" parent="Collectables" unique_id=1447018976 instance=ExtResource("7_72x3h")]
+position = Vector2(3220.9998, 8058)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable11" parent="Collectables" unique_id=1542530225 instance=ExtResource("7_72x3h")]
+position = Vector2(5374, 7644)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable12" parent="Collectables" unique_id=1508963369 instance=ExtResource("7_72x3h")]
+position = Vector2(3064.0002, 7219)
+scale = Vector2(0.1, 0.1)
+
+[node name="Hazards" type="Node2D" parent="." unique_id=608636130]
+
+[node name="Spike" parent="Hazards" unique_id=1872278194 instance=ExtResource("8_wb0vq")]
+position = Vector2(172, 1307)
+
+[node name="Spike2" parent="Hazards" unique_id=299243844 instance=ExtResource("8_wb0vq")]
+position = Vector2(533, 1307)
+
+[node name="Spike3" parent="Hazards" unique_id=1225907700 instance=ExtResource("8_wb0vq")]
+position = Vector2(891, 1307)
+
+[node name="Spike4" parent="Hazards" unique_id=638994204 instance=ExtResource("8_wb0vq")]
+position = Vector2(1254, 1305)
+
+[node name="Spike5" parent="Hazards" unique_id=196783992 instance=ExtResource("8_wb0vq")]
+position = Vector2(1613, 1307)
+
+[node name="Spike6" parent="Hazards" unique_id=803858402 instance=ExtResource("8_wb0vq")]
+position = Vector2(1969, 1304)
+
+[node name="Spike7" parent="Hazards" unique_id=215768887 instance=ExtResource("8_wb0vq")]
+position = Vector2(2325, 1307)
+
+[node name="Spike8" parent="Hazards" unique_id=1025022391 instance=ExtResource("8_wb0vq")]
+position = Vector2(2684, 1307)
+
+[node name="Spike9" parent="Hazards" unique_id=1087633425 instance=ExtResource("8_wb0vq")]
+position = Vector2(3037, 1305)
+
+[node name="Spike10" parent="Hazards" unique_id=312611003 instance=ExtResource("8_wb0vq")]
+position = Vector2(3395, 1302)
+
+[node name="Spike11" parent="Hazards" unique_id=1912575527 instance=ExtResource("8_wb0vq")]
+position = Vector2(3736, 1302)
+
+[node name="Spike12" parent="Hazards" unique_id=1757273987 instance=ExtResource("8_wb0vq")]
+position = Vector2(4086, 1305)
+
+[node name="Spike13" parent="Hazards" unique_id=862454860 instance=ExtResource("8_wb0vq")]
+position = Vector2(4440, 1305)
+
+[node name="Spike14" parent="Hazards" unique_id=1266056167 instance=ExtResource("8_wb0vq")]
+position = Vector2(4791, 1305)
+
+[node name="Spike15" parent="Hazards" unique_id=2022247328 instance=ExtResource("8_wb0vq")]
+position = Vector2(5140, 1308)
+
+[node name="Spike16" parent="Hazards" unique_id=1961033658 instance=ExtResource("8_wb0vq")]
+position = Vector2(5491, 1308)
+
+[node name="Spike17" parent="Hazards" unique_id=2072575343 instance=ExtResource("8_wb0vq")]
+position = Vector2(5731, 1311)
+
+[node name="Spike18" parent="Hazards" unique_id=2076428288 instance=ExtResource("8_wb0vq")]
+position = Vector2(-156, 1310)
+
+[node name="MovingPlatform" parent="Hazards" unique_id=785997726 instance=ExtResource("9_7eb4w")]
+position = Vector2(1562, 893)
+scale = Vector2(0.5, 0.5)
+
+[node name="MovingPlatform2" parent="Hazards" unique_id=921161044 instance=ExtResource("9_7eb4w")]
+position = Vector2(2874, 896)
+scale = Vector2(0.5, 0.5)
+
+[node name="MovingPlatform3" parent="Hazards" unique_id=1004439620 instance=ExtResource("9_7eb4w")]
+position = Vector2(4138, 896)
+scale = Vector2(0.5, 0.5)
+
+[node name="CrumblingPlatform" parent="Hazards" unique_id=1036132127 instance=ExtResource("10_hadiw")]
+position = Vector2(3539, 614)
+
+[node name="Bossroom" type="Panel" parent="." unique_id=696472844]
+visible = false
+offset_left = 423.0
+offset_top = 6827.0
+offset_right = 5945.0
+offset_bottom = 8228.0

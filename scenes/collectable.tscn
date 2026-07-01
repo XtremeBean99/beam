@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://y1v2jv2bmd2f"]
 
 [ext_resource type="Script" uid="uid://kckustq3rrxl" path="res://scripts/collectable.gd" id="1_llfh3"]
+[ext_resource type="AudioStream" uid="uid://y1j1y23tdlql" path="res://assets/sounds/punch.mp3" id="9_pickup"]
 [ext_resource type="Texture2D" uid="uid://ivijypmcu4cp" path="res://assets/images/SPRITES/canvas.png" id="1_ti8a4"]
 [ext_resource type="Texture2D" uid="uid://7ll2203vi0n" path="res://assets/images/SPRITES/fx/enemy-death/enemy-death-sprites/enemy-death3.png" id="2_cooh5"]
 [ext_resource type="Texture2D" uid="uid://y0u8sgj4giny" path="res://assets/images/SPRITES/fx/enemy-death/enemy-death-sprites/enemy-death4.png" id="3_uvacn"]
@@ -65,6 +66,14 @@ autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=638713866]
 shape = SubResource("CapsuleShape2D_yf5fn")
+
+[node name="PickupSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("9_pickup")
+bus = &"SFX"
+pitch_scale = 1.8
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+rect = Rect2(-256, -256, 512, 512)
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="animation_looped" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_looped"]

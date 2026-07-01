@@ -1,0 +1,69 @@
+[gd_scene load_steps=12 format=3 uid="uid://bflyrwatch01"]
+
+[ext_resource type="Script" path="res://scripts/flyer.gd" id="1_flyer"]
+[ext_resource type="Texture2D" uid="uid://beqopilnt61wp" path="res://assets/images/SPRITES/angel/sprites/idle/angel1.png" id="2_a1"]
+[ext_resource type="Texture2D" uid="uid://dd1m0yhkva31x" path="res://assets/images/SPRITES/angel/sprites/idle/angel2.png" id="3_a2"]
+[ext_resource type="Texture2D" uid="uid://i8bbii42nd5" path="res://assets/images/SPRITES/angel/sprites/idle/angel3.png" id="4_a3"]
+[ext_resource type="Texture2D" uid="uid://dqj02jn0vto3f" path="res://assets/images/SPRITES/angel/sprites/idle/angel4.png" id="5_a4"]
+[ext_resource type="Texture2D" uid="uid://cdr4nvwxrgi5o" path="res://assets/images/SPRITES/angel/sprites/idle/angel5.png" id="6_a5"]
+[ext_resource type="Texture2D" uid="uid://cedfrchknxjfi" path="res://assets/images/SPRITES/angel/sprites/idle/angel6.png" id="7_a6"]
+[ext_resource type="Texture2D" uid="uid://7e6c861sw3qw" path="res://assets/images/SPRITES/angel/sprites/idle/angel7.png" id="8_a7"]
+[ext_resource type="Texture2D" uid="uid://drs8k3edd1cwi" path="res://assets/images/SPRITES/angel/sprites/idle/angel8.png" id="9_a8"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_flyer"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_a1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_a2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_a3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_a4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_a5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_a6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_a7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_a8")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 6.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_flyer"]
+radius = 12.0
+height = 40.0
+
+[node name="Flyer" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_flyer")
+max_health = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_flyer")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_flyer")
+
+[node name="ContactArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ContactArea"]
+shape = SubResource("CapsuleShape2D_flyer")

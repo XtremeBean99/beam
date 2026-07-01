@@ -4,7 +4,86 @@
 > (`docs/superpowers/specs/2026-06-29-beam-movement-ink-ui-design.md`). Pick up
 > from the top of "Priorities" below.
 
-## Where we are (shipped this session)
+## Update — 2026-06-30 (input-corruption + float fixes)
+
+- **Dead controls after a rebind (critical)** — `settings.gd` saved/loaded key
+  bindings by `keycode`, but the project's default bindings use `physical_keycode`
+  (keycode 0). One rebind wrote zeros for every action; on launch `load_keybindings`
+  erased the real bindings and bound them to nothing. Fixed to use `physical_keycode`
+  and skip invalid (0) codes (self-heals old saves); cleared the corrupt
+  `user://settings.cfg [keys]` section. If controls ever die again, suspect that file.
+- **Player floated above ground** — terrain collision `thickness` 40 seats the player
+  ~20px above the drawn line (symmetric band). Level 1/3 set to 16 to match Level 2.
+
+## Update — 2026-06-30 (tutorial + boss/feedback pass)
+
+- **Tutorial (new Level 1, "FIRST BREATH")** — `scenes/levels/level1.tscn` +
+  `assets/levels/level1_strokes.json`, reusing `level2.gd`. Teaches move → jump →
+  double-jump → slide → stomp → collect-all via floating ink hint-text Labels.
+  Platform heights tuned to the real jump arc. Campaign is now level1 → level2 →
+  level3 (`Main.tscn` boots level1; `main.gd` LEVELS has all three).
+- **Flyer now chases** the player within `CHASE_RANGE` (exported `chases`).
+- **Wizard boss** (uses the unused wizard sprites) — `scripts/boss.gd` +
+  `scenes/boss.tscn`: hovers, tracks the player at range, casts `enemy_fireball`
+  projectiles, has a depleting health bar, dies with a grow-and-fade. Replaces the
+  tanky-snail placeholder in level3. Killable by stomp/slide/player-fireball.
+- **Player hit-feedback** — `player.gd` `hurt()` now white-flashes the sprite,
+  shakes the camera, plays a hit sound (`PistolSound`), and emits `health_changed`
+  (main wires it to the HUD so projectile damage updates the pips). Collectable
+  pickup plays a pitched `punch.mp3` blip.
+- **Slides faster/snappier** + **auto-slide on landing while holding crouch**.
+- **Still TODO (Pass 2):** real ink-wipe transition, display font (no font asset in
+  repo yet), broad placement/difficulty balance. Hint-text size/placement and boss
+  feel need an F5 look.
+
+## Update — 2026-06-30 (freeze fix + HUD pass)
+
+- **Level-complete freeze fixed** — `_on_beam_done`/`_on_level_continue` awaited
+  `transition.faded_out`, which never fired (the Transition CanvasLayer was
+  force-hidden in `_ready`), so the beam sequence hung and Continue never advanced.
+  Now timer-driven (`await get_tree().create_timer().timeout`) and the layer is no
+  longer hidden, so fades actually render.
+- **Beam "frozen camera" fixed** — the dissolve tween scaled the whole player to
+  0.01, shrinking its child `Camera2D` and zooming into the void. Now only the
+  sprite scales/fades (`level2.gd`).
+- **HUD cleanup** — removed the redundant `CHARGE` text row (the ensō is the charge
+  display); moved the **charge ensō to the top-right** with a `FIRE` label (was
+  overlapping the stats panel); moved the test button to bottom-right; put the
+  level-complete screen on its own `OverlayLayer` (CanvasLayer 50) so the beam
+  (world z-index 100) no longer draws over it. Fireball damage = 3 (one-shots),
+  stomp plays `KickSound`, END LEVEL test button, score/kills reset on death.
+
+## Update — 2026-06-30 (expansion pass)
+
+**Bug fixes (startup/play-path errors):**
+- `collectable.gd` — `call_deferred("_disable_collision()")` had literal parens
+  (runtime error on every pickup); also now ignores non-player bodies so terrain
+  on the shared collision layer 1 can't auto-trigger collection on level load.
+- `fireball.tscn` — `collision_mask` was `1` (terrain/player) so fireballs never
+  hit enemies (layer 2). Now `2`; fireballs damage snails/flyers/boss.
+- `settings_menu.gd` — key-rebind buttons looked up the wrong node path
+  (`<action>Button` vs `<action>Row/<action>Button`); rebinding was silently dead.
+- `main.gd` `_update_charge` — dereferenced `player.KILLS_PER_CHARGE` outside the
+  `is_instance_valid(player)` guard (null-crash risk).
+
+**Expansion beyond spec:**
+- **Multi-level campaign flow** — `main.gd` now has a `LEVELS` list + `_level_index`;
+  clearing a level advances via `load_level()` (Continue), death respawns the
+  *current* level, final clear returns to title. Fixed a latent double-show of the
+  level-complete screen (the persistent `faded_out` handler became explicit `await`s).
+- **Air-fireball** — `player.gd` `FIREBALL_GROUND_ONLY = false`.
+- **New enemy: Flyer** (`scripts/flyer.gd`, `scenes/flyer.tscn`) — hovering/bobbing
+  patroller using the **angel** sprites; stomp/slide/fireball kill it, contact hurts.
+- **Boss** — `snail.gd` `max_health` is now `@export` (and `_foot` scales with node
+  scale); Level 3 uses a big high-HP snail as a boss. Reuses all snail combat.
+- **Level 3** (`scenes/levels/level3.tscn` + `assets/levels/level3_strokes.json`) —
+  hand-authored InkStroke terrain (ramp, plateau, slide slope, boss arena, two float
+  platforms), reuses the generic `level2.gd`. 3 snails + 2 flyers + boss + 5 collectables.
+
+**Not yet done / next:** real multi-phase boss (current boss is a tanky snail),
+checkpoints, more levels, and a verified F5 playtest (no Godot in the agent env).
+
+## Where we are (shipped earlier)
 
 - **Movement core** (spec §4) — accel/friction run, variable-height jump, coyote
   time, jump buffer, double jump with wall-refund, momentum slide. Slide tuned to

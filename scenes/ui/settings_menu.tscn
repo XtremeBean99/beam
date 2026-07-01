@@ -103,6 +103,19 @@ text = "90%"
 horizontal_alignment = 2
 vertical_alignment = 1
 
+[node name="Fullscreen" type="HBoxContainer" parent="Dim/Center/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Label" type="Label" parent="Dim/Center/Panel/VBox/Fullscreen"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "FULLSCREEN"
+vertical_alignment = 1
+
+[node name="Check" type="CheckButton" parent="Dim/Center/Panel/VBox/Fullscreen"]
+layout_mode = 2
+
 [node name="RebindSection" type="VBoxContainer" parent="Dim/Center/Panel/VBox"]
 layout_mode = 2
 theme_override_constants/separation = 8
@@ -168,19 +181,6 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 text = "S"
-
-[node name="punchRow" type="HBoxContainer" parent="Dim/Center/Panel/VBox/RebindSection/VBox"]
-layout_mode = 2
-theme_override_constants/separation = 10
-[node name="Label" type="Label" parent="Dim/Center/Panel/VBox/RebindSection/VBox/punchRow"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "PUNCH"
-vertical_alignment = 1
-[node name="punchButton" type="Button" parent="Dim/Center/Panel/VBox/RebindSection/VBox/punchRow"]
-custom_minimum_size = Vector2(140, 0)
-layout_mode = 2
-text = "J"
 
 [node name="shootRow" type="HBoxContainer" parent="Dim/Center/Panel/VBox/RebindSection/VBox"]
 layout_mode = 2

@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://bbeamenemyfb01"]
+
+[ext_resource type="Script" path="res://scripts/enemy_fireball.gd" id="1_efb"]
+[ext_resource type="Texture2D" uid="uid://btlblo30nut1f" path="res://assets/images/SPRITES/fx/fireball/fireball-sprites/fireball1.png" id="2_f1"]
+[ext_resource type="Texture2D" uid="uid://4jxmrswytcoa" path="res://assets/images/SPRITES/fx/fireball/fireball-sprites/fireball2.png" id="3_f2"]
+[ext_resource type="Texture2D" uid="uid://dak6fcqhq5qqb" path="res://assets/images/SPRITES/fx/fireball/fireball-sprites/fireball3.png" id="4_f3"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_efb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_f1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_f2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_f3")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_efb"]
+radius = 14.0
+
+[node name="EnemyFireball" type="Area2D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_efb")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2.2, 2.2)
+sprite_frames = SubResource("SpriteFrames_efb")
+animation = &"default"
+autoplay = "default"
+modulate = Color(1, 0.7, 0.55, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_efb")
