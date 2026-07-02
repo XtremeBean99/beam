@@ -99,7 +99,7 @@ position = Vector2(510, 7491)
 
 [node name="Spring2" parent="Hazards" unique_id=905249020 instance=ExtResource("8_spring")]
 position = Vector2(5361, 7492)
-launch_velocity = -1700.0
+launch_velocity = -2550.0
 
 [node name="Spring3" parent="Hazards" unique_id=1698549787 instance=ExtResource("8_spring")]
 position = Vector2(3396, 2332)

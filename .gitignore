@@ -18,3 +18,5 @@ assets/sounds/bgm.mp3
 # OS files
 .DS_Store
 Thumbs.db
+build/web/
+build/web/

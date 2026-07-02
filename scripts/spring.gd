@@ -6,7 +6,7 @@ extends Area2D
 ## visual flat, flashes it bright, and fires the player up with a refreshed
 ## air jump so springs chain naturally into movement routes.
 
-@export var launch_velocity: float = -1500.0   # upward speed given to the player
+@export var launch_velocity: float = -2250.0   # upward speed given to the player
 
 const COIL_HEIGHT = 64.0
 const COIL_HALF_WIDTH = 24.0

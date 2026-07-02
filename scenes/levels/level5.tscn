@@ -34,18 +34,18 @@ scale = Vector2(2, 2)
 
 [node name="Spring" parent="Hazards" unique_id=321125667 instance=ExtResource("4_spring")]
 position = Vector2(5820, 7552)
-launch_velocity = -1800.0
+launch_velocity = -2700.0
 
 [node name="Spring2" parent="Hazards" unique_id=427733468 instance=ExtResource("4_spring")]
 position = Vector2(480, 5992)
-launch_velocity = -1800.0
+launch_velocity = -2700.0
 
 [node name="Spring3" parent="Hazards" unique_id=1738594977 instance=ExtResource("4_spring")]
 position = Vector2(5820, 4432)
-launch_velocity = -1800.0
+launch_velocity = -2700.0
 
 [node name="ExitZone" parent="." unique_id=154114880 instance=ExtResource("5_exit")]
-position = Vector2(4500, 2760)
+position = Vector2(4699, 2798)
 
 [node name="Enemies" type="Node2D" parent="." unique_id=448807645]
 
@@ -88,7 +88,7 @@ position = Vector2(2681, 4961)
 [node name="Collectables" type="Node2D" parent="." unique_id=221694516]
 
 [node name="Collectable" parent="Collectables" unique_id=411621955 instance=ExtResource("8_lsgss")]
-position = Vector2(4500, 2840)
+position = Vector2(4881, 2836)
 scale = Vector2(0.1, 0.1)
 
 [node name="Collectable2" parent="Collectables" unique_id=1990174280 instance=ExtResource("8_lsgss")]
