@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Level 7: "The Well" - a committed drop. The only way forward is down the
+     well mouth between the two rims; the long fall lands in a gallery bowl
+     (hold crouch to convert the fall straight into a slide), then the bowl's
+     right lip rolls down a corridor to the exit in the depths. Both ends of
+     the underground are sealed; falls are contained, never lethal.
+     Parsed by SvgParser (flip_y = false, world_scale 30). -->
+<svg width="210mm" height="297mm" viewBox="0 0 210 297" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke="#000000" stroke-width="1">
+    <!-- surface rims with the well mouth between them -->
+    <path id="rimL" d="M 8,32 L 92,32" />
+    <path id="rimR" d="M 118,32 L 202,32" />
+    <!-- well shaft -->
+    <path id="shaftL" d="M 92,32 L 92,110" />
+    <path id="shaftR" d="M 118,32 L 118,110" />
+    <!-- gallery bowl, centred under the shaft -->
+    <path id="bowl" d="M 50,135 C 75,165 135,165 160,135" />
+    <!-- left seal: wall + curved link onto the bowl's left lip -->
+    <path id="wallL" d="M 8,32 L 8,150" />
+    <path id="linkL" d="M 8,150 C 25,155 40,148 50,135" />
+    <!-- right corridor: bowl lip rolls down to the exit vault -->
+    <path id="corridor" d="M 160,135 C 172,144 178,150 186,152 C 194,154 198,154 202,154" />
+    <path id="wallR" d="M 202,32 L 202,154" />
+  </g>
+</svg>

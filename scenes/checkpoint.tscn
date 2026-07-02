@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/checkpoint.gd" id="1_ckpt"]
+
+[node name="Checkpoint" type="Area2D"]
+script = ExtResource("1_ckpt")

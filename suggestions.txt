@@ -1,2 +1,54 @@
-https://www.youtube.com/watch?v=RfB7y7M6P4c&list=RDRfB7y7M6P4c&start_radio=1&t=7404s - bgm
-From opengameart.org by ansimuz -player and enemy sprites
+## Remaining items for future versions beyond 1.0
+
+### Export & Distribution
+- Create Windows (.exe) export preset
+- Create macOS (.dmg) export preset
+- Create Linux export preset
+- Set up itch.io page with trailer, screenshots, and download links
+- Create 60-second gameplay trailer for store page and site
+
+### Polish & Juice
+- Camera look-ahead (shift toward movement direction)
+- Post-processing: subtle vignette, optional CRT scanlines toggle
+- Landing dust / ink-splash particles on landing and slide-start
+- Wall-slide sparks / ink motes
+- Screen shake on kills and heavy impacts
+- Unique SFX per enemy type on death
+- Pitch-scale melody on collectable pickup (sequential notes)
+- Player afterglow trail during slides and wall-jumps
+- Seamless BGM loop (convert to OGG, proper loop points)
+
+### Enemies
+- Turret enemy: scene file needs proper setup in Godot editor
+- Charger enemy: scene file needs proper setup in Godot editor
+- Shielded enemy: scene file needs proper setup in Godot editor
+- Triple-fireball attack pattern for boss phase 3
+- New boss type: melee-focused arena boss for level 8
+
+### Levels
+- All new levels (6-9) need playtesting and terrain tuning
+- Level 9 chase needs a death-wall or screen-scroll mechanic
+- Secret areas: breakable walls hiding extra collectables or lore
+- Hidden bonus level or challenge gauntlet (unlockable)
+- Per-level best time tracking and display on level select
+
+### Systems
+- Level-select screen (unlock-based, shows best times)
+- Save system: persist unlock progress and per-level best times to disk
+- Practice mode: replay any unlocked level individually from level select
+- Difficulty modes: relaxed (more health, slower enemies) and hardcore (one hit death)
+- Accessibility: reduce-motion toggle, high-contrast terrain outlines
+
+### UI
+- Credits sequence / end-of-game scroll after level 10
+- Display font for headings (replace Godot default)
+- Terminal-style HUD font
+- Level name card on level start (brief overlay showing level title)
+- Total token percentage on end-of-run screen alongside time
+
+### Bugs & Known Issues
+- Crouch does not shrink player collision shape
+- Boss-room detection uses hand-placed panel per level (needs automation)
+- BGM loops with gap when using MP3 (switch to OGG)
+- Ghost runner samples may desync if frame rate varies widely
+- Key rebinding may need additional gamepad button support

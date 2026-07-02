@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bfurr8scdlfjk"
-path="res://.godot/imported/level7.svg-7390c4c40c720db55d5ec3f7f9e16723.ctex"
+uid="uid://b1rgo5tal6npj"
+path="res://.godot/imported/level10.svg-b877a0127b46e815f32bf3255947f718.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/levels/level7.svg"
-dest_files=["res://.godot/imported/level7.svg-7390c4c40c720db55d5ec3f7f9e16723.ctex"]
+source_file="res://assets/levels/level10.svg"
+dest_files=["res://.godot/imported/level10.svg-b877a0127b46e815f32bf3255947f718.ctex"]
 
 [params]
 
@@ -32,7 +32,7 @@ process/channel_remap/green=1
 process/channel_remap/blue=2
 process/channel_remap/alpha=3
 process/fix_alpha_border=true
-process/premult_alpha=true
+process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false

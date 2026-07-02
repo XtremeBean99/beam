@@ -27,7 +27,11 @@ const LEVELS := [
 	"res://scenes/levels/level3.tscn",
 	"res://scenes/levels/level4.tscn",
 	"res://scenes/levels/level5.tscn",
+	"res://scenes/levels/level6.tscn",
 	"res://scenes/levels/level7.tscn",
+	"res://scenes/levels/level8.tscn",
+	"res://scenes/levels/level9.tscn",
+	"res://scenes/levels/level10.tscn",
 ]
 
 var score := 0
@@ -66,6 +70,10 @@ const GhostRunnerScript := preload("res://scripts/ghost_runner.gd")
 var _ghost_recordings: Dictionary = {}
 var _ghost_buffer: Array = []
 var _ghost_accum := 0.0
+
+# Checkpoint positions per level index (saved when a checkpoint is activated
+# and applied after the level reloads on death).
+var _level_checkpoints: Dictionary = {}
 
 
 func _ready() -> void:
@@ -196,6 +204,14 @@ func _setup_level() -> void:
 	if player and player.has_signal("health_changed") and not player.health_changed.is_connected(_update_health):
 		player.health_changed.connect(_update_health)
 
+	# Wire checkpoints — each level's checkpoint activation stores its position
+	# so respawns move the player there instead of the level start.
+	for cp in get_tree().get_nodes_in_group("checkpoints"):
+		if level_root and not level_root.is_ancestor_of(cp):
+			continue
+		if cp.has_signal("activated") and not cp.activated.is_connected(_on_checkpoint_activated):
+			cp.activated.connect(_on_checkpoint_activated)
+
 	_compute_bossroom()
 
 
@@ -223,6 +239,14 @@ func _compute_bossroom() -> void:
 
 func _on_exit_reached(pos: Vector2) -> void:
 	_trigger_level_complete(pos)
+
+
+func _on_checkpoint_activated(pos: Vector2) -> void:
+	_level_checkpoints[_level_index] = pos
+	# Refill player health.
+	if is_instance_valid(player):
+		player.health = 3
+		_update_health()
 
 
 func _on_collectable_collected(source) -> void:
@@ -399,6 +423,9 @@ func load_level(level_path: String) -> void:
 		_ghost_buffer = []
 		_ghost_accum = 0.0
 		_spawn_ghost()
+		# Restore checkpoint position if one was saved for this level.
+		if _level_checkpoints.has(_level_index) and is_instance_valid(player):
+			player.global_position = _level_checkpoints[_level_index]
 		_update_health()
 		_update_score()
 		_update_kills()

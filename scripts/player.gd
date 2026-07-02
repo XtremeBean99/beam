@@ -128,8 +128,8 @@ func hurt():
 
 
 ## Kill the player outright, regardless of remaining health. Used both by lethal
-## damage (via hurt) and by falling off the map. Plays the death animation, then
-## emits death_finished so main.gd can restart the level.
+## damage (via hurt) and by falling off the map. Shatters the player into ink
+## fragments, then emits death_finished so main.gd can restart the level.
 func die():
 	if not alive:
 		return
@@ -139,11 +139,34 @@ func die():
 	is_busy = true
 	invincible = true   # ignore further hits during the death animation
 	player_died.emit()
-	animated_sprite_2d.play("hurt")
-	set_physics_process(false)
-	await animated_sprite_2d.animation_finished
-	# Respawn/cleanup is owned by main.gd (it reloads the level, which frees
-	# this node) — do not self-free here, to avoid a double-free race.
+
+	# ---- Death shatter: spawn ink fragments that fly outward ----
+	var shatter_count := 14
+	for i in range(shatter_count):
+		var frag := Sprite2D.new()
+		frag.texture = animated_sprite_2d.sprite_frames.get_frame_texture("idle", 0) if animated_sprite_2d.sprite_frames.has_animation("idle") else null
+		if frag.texture == null:
+			continue
+		frag.global_position = global_position
+		frag.scale = Vector2(0.35, 0.35)
+		frag.modulate = Color.WHITE
+		frag.z_index = 200
+		get_parent().add_child(frag)
+		var angle := randf_range(0, TAU)
+		var speed := randf_range(80.0, 220.0)
+		var vel := Vector2(cos(angle), sin(angle)) * speed
+		var tween := create_tween().set_parallel(true)
+		tween.tween_property(frag, "position", frag.position + vel * 0.6, 0.5).set_ease(Tween.EASE_OUT)
+		tween.tween_property(frag, "modulate:a", 0.0, 0.5).set_ease(Tween.EASE_IN)
+		tween.tween_property(frag, "rotation", randf_range(-4.0, 4.0), 0.5)
+		tween.tween_callback(frag.queue_free).set_delay(0.55)
+
+	# Hide the player sprite.
+	animated_sprite_2d.visible = false
+
+	# Brief pause for the shatter to read, then emit the signal that triggers
+	# the level reload (driven by main.gd).
+	await get_tree().create_timer(0.45).timeout
 	death_finished.emit()
 
 

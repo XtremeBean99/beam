@@ -19,6 +19,8 @@ signal player_fell   # player dropped below fall_limit → main restarts the lev
 const FALL_MARGIN := 700.0
 
 var _spawn := Vector2.ZERO
+var _checkpoint := Vector2.ZERO  # most recent checkpoint position
+var _has_checkpoint := false
 var _beam_active := false
 var _fell := false
 
@@ -29,7 +31,12 @@ const VoidBackgroundScript = preload("res://scripts/void_background.gd")
 func _ready() -> void:
 	if player:
 		_spawn = player.global_position
+		_checkpoint = _spawn
 	_compute_fall_limit()
+	# Wire checkpoints.
+	for cp in get_tree().get_nodes_in_group("checkpoints"):
+		if is_ancestor_of(cp) and cp.has_signal("activated") and not cp.activated.is_connected(_on_checkpoint):
+			cp.activated.connect(_on_checkpoint)
 	# Ambient parallax background — spawned here so every level gets it without
 	# per-scene wiring (preloaded by path; see main.gd's GhostRunner note).
 	add_child(VoidBackgroundScript.new())
@@ -51,6 +58,21 @@ func _compute_fall_limit() -> void:
 			lowest = maxf(lowest, stroke.global_position.y + p.y)
 	if lowest > -INF:
 		fall_limit = lowest + FALL_MARGIN
+
+
+func _on_checkpoint(pos: Vector2) -> void:
+	_checkpoint = pos
+	_has_checkpoint = true
+	# Refill the player's health when activating a checkpoint.
+	if is_instance_valid(player) and "health" in player:
+		player.health = 3
+		if player.has_signal("health_changed"):
+			player.health_changed.emit()
+
+
+## Where the player should respawn: latest checkpoint, or the level start.
+func get_spawn_position() -> Vector2:
+	return _checkpoint if _has_checkpoint else _spawn
 
 
 func _process(_delta: float) -> void:
