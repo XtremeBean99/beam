@@ -1,7 +1,7 @@
-# Beam
+# Super Ninja Monk Fighter IV
 
 A fast, movement-focused 2D platformer built with **Godot 4.7**, with a hand-drawn
-"ink & void" aesthetic. Levels are traced as ink strokes and built into terrain at
+"ink & void" aesthetic. (Working title during development: *Beam*.) Levels are traced as ink strokes and built into terrain at
 runtime; you clear each one by flowing through it — sliding, wall-jumping, and
 turning your own momentum into your main weapon.
 
@@ -19,12 +19,26 @@ turning your own momentum into your main weapon.
   and restart the level from the current attempt.
 - **Platforms** — horizontal moving platforms that carry the player between markers,
   and crumbling platforms that break away a few moments after you land on them.
+- **Springs** — jump pads that squash flat and launch the player skyward,
+  refreshing the air jump so they chain into movement routes (per-instance
+  `launch_velocity`).
+- **Racing ghost** — your previous attempt of each level replays as a translucent
+  ghost, so every retry is a race against yourself.
 - **Level flow** — a level is cleared by collecting every token **or** clearing the
   enemies inside its boss-room panel; an exit door then appears where the last token
   was grabbed / last boss-room enemy fell.
-- **Three levels** plus a tutorial with in-world text signs.
-- **HUD** — health pips, score, kills, a fireball-charge ensō, and a live speedrun clock.
-- **End-of-run screen** — total time and tokens collected as a percentage.
+- **Six levels** plus a tutorial with in-world text signs. Level 4 ("Brushfall")
+  is a slide showcase; the last two are pure movement levels with no enemies or
+  tokens: "The Stack" (a bottom-to-top climb through stacked half-pipes) and
+  "The Well" (a committed drop into an underground gallery).
+- **Exit rings** — point-to-point levels end at a breathing enso ring; touching
+  it completes the level (no tokens required).
+- **HUD** — health pips, per-level token progress, kills, a fireball-charge ensō,
+  and a live speedrun clock.
+- **End-of-run screen** — total time and tokens collected as a percentage; the
+  fastest full run is saved and shown on the title screen.
+- **Ambient void background** — a parallax field of drifting ink motes and ghost
+  brush strokes behind every level, drawn in code (no art assets).
 - Title screen, pause menu, settings (volume), scene transitions, and persistent music.
 
 ## Controls
@@ -36,7 +50,9 @@ turning your own momentum into your main weapon.
 | Wall jump | Jump while against a wall |
 | Crouch | `S` or Down arrow |
 | Slide | Crouch while running (jump to launch or cancel; double-jump in a flying slide drops straight down) |
+| Wall ride | Press crouch in the air against any surface — every surface is slideable, near-vertical lines included |
 | Fireball | `L` (needs a charge) |
+| Quick restart | `R` (retries the level from the current attempt's checkpoint) |
 | Pause | `Escape` |
 | Start game | Any key / mouse click on the title screen |
 
@@ -53,10 +69,12 @@ scenes/
   title_screen.tscn        # Entry scene
   Main.tscn                # Gameplay root: HUD, pause overlay, level slot
   player.tscn              # Player: animations, sounds, camera, trail
-  levels/level1..3.tscn    # Campaign levels (level1 = tutorial)
+  levels/level1..5,7.tscn  # Campaign levels (level1 = tutorial; 5 & 7 pure movement)
+  exit_zone.tscn           # Touch-to-finish enso ring for point-to-point levels
   spike.tscn               # Instant-kill hazard
   platform.tscn            # Horizontal moving platform (marker endpoints)
   crumbling_platform.tscn  # Breaks away after the player lands
+  spring.tscn              # Jump pad: launches the player, refreshes air jump
   snail/flyer/boss.tscn    # Enemies
   collectable.tscn         # Token with collection animation
   ui/text_sign.tscn        # In-world tutorial sign
@@ -66,7 +84,10 @@ scripts/
   ink_level.gd             # Per-level controller: fall-death + exit door
   ink_terrain.gd/ink_stroke.gd/svg_parser.gd   # SVG → terrain pipeline
   enemy_base.gd (+ snail/flyer/boss)            # Enemy behaviour
-  moving_platform.gd/crumbling_platform.gd/spike.gd/text_sign.gd
+  moving_platform.gd/crumbling_platform.gd/spike.gd/spring.gd/text_sign.gd
+  ghost_runner.gd          # Translucent replay of the previous attempt
+  exit_zone.gd             # Enso ring that completes point-to-point levels
+  void_background.gd       # Parallax ink-mote background (spawned by ink_level)
   level_complete.gd        # Level-complete + end-of-run screen
 assets/
   images/                  # Sprites and environment art
