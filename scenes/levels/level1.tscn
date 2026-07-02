@@ -96,16 +96,16 @@ scale = Vector2(0.1, 0.1)
 [node name="Signs" type="Node2D" parent="." unique_id=1244017581]
 
 [node name="Sign1" parent="Signs" unique_id=2019726583 instance=ExtResource("6_sign")]
-position = Vector2(685, 821)
+position = Vector2(981, 991)
 text = "MOVE
 ←  A      D  →"
 
 [node name="Sign2" parent="Signs" unique_id=1192280220 instance=ExtResource("6_sign")]
-position = Vector2(1442, 780)
+position = Vector2(2143, 1069)
 text = "JUMP:  SPACE  /  W
 Tap again in mid-air to DOUBLE JUMP"
 
 [node name="Sign4" parent="Signs" unique_id=669532629 instance=ExtResource("6_sign")]
-position = Vector2(465, 1843)
+position = Vector2(2064, 2061)
 text = "SHOOT:  press  L
 Defeat enemies to earn fireball charges"

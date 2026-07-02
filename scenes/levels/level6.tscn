@@ -1,4 +1,4 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dcrdtu3xfloew"]
 
 [ext_resource type="PackedScene" uid="uid://fgxcv3f8vatq" path="res://scenes/player.tscn" id="1_player"]
 [ext_resource type="Script" uid="uid://dtv6qnxaweupx" path="res://scripts/ink_terrain.gd" id="2_terrain"]
@@ -6,73 +6,134 @@
 [ext_resource type="PackedScene" uid="uid://s1r1qbt1mq60" path="res://scenes/snail.tscn" id="4_snail"]
 [ext_resource type="PackedScene" uid="uid://bflyrwatch01" path="res://scenes/flyer.tscn" id="5_flyer"]
 [ext_resource type="PackedScene" uid="uid://y1v2jv2bmd2f" path="res://scenes/collectable.tscn" id="6_token"]
-[ext_resource type="PackedScene" uid="uid://crumblingplat" path="res://scenes/crumbling_platform.tscn" id="7_crumble"]
+[ext_resource type="PackedScene" uid="uid://bosdn7a35krc7" path="res://scenes/spring.tscn" id="7_spring"]
+[ext_resource type="PackedScene" uid="uid://cry128keverqq" path="res://scenes/crumbling_platform.tscn" id="8_yu5ka"]
 
-[node name="LevelRoot" type="Node2D"]
+[node name="LevelRoot" type="Node2D" unique_id=2026424284]
 script = ExtResource("3_level")
 
-[node name="VoidBG" type="CanvasLayer" parent="."]
+[node name="VoidBG" type="CanvasLayer" parent="." unique_id=1316712091]
 layer = -10
 
-[node name="ColorRect" type="ColorRect" parent="VoidBG"]
+[node name="ColorRect" type="ColorRect" parent="VoidBG" unique_id=1306501030]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(0.054902, 0.058824, 0.070588, 1)
 
-[node name="Terrain" type="Node2D" parent="."]
+[node name="Terrain" type="Node2D" parent="." unique_id=1720901574]
 script = ExtResource("2_terrain")
-strokes_path = "res://assets/levels/level6.svg"
+strokes_path = "res://assets/levels/level7.svg"
 world_scale = 30.0
 
-[node name="Player" parent="." instance=ExtResource("1_player")]
-position = Vector2(150, 450)
+[node name="Player" parent="." unique_id=1058640454 instance=ExtResource("1_player")]
+position = Vector2(2700, 7698)
 scale = Vector2(2, 2)
 
-[node name="Enemies" type="Node2D" parent="."]
+[node name="Enemies" type="Node2D" parent="." unique_id=76020660]
 
-[node name="Snail" parent="Enemies" instance=ExtResource("4_snail")]
-position = Vector2(600, 1100)
+[node name="Flyer" parent="Enemies" unique_id=1693791772 instance=ExtResource("5_flyer")]
+position = Vector2(4532, 5057)
 
-[node name="Snail2" parent="Enemies" instance=ExtResource("4_snail")]
-position = Vector2(2000, 1800)
+[node name="Flyer2" parent="Enemies" unique_id=2094966383 instance=ExtResource("5_flyer")]
+position = Vector2(3736, 2523)
 
-[node name="Snail3" parent="Enemies" instance=ExtResource("4_snail")]
-position = Vector2(2500, 3200)
+[node name="Flyer3" parent="Enemies" unique_id=106838213 instance=ExtResource("5_flyer")]
+position = Vector2(2135, 2283)
 
-[node name="Snail4" parent="Enemies" instance=ExtResource("4_snail")]
-position = Vector2(3500, 4500)
+[node name="Flyer4" parent="Enemies" unique_id=718266400 instance=ExtResource("5_flyer")]
+position = Vector2(3190, 6321)
 
-[node name="Flyer" parent="Enemies" instance=ExtResource("5_flyer")]
-position = Vector2(1000, 2000)
+[node name="Flyer5" parent="Enemies" unique_id=1703685555 instance=ExtResource("5_flyer")]
+position = Vector2(2669, 5574)
 
-[node name="Flyer2" parent="Enemies" instance=ExtResource("5_flyer")]
-position = Vector2(1500, 2800)
+[node name="Flyer6" parent="Enemies" unique_id=774743513 instance=ExtResource("5_flyer")]
+position = Vector2(1092, 4042)
 
-[node name="Flyer3" parent="Enemies" instance=ExtResource("5_flyer")]
-position = Vector2(3000, 5000)
+[node name="Snail" parent="Enemies" unique_id=2067139351 instance=ExtResource("4_snail")]
+position = Vector2(1500, 7689)
 
-[node name="Collectables" type="Node2D" parent="."]
+[node name="Snail2" parent="Enemies" unique_id=735575646 instance=ExtResource("4_snail")]
+position = Vector2(4230, 7673)
 
-[node name="Collectable" parent="Collectables" instance=ExtResource("6_token")]
-position = Vector2(1000, 1200)
+[node name="Collectables" type="Node2D" parent="." unique_id=484288964]
+
+[node name="Collectable" parent="Collectables" unique_id=1865696676 instance=ExtResource("6_token")]
+position = Vector2(3685.9998, 3250)
 scale = Vector2(0.1, 0.1)
 
-[node name="Collectable2" parent="Collectables" instance=ExtResource("6_token")]
-position = Vector2(2200, 2100)
+[node name="Collectable2" parent="Collectables" unique_id=188297343 instance=ExtResource("6_token")]
+position = Vector2(4920, 1796.0001)
 scale = Vector2(0.1, 0.1)
 
-[node name="Collectable3" parent="Collectables" instance=ExtResource("6_token")]
-position = Vector2(2800, 3600)
+[node name="Collectable3" parent="Collectables" unique_id=2137544878 instance=ExtResource("6_token")]
+position = Vector2(2025, 3837)
 scale = Vector2(0.1, 0.1)
 
-[node name="Collectable4" parent="Collectables" instance=ExtResource("6_token")]
-position = Vector2(3800, 5100)
+[node name="Collectable4" parent="Collectables" unique_id=1419348298 instance=ExtResource("6_token")]
+position = Vector2(3071, 7096)
 scale = Vector2(0.1, 0.1)
 
-[node name="Collectable5" parent="Collectables" instance=ExtResource("6_token")]
-position = Vector2(3000, 6400)
+[node name="Collectable5" parent="Collectables" unique_id=858488342 instance=ExtResource("6_token")]
+position = Vector2(3228, 7088)
 scale = Vector2(0.1, 0.1)
 
-[node name="Checkpoint" parent="." instance=ExtResource("7_crumble")]
-position = Vector2(2800, 4400)
+[node name="Spring" parent="." unique_id=74958153 instance=ExtResource("7_spring")]
+position = Vector2(3198, 7795)
+
+[node name="Spring2" parent="." unique_id=459822597 instance=ExtResource("7_spring")]
+position = Vector2(3103, 7795)
+
+[node name="CrumblingPlatform" parent="." unique_id=516136472 instance=ExtResource("8_yu5ka")]
+position = Vector2(3130, 6549)
+
+[node name="CrumblingPlatform2" parent="." unique_id=838250036 instance=ExtResource("8_yu5ka")]
+position = Vector2(3988, 5771)
+
+[node name="CrumblingPlatform3" parent="." unique_id=1431944731 instance=ExtResource("8_yu5ka")]
+position = Vector2(2391, 5827)
+
+[node name="CrumblingPlatform4" parent="." unique_id=1677400773 instance=ExtResource("8_yu5ka")]
+position = Vector2(3690, 4892)
+
+[node name="CrumblingPlatform5" parent="." unique_id=693000256 instance=ExtResource("8_yu5ka")]
+position = Vector2(2578, 4654)
+
+[node name="CrumblingPlatform6" parent="." unique_id=398591808 instance=ExtResource("8_yu5ka")]
+position = Vector2(1179, 3588)
+
+[node name="CrumblingPlatform7" parent="." unique_id=1303030380 instance=ExtResource("8_yu5ka")]
+position = Vector2(3303, 3655)
+
+[node name="CrumblingPlatform8" parent="." unique_id=1034234265 instance=ExtResource("8_yu5ka")]
+position = Vector2(4887, 3537)
+
+[node name="CrumblingPlatform9" parent="." unique_id=1716504390 instance=ExtResource("8_yu5ka")]
+position = Vector2(3296, 2693)
+
+[node name="CrumblingPlatform10" parent="." unique_id=1009649878 instance=ExtResource("8_yu5ka")]
+position = Vector2(1505, 2441)
+
+[node name="CrumblingPlatform11" parent="." unique_id=979363840 instance=ExtResource("8_yu5ka")]
+position = Vector2(4724, 2182)
+
+[node name="CrumblingPlatform12" parent="." unique_id=1457767467 instance=ExtResource("8_yu5ka")]
+position = Vector2(1608, 6593)
+
+[node name="CrumblingPlatform13" parent="." unique_id=1856278371 instance=ExtResource("8_yu5ka")]
+position = Vector2(935, 5483)
+
+[node name="CrumblingPlatform14" parent="." unique_id=1445215640 instance=ExtResource("8_yu5ka")]
+position = Vector2(5096, 6438)
+
+[node name="CrumblingPlatform15" parent="." unique_id=503529953 instance=ExtResource("8_yu5ka")]
+position = Vector2(5214, 5624)
+
+[node name="CrumblingPlatform16" parent="." unique_id=727130477 instance=ExtResource("8_yu5ka")]
+position = Vector2(5451, 4536)
+
+[node name="CrumblingPlatform17" parent="." unique_id=1694522870 instance=ExtResource("8_yu5ka")]
+position = Vector2(3216, 5431)
+
+[node name="CrumblingPlatform18" parent="." unique_id=1754942945 instance=ExtResource("8_yu5ka")]
+position = Vector2(4296, 6992)

@@ -34,12 +34,6 @@ scale = Vector2(2, 2)
 
 [node name="Enemies" type="Node2D" parent="." unique_id=818103087]
 
-[node name="Flyer" parent="Enemies" unique_id=456963151 instance=ExtResource("4_8w0pe")]
-position = Vector2(1950, 661)
-
-[node name="Flyer2" parent="Enemies" unique_id=1919060469 instance=ExtResource("4_8w0pe")]
-position = Vector2(4145, 674)
-
 [node name="Flyer3" parent="Enemies" unique_id=694576588 instance=ExtResource("4_8w0pe")]
 position = Vector2(3179, 3952)
 
@@ -95,11 +89,11 @@ position = Vector2(1951, 739)
 scale = Vector2(0.1, 0.1)
 
 [node name="Collectable13" parent="Collectables" unique_id=499806232 instance=ExtResource("7_72x3h")]
-position = Vector2(3539, 484)
+position = Vector2(3680, 381)
 scale = Vector2(0.1, 0.1)
 
 [node name="Collectable2" parent="Collectables" unique_id=1920552219 instance=ExtResource("7_72x3h")]
-position = Vector2(4096, 770)
+position = Vector2(4681, 793)
 scale = Vector2(0.1, 0.1)
 
 [node name="Collectable3" parent="Collectables" unique_id=1861045232 instance=ExtResource("7_72x3h")]
@@ -199,19 +193,23 @@ position = Vector2(5731, 1311)
 position = Vector2(-156, 1310)
 
 [node name="MovingPlatform" parent="Hazards" unique_id=785997726 instance=ExtResource("9_7eb4w")]
-position = Vector2(1562, 893)
+position = Vector2(1229, 888)
 scale = Vector2(0.5, 0.5)
 
-[node name="MovingPlatform2" parent="Hazards" unique_id=921161044 instance=ExtResource("9_7eb4w")]
-position = Vector2(2874, 896)
+[node name="MovingPlatform4" parent="Hazards" unique_id=921161044 instance=ExtResource("9_7eb4w")]
+position = Vector2(2203, 888)
+scale = Vector2(0.5, 0.5)
+
+[node name="MovingPlatform2" parent="Hazards" unique_id=885626296 instance=ExtResource("9_7eb4w")]
+position = Vector2(3186, 887)
 scale = Vector2(0.5, 0.5)
 
 [node name="MovingPlatform3" parent="Hazards" unique_id=1004439620 instance=ExtResource("9_7eb4w")]
-position = Vector2(4138, 896)
+position = Vector2(4175, 891)
 scale = Vector2(0.5, 0.5)
 
 [node name="CrumblingPlatform" parent="Hazards" unique_id=1036132127 instance=ExtResource("10_hadiw")]
-position = Vector2(3539, 614)
+position = Vector2(3704, 657)
 
 [node name="Bossroom" type="Panel" parent="." unique_id=696472844]
 visible = false

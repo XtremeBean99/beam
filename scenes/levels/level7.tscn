@@ -1,84 +1,42 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bkj8uxkswryrd"]
 
 [ext_resource type="PackedScene" uid="uid://fgxcv3f8vatq" path="res://scenes/player.tscn" id="1_player"]
 [ext_resource type="Script" uid="uid://dtv6qnxaweupx" path="res://scripts/ink_terrain.gd" id="2_terrain"]
 [ext_resource type="Script" uid="uid://dwd64c2khpyrx" path="res://scripts/ink_level.gd" id="3_level"]
-[ext_resource type="PackedScene" uid="uid://s1r1qbt1mq60" path="res://scenes/snail.tscn" id="4_snail"]
-[ext_resource type="PackedScene" uid="uid://bflyrwatch01" path="res://scenes/flyer.tscn" id="5_flyer"]
-[ext_resource type="PackedScene" uid="uid://y1v2jv2bmd2f" path="res://scenes/collectable.tscn" id="6_token"]
-[ext_resource type="PackedScene" uid="uid://bosdn7a35krc7" path="res://scenes/spring.tscn" id="7_spring"]
+[ext_resource type="PackedScene" uid="uid://y1v2jv2bmd2f" path="res://scenes/collectable.tscn" id="4_rrpq3"]
 
-[node name="LevelRoot" type="Node2D"]
+[node name="LevelRoot" type="Node2D" unique_id=1718659019]
 script = ExtResource("3_level")
 
-[node name="VoidBG" type="CanvasLayer" parent="."]
+[node name="VoidBG" type="CanvasLayer" parent="." unique_id=1636287363]
 layer = -10
 
-[node name="ColorRect" type="ColorRect" parent="VoidBG"]
+[node name="ColorRect" type="ColorRect" parent="VoidBG" unique_id=856038729]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(0.054902, 0.058824, 0.070588, 1)
 
-[node name="Terrain" type="Node2D" parent="."]
+[node name="Terrain" type="Node2D" parent="." unique_id=1503303366]
 script = ExtResource("2_terrain")
-strokes_path = "res://assets/levels/level7.svg"
+strokes_path = "res://assets/levels/level10.svg"
 world_scale = 30.0
 
-[node name="Player" parent="." instance=ExtResource("1_player")]
-position = Vector2(200, 650)
+[node name="Player" parent="." unique_id=1904850561 instance=ExtResource("1_player")]
+position = Vector2(3135, 728)
 scale = Vector2(2, 2)
 
-[node name="Enemies" type="Node2D" parent="."]
+[node name="Collectable" parent="." unique_id=411621955 instance=ExtResource("4_rrpq3")]
+position = Vector2(3122, 4450)
 
-[node name="Flyer" parent="Enemies" instance=ExtResource("5_flyer")]
-position = Vector2(600, 800)
+[node name="Collectable2" parent="." unique_id=1728255484 instance=ExtResource("4_rrpq3")]
+position = Vector2(5778, 4285)
 
-[node name="Flyer2" parent="Enemies" instance=ExtResource("5_flyer")]
-position = Vector2(1400, 700)
+[node name="Collectable3" parent="." unique_id=940717977 instance=ExtResource("4_rrpq3")]
+position = Vector2(471, 4225)
 
-[node name="Flyer3" parent="Enemies" instance=ExtResource("5_flyer")]
-position = Vector2(2200, 850)
+[node name="Collectable4" parent="." unique_id=2138917872 instance=ExtResource("4_rrpq3")]
+position = Vector2(1477, 3021)
 
-[node name="Flyer4" parent="Enemies" instance=ExtResource("5_flyer")]
-position = Vector2(1000, 1100)
-
-[node name="Flyer5" parent="Enemies" instance=ExtResource("5_flyer")]
-position = Vector2(1800, 1050)
-
-[node name="Flyer6" parent="Enemies" instance=ExtResource("5_flyer")]
-position = Vector2(2500, 900)
-
-[node name="Snail" parent="Enemies" instance=ExtResource("4_snail")]
-position = Vector2(1500, 7200)
-
-[node name="Snail2" parent="Enemies" instance=ExtResource("4_snail")]
-position = Vector2(2500, 7200)
-
-[node name="Collectables" type="Node2D" parent="."]
-
-[node name="Collectable" parent="Collectables" instance=ExtResource("6_token")]
-position = Vector2(1200, 2800)
-scale = Vector2(0.1, 0.1)
-
-[node name="Collectable2" parent="Collectables" instance=ExtResource("6_token")]
-position = Vector2(2200, 3000)
-scale = Vector2(0.1, 0.1)
-
-[node name="Collectable3" parent="Collectables" instance=ExtResource("6_token")]
-position = Vector2(1800, 4200)
-scale = Vector2(0.1, 0.1)
-
-[node name="Collectable4" parent="Collectables" instance=ExtResource("6_token")]
-position = Vector2(800, 5000)
-scale = Vector2(0.1, 0.1)
-
-[node name="Collectable5" parent="Collectables" instance=ExtResource("6_token")]
-position = Vector2(2600, 5800)
-scale = Vector2(0.1, 0.1)
-
-[node name="Spring" parent="." instance=ExtResource("7_spring")]
-position = Vector2(1800, 4000)
-
-[node name="Spring2" parent="." instance=ExtResource("7_spring")]
-position = Vector2(2600, 5500)
+[node name="Collectable5" parent="." unique_id=1736990426 instance=ExtResource("4_rrpq3")]
+position = Vector2(4877, 3058)

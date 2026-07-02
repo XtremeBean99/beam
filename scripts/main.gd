@@ -29,9 +29,6 @@ const LEVELS := [
 	"res://scenes/levels/level5.tscn",
 	"res://scenes/levels/level6.tscn",
 	"res://scenes/levels/level7.tscn",
-	"res://scenes/levels/level8.tscn",
-	"res://scenes/levels/level9.tscn",
-	"res://scenes/levels/level10.tscn",
 ]
 
 var score := 0
