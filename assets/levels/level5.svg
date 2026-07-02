@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Level 5: "The Stack" - bottom-to-top climb. Three stacked half-pipes in a
+     walled tower. Each tier: slide through the pipe to the far side, spring up
+     into the next tier's pipe. Springs launch through OPEN columns (the shelf
+     directly above each spring is deliberately absent so the rise never bonks).
+     Falls always land in the tier below - recoverable, never lethal.
+     Parsed by SvgParser (flip_y = false, world_scale 30). -->
+<svg width="210mm" height="297mm" viewBox="0 0 210 297" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke="#000000" stroke-width="1">
+    <!-- tower walls -->
+    <path id="wallL" d="M 8,96 L 8,252" />
+    <path id="wallR" d="M 202,88 L 202,252" />
+    <!-- tier 1 (bottom): spawn shelf left, spring shelf right, pipe between -->
+    <path id="shelf1L" d="M 8,252 L 25,252" />
+    <path id="shelf1R" d="M 185,252 L 202,252" />
+    <path id="bowl1" d="M 25,252 C 60,288 150,288 185,252" />
+    <!-- tier 2: spring shelf LEFT only (right column stays open for sp1's rise) -->
+    <path id="shelf2L" d="M 8,200 L 25,200" />
+    <path id="bowl2" d="M 25,200 C 60,236 150,236 185,200" />
+    <!-- tier 3: spring shelf RIGHT only (left column open for sp2's rise) -->
+    <path id="shelf3R" d="M 185,148 L 202,148" />
+    <path id="bowl3" d="M 25,148 C 60,184 150,184 185,148" />
+    <!-- summit: ends at x180 so the right column stays open for sp3's rise -->
+    <path id="summit" d="M 60,96 L 180,96" />
+  </g>
+</svg>

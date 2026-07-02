@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Level 4: "Brushfall" — slide showcase. Long curved descent into a valley,
+     a crest launch onto an island, a double half-pipe, then a floor arena.
+     Parsed by SvgParser (flip_y = false, world_scale 30). -->
+<svg width="210mm" height="297mm" viewBox="0 0 210 297" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke="#000000" stroke-width="1">
+    <!-- start platform -->
+    <path id="start" d="M 4,35 L 40,35" />
+    <!-- curved slide run: descent, flat valley, up-curved crest -->
+    <path id="sliderun" d="M 40,35 C 58,35 66,46 76,58 C 86,70 98,78 114,78 C 134,78 146,68 152,51" />
+    <!-- landing island after the crest launch -->
+    <path id="island" d="M 166,56 L 203,56" />
+    <!-- wall under the island's right edge (wall-slide / wall-jump) -->
+    <path id="islandwall" d="M 203,60 L 203,96" />
+    <!-- double half-pipe -->
+    <path id="bowl1" d="M 12,130 C 22,166 85,166 95,130" />
+    <path id="bowl2" d="M 95,130 C 105,166 168,166 178,130" />
+    <!-- optional drop platforms -->
+    <path id="platformA" d="M 38,192 L 72,192" />
+    <path id="platformB" d="M 128,202 L 162,202" />
+    <!-- floor arena -->
+    <path id="arenafloor" d="M 8,250 L 202,250" />
+    <path id="arenawallL" d="M 8,208 L 8,250" />
+    <path id="arenawallR" d="M 202,208 L 202,250" />
+  </g>
+</svg>

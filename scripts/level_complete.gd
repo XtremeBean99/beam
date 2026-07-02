@@ -34,8 +34,8 @@ func show_stats(elapsed: float, score: int, kills: int) -> void:
 ## tokens collected as a percentage. The KILLS row is hidden and the SCORE row is
 ## repurposed as TOKENS. Continue still fires continue_pressed (main routes the last
 ## level's continue to the title screen).
-func show_endgame(total_time: float, token_percent: int) -> void:
-	$Center/Panel/VBox/Title.text = "RUN COMPLETE"
+func show_endgame(total_time: float, token_percent: int, new_best: bool = false) -> void:
+	$Center/Panel/VBox/Title.text = "NEW BEST RUN!" if new_best else "RUN COMPLETE"
 	var mins := int(total_time / 60.0)
 	var secs := int(fmod(total_time, 60.0))
 	var cs := int(fmod(total_time, 1.0) * 100.0)

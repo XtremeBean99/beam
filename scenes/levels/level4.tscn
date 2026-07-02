@@ -1,0 +1,112 @@
+[gd_scene format=3 uid="uid://bq4lvl4beam77"]
+
+[ext_resource type="PackedScene" uid="uid://fgxcv3f8vatq" path="res://scenes/player.tscn" id="1_player"]
+[ext_resource type="Script" uid="uid://dtv6qnxaweupx" path="res://scripts/ink_terrain.gd" id="2_terrain"]
+[ext_resource type="Script" uid="uid://dwd64c2khpyrx" path="res://scripts/ink_level.gd" id="3_level"]
+[ext_resource type="PackedScene" uid="uid://s1r1qbt1mq60" path="res://scenes/snail.tscn" id="4_snail"]
+[ext_resource type="PackedScene" uid="uid://bflyrwatch01" path="res://scenes/flyer.tscn" id="5_flyer"]
+[ext_resource type="PackedScene" uid="uid://y1v2jv2bmd2f" path="res://scenes/collectable.tscn" id="6_token"]
+[ext_resource type="PackedScene" uid="uid://ctextsign0001" path="res://scenes/ui/text_sign.tscn" id="7_sign"]
+[ext_resource type="PackedScene" uid="uid://bosdn7a35krc7" path="res://scenes/spring.tscn" id="8_spring"]
+
+[node name="LevelRoot" type="Node2D" unique_id=951025061]
+script = ExtResource("3_level")
+
+[node name="VoidBG" type="CanvasLayer" parent="." unique_id=1270856818]
+layer = -10
+
+[node name="ColorRect" type="ColorRect" parent="VoidBG" unique_id=802686597]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.054902, 0.058824, 0.070588, 1)
+
+[node name="Terrain" type="Node2D" parent="." unique_id=1172610741]
+script = ExtResource("2_terrain")
+strokes_path = "res://assets/levels/level4.svg"
+world_scale = 30.0
+
+[node name="Player" parent="." unique_id=1424169492 instance=ExtResource("1_player")]
+position = Vector2(250, 990)
+scale = Vector2(2, 2)
+
+[node name="Enemies" type="Node2D" parent="." unique_id=2120064839]
+
+[node name="Snail" parent="Enemies" unique_id=224115220 instance=ExtResource("4_snail")]
+position = Vector2(3449, 2264)
+
+[node name="Snail2" parent="Enemies" unique_id=897629910 instance=ExtResource("4_snail")]
+position = Vector2(2200, 7435)
+
+[node name="Snail3" parent="Enemies" unique_id=1984480707 instance=ExtResource("4_snail")]
+position = Vector2(4000, 7435)
+
+[node name="Flyer" parent="Enemies" unique_id=2103141513 instance=ExtResource("5_flyer")]
+position = Vector2(2345, 1412)
+
+[node name="Flyer2" parent="Enemies" unique_id=585884228 instance=ExtResource("5_flyer")]
+position = Vector2(4800, 1200)
+
+[node name="Flyer3" parent="Enemies" unique_id=1202311119 instance=ExtResource("5_flyer")]
+position = Vector2(2386, 4057)
+
+[node name="Collectables" type="Node2D" parent="." unique_id=1734678248]
+
+[node name="Collectable" parent="Collectables" unique_id=1640033969 instance=ExtResource("6_token")]
+position = Vector2(712, 1011)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable2" parent="Collectables" unique_id=1338459459 instance=ExtResource("6_token")]
+position = Vector2(2499, 1849)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable3" parent="Collectables" unique_id=922472653 instance=ExtResource("6_token")]
+position = Vector2(3200, 2230)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable4" parent="Collectables" unique_id=1420960106 instance=ExtResource("6_token")]
+position = Vector2(4570, 1400)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable5" parent="Collectables" unique_id=1634620961 instance=ExtResource("6_token")]
+position = Vector2(5076, 1621)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable6" parent="Collectables" unique_id=355796717 instance=ExtResource("6_token")]
+position = Vector2(1600, 4590)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable7" parent="Collectables" unique_id=1133816696 instance=ExtResource("6_token")]
+position = Vector2(4100, 4590)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable8" parent="Collectables" unique_id=22676750 instance=ExtResource("6_token")]
+position = Vector2(1650, 5640)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable9" parent="Collectables" unique_id=827701523 instance=ExtResource("6_token")]
+position = Vector2(4350, 5940)
+scale = Vector2(0.1, 0.1)
+
+[node name="Collectable10" parent="Collectables" unique_id=933755859 instance=ExtResource("6_token")]
+position = Vector2(3115, 7436)
+scale = Vector2(0.1, 0.1)
+
+[node name="Hazards" type="Node2D" parent="." unique_id=1646909250]
+
+[node name="Spring" parent="Hazards" unique_id=296992287 instance=ExtResource("8_spring")]
+position = Vector2(510, 7491)
+
+[node name="Spring2" parent="Hazards" unique_id=905249020 instance=ExtResource("8_spring")]
+position = Vector2(5361, 7492)
+launch_velocity = -1700.0
+
+[node name="Spring3" parent="Hazards" unique_id=1698549787 instance=ExtResource("8_spring")]
+position = Vector2(3396, 2332)
+
+[node name="Signs" type="Node2D" parent="." unique_id=521240810]
+
+[node name="HintSign1" parent="Signs" unique_id=508351187 instance=ExtResource("7_sign")]
+position = Vector2(1500, 850)
+text = "HOLD  S  downhill —
+let the slope carry you"

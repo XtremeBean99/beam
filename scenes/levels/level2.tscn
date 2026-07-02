@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://s1r1qbt1mq60" path="res://scenes/snail.tscn" id="4_ok6xr"]
 [ext_resource type="PackedScene" uid="uid://bflyrwatch01" path="res://scenes/flyer.tscn" id="5_dj4wq"]
 [ext_resource type="PackedScene" uid="uid://y1v2jv2bmd2f" path="res://scenes/collectable.tscn" id="6_k0mew"]
+[ext_resource type="PackedScene" uid="uid://bosdn7a35krc7" path="res://scenes/spring.tscn" id="7_dj4wq"]
 
 [node name="LevelRoot" type="Node2D" unique_id=1103856774]
 script = ExtResource("3_level")
@@ -166,3 +167,9 @@ offset_left = 2782.0
 offset_top = 4471.0
 offset_right = 5784.0
 offset_bottom = 6055.0
+
+[node name="Spring" parent="." unique_id=1684923962 instance=ExtResource("7_dj4wq")]
+position = Vector2(3975, 4460)
+
+[node name="Spring2" parent="." unique_id=576646030 instance=ExtResource("7_dj4wq")]
+position = Vector2(4705, 6056)

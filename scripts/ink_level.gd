@@ -23,10 +23,16 @@ var _beam_active := false
 var _fell := false
 
 
+const VoidBackgroundScript = preload("res://scripts/void_background.gd")
+
+
 func _ready() -> void:
 	if player:
 		_spawn = player.global_position
 	_compute_fall_limit()
+	# Ambient parallax background — spawned here so every level gets it without
+	# per-scene wiring (preloaded by path; see main.gd's GhostRunner note).
+	add_child(VoidBackgroundScript.new())
 
 
 ## Set fall_limit just below the lowest point of the built terrain so a player who

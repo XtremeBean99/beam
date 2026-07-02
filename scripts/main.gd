@@ -25,6 +25,9 @@ const LEVELS := [
 	"res://scenes/levels/level1.tscn",
 	"res://scenes/levels/level2.tscn",
 	"res://scenes/levels/level3.tscn",
+	"res://scenes/levels/level4.tscn",
+	"res://scenes/levels/level5.tscn",
+	"res://scenes/levels/level7.tscn",
 ]
 
 var score := 0
@@ -51,6 +54,18 @@ var _run_time := 0.0
 var _run_finished := false
 var _run_tokens_collected := 0
 var _run_tokens_total := 0
+# Racing ghost: the previous attempt of each level replays as a translucent
+# ghost. Poses are sampled at a fixed rate into _ghost_buffer during a live
+# attempt, banked per level index when the attempt ends, and handed to a
+# GhostRunner node when the level (re)loads. In-memory only (per session).
+const GHOST_SAMPLE_HZ := 30.0
+# Preloaded by PATH, not by class_name: a global class added outside the editor
+# is unregistered until a rescan, and an unresolved class name kills THIS whole
+# script (which is what left the pause overlay stuck on screen at startup).
+const GhostRunnerScript := preload("res://scripts/ghost_runner.gd")
+var _ghost_recordings: Dictionary = {}
+var _ghost_buffer: Array = []
+var _ghost_accum := 0.0
 
 
 func _ready() -> void:
@@ -71,6 +86,8 @@ func _ready() -> void:
 	$HUD/PauseOverlay/Center/VBox/SettingsButton.pressed.connect(_on_settings_pressed)
 	$HUD/PauseOverlay/Center/VBox/QuitButton.pressed.connect(_on_quit_pressed)
 	$HUD/EndLevelButton.pressed.connect(_trigger_level_complete)
+	# Dev-only shortcut: never show the END LEVEL button in release builds.
+	$HUD/EndLevelButton.visible = OS.is_debug_build()
 
 	# Level-complete wiring
 	level_complete.continue_pressed.connect(_on_level_continue)
@@ -86,6 +103,12 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("pause") and not settings_menu.visible and not _level_done:
 		_toggle_pause()
 
+	# QoL: quick restart (R) — instant retry of the current level from its
+	# checkpoint, for speedruns and fumbled slides. Ignored in menus / after clear.
+	if Input.is_action_just_pressed("restart") and not is_paused \
+			and not settings_menu.visible and not _level_done:
+		_restart_level(0.25, 0.35)
+
 	if not _level_done and not is_paused:
 		_elapsed += delta
 
@@ -95,6 +118,47 @@ func _process(delta: float) -> void:
 		_run_time += delta
 	if is_instance_valid(time_label):
 		time_label.text = _format_time(_run_time)
+
+
+## Ghost recorder — samples the player's pose at GHOST_SAMPLE_HZ during a live
+## attempt (skipped while paused, dead, or after the level is done).
+func _physics_process(delta: float) -> void:
+	if _level_done or is_paused or get_tree().paused:
+		return
+	if not is_instance_valid(player) or not player.alive:
+		return
+	_ghost_accum += delta
+	if _ghost_accum < 1.0 / GHOST_SAMPLE_HZ:
+		return
+	_ghost_accum = 0.0
+	var spr: AnimatedSprite2D = player.get_node_or_null("AnimatedSprite2D")
+	if spr == null:
+		return
+	_ghost_buffer.append(
+		[player.global_position, String(spr.animation), spr.frame, spr.flip_h, spr.rotation])
+
+
+## Bank the current attempt as this level's ghost (only if it went anywhere:
+## at least ~1 s of samples), then start a fresh buffer for the next attempt.
+func _bank_ghost() -> void:
+	if _ghost_buffer.size() >= int(GHOST_SAMPLE_HZ):
+		_ghost_recordings[_level_index] = _ghost_buffer
+	_ghost_buffer = []
+	_ghost_accum = 0.0
+
+
+## Spawn the previous attempt's ghost into the freshly loaded level, if any.
+func _spawn_ghost() -> void:
+	if not _ghost_recordings.has(_level_index) or not is_instance_valid(player):
+		return
+	var spr: AnimatedSprite2D = player.get_node_or_null("AnimatedSprite2D")
+	if spr == null:
+		return
+	var g: Node2D = GhostRunnerScript.new()
+	g.set("samples", _ghost_recordings[_level_index])
+	g.set("sprite_frames", spr.sprite_frames)
+	g.set("sprite_scale", spr.global_scale)
+	level_root.add_child(g)
 
 
 func _setup_level() -> void:
@@ -117,6 +181,14 @@ func _setup_level() -> void:
 			enemy.player_hit.connect(_on_player_hit)
 		if enemy.has_signal("died") and not enemy.died.is_connected(_on_enemy_died):
 			enemy.died.connect(_on_enemy_died)
+
+	# Exit zones (point-to-point levels without tokens or a boss room): touching
+	# one completes the level with the door at the zone's position.
+	for zone in get_tree().get_nodes_in_group("exit_zone"):
+		if level_root and not level_root.is_ancestor_of(zone):
+			continue
+		if zone.has_signal("reached") and not zone.reached.is_connected(_on_exit_reached):
+			zone.reached.connect(_on_exit_reached)
 
 	if player and player.has_signal("death_finished") and not player.death_finished.is_connected(_on_player_died):
 		player.death_finished.connect(_on_player_died)
@@ -149,6 +221,10 @@ func _compute_bossroom() -> void:
 			_bossroom_enemies.append(enemy)
 
 
+func _on_exit_reached(pos: Vector2) -> void:
+	_trigger_level_complete(pos)
+
+
 func _on_collectable_collected(source) -> void:
 	if _level_done:
 		return
@@ -169,6 +245,7 @@ func _trigger_level_complete(door_pos: Vector2 = Vector2.INF) -> void:
 	if _level_done:
 		return
 	_level_done = true
+	_bank_ghost()   # the clearing run becomes this level's ghost
 	# Bank this level's tokens toward the whole-run total (counted once, at clear).
 	_run_tokens_collected += _collected_count
 	_run_tokens_total += _total_collectables
@@ -199,9 +276,25 @@ func _show_level_complete() -> void:
 		var pct := 100
 		if _run_tokens_total > 0:
 			pct = int(round(100.0 * float(_run_tokens_collected) / float(_run_tokens_total)))
-		level_complete.show_endgame(_run_time, pct)
+		level_complete.show_endgame(_run_time, pct, _save_best_run(_run_time))
 	else:
 		level_complete.show_stats(_elapsed, score, kills)
+
+
+const BEST_RUN_PATH := "user://best_run.cfg"
+
+
+## Persist the fastest full-run time. Returns true if `t` set a new best, so the
+## end screen can celebrate it. The title screen reads the same file.
+func _save_best_run(t: float) -> bool:
+	var cfg := ConfigFile.new()
+	cfg.load(BEST_RUN_PATH)  # ignore missing file — defaults below cover it
+	var best := float(cfg.get_value("run", "best_time", INF))
+	if t < best:
+		cfg.set_value("run", "best_time", t)
+		cfg.save(BEST_RUN_PATH)
+		return true
+	return false
 
 
 ## Format seconds as M:SS.cc for the HUD clock and the end screen.
@@ -269,6 +362,7 @@ func _restart_level(fade_out: float = 0.4, fade_in: float = 0.5) -> void:
 	if _reloading:
 		return
 	_reloading = true
+	_bank_ghost()   # the failed attempt becomes the next attempt's ghost
 	transition.fade_to_black(fade_out)
 	await get_tree().create_timer(fade_out).timeout
 	score = _score_checkpoint
@@ -302,6 +396,9 @@ func load_level(level_path: String) -> void:
 			level_root.player_fell.connect(_on_player_fell)
 		$HUD.show()
 		_setup_level()
+		_ghost_buffer = []
+		_ghost_accum = 0.0
+		_spawn_ghost()
 		_update_health()
 		_update_score()
 		_update_kills()
@@ -309,7 +406,9 @@ func load_level(level_path: String) -> void:
 
 
 func _update_score() -> void:
-	score_label.text = str(score)
+	# QoL: the HUD shows per-level token progress (collected/total), which is far
+	# more actionable mid-level than a cumulative score figure.
+	score_label.text = "%d/%d" % [_collected_count, maxi(_total_collectables, _collected_count)]
 
 
 func _update_kills() -> void:
@@ -368,3 +467,4 @@ func _on_settings_closed() -> void:
 func _on_quit_pressed() -> void:
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://scenes/title_screen.tscn")
+# EOF

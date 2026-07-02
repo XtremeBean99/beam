@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://bosdn7a35krc7"]
+
+[ext_resource type="Script" uid="uid://dfbkfwx7jgm5" path="res://scripts/spring.gd" id="1_spring"]
+[ext_resource type="AudioStream" uid="uid://bmqo1vamgfs2s" path="res://assets/sounds/jump.mp3" id="2_boing"]
+[ext_resource type="Texture2D" uid="uid://b3mgosxl0d1k8" path="res://assets/images/ENVIRONMENT/jump-pad.png" id="3_pad"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_spring"]
+size = Vector2(90, 84)
+
+[node name="Spring" type="Area2D" unique_id=1684923962]
+collision_layer = 0
+script = ExtResource("1_spring")
+
+[node name="Pad" type="Sprite2D" parent="." unique_id=366641931]
+texture_filter = 1
+position = Vector2(0, 42.000008)
+scale = Vector2(0.09, 0.09)
+texture = ExtResource("3_pad")
+offset = Vector2(0, -592)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1677345044]
+position = Vector2(0, -40)
+shape = SubResource("RectangleShape2D_spring")
+
+[node name="BoingSound" type="AudioStreamPlayer2D" parent="." unique_id=1433398179]
+stream = ExtResource("2_boing")
+pitch_scale = 0.7

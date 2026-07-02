@@ -37,8 +37,8 @@ theme_override_colors/font_shadow_color = Color(0.35, 0.6, 0.95, 0.55)
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/shadow_offset_y = 0
 theme_override_constants/shadow_outline_size = 22
-theme_override_font_sizes/font_size = 150
-text = "BEAM"
+theme_override_font_sizes/font_size = 76
+text = "SUPER NINJA MONK FIGHT IV"
 horizontal_alignment = 1
 
 [node name="Prompt" type="Label" parent="Center/VBox"]
@@ -46,6 +46,14 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.82, 1, 1)
 theme_override_font_sizes/font_size = 22
 text = "a hand-drawn movement game"
+horizontal_alignment = 1
+
+[node name="BestRun" type="Label" parent="Center/VBox"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.78, 1, 0.85)
+theme_override_font_sizes/font_size = 19
+text = "BEST RUN  —  0:00.00"
 horizontal_alignment = 1
 
 [node name="Menu" type="VBoxContainer" parent="Center/VBox"]
@@ -70,6 +78,42 @@ custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "QUIT"
+
+[node name="Controls" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -400.0
+offset_top = -56.0
+offset_right = 400.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.55, 0.65, 0.8, 0.75)
+theme_override_font_sizes/font_size = 18
+text = "A / D  move      SPACE  jump      S  crouch + slide      L  fireball      R  restart      ESC  pause"
+horizontal_alignment = 1
+
+[node name="Version" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -140.0
+offset_top = -36.0
+offset_right = -16.0
+offset_bottom = -12.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.45, 0.52, 0.65, 0.55)
+theme_override_font_sizes/font_size = 15
+text = "v0.4"
+horizontal_alignment = 2
 
 [node name="SettingsMenu" parent="." instance=ExtResource("3_settings")]
 visible = false
