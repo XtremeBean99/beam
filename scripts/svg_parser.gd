@@ -10,13 +10,29 @@ extends RefCounted
 
 
 ## Parse an SVG file → [ { "pts": [[x,y], ...] }, ... ]
+## NOTE: The SVG file must NOT have a .import file that remaps it to a texture.
+## Godot's HTML5 export redirects FileAccess through the import remapping layer,
+## silently serving binary .ctex data instead of the raw SVG XML when an import
+## exists. Removing the .svg.import files ensures the raw SVG is read correctly
+## on all platforms.
 static func parse_file(path: String, flip_y: bool = true) -> Array:
+	if not FileAccess.file_exists(path):
+		push_warning("SvgParser: file not found: %s" % path)
+		return []
 	var f := FileAccess.open(path, FileAccess.READ)
 	if f == null:
 		push_warning("SvgParser: cannot open: %s" % path)
 		return []
 	var xml := f.get_as_text()
 	f.close()
+	if xml.is_empty():
+		push_warning("SvgParser: empty file: %s" % path)
+		return []
+	# Sanity check: if the file was imported as a texture, get_as_text() returns
+	# binary garbage that won't start with '<'. Catch that early.
+	if not xml.strip_edges().begins_with("<"):
+		push_warning("SvgParser: file does not look like XML (maybe imported as texture?): %s" % path)
+		return []
 	return parse_svg_string(xml, flip_y)
 
 
